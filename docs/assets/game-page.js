@@ -8,28 +8,31 @@ async function loadGamePage() {
     const title = document.querySelector(".game-page-title");
     const genre = document.getElementById("game-genre");
     const summary = document.getElementById("game-summary");
+    const detailList = document.getElementById("game-detail-list");
     const heroImage = document.getElementById("game-hero-image");
 
-    if (!jsonPath || !tabList || !subtabList || !panel || !panelLabel || !title || !genre || !summary || !heroImage) {
+    if (!jsonPath || !tabList || !subtabList || !panel || !panelLabel || !title || !genre || !summary || !detailList || !heroImage) {
         return;
     }
 
     try {
         const data = await loadGameData(jsonPath, fallbackNode);
         const tabs = [
-            { id: "overview", label: "게임 설명" },
             { id: "guides", label: "공략 탭" },
             { id: "install", label: "설치 탭" }
         ];
         const state = {
-            tabId: "overview",
-            subtabId: null
+            tabId: "guides",
+            subtabId: getPreferredCategoryId(data.guides)
         };
 
         panelLabel.textContent = data.slug.toUpperCase();
         title.textContent = data.name;
         genre.textContent = data.description.genre;
         summary.textContent = data.description.summary;
+        detailList.innerHTML = data.description.details
+            .map((item) => `<li>${escapeHtml(item)}</li>`)
+            .join("");
         heroImage.src = data.profileImage;
         heroImage.alt = `${data.name} profile`;
 
@@ -75,13 +78,6 @@ function renderTabButtons(tabs, state, data, tabList, subtabList, panel) {
 }
 
 function renderContent(state, data, subtabList, panel) {
-    if (state.tabId === "overview") {
-        subtabList.innerHTML = "";
-        subtabList.hidden = true;
-        renderOverview(data, panel);
-        return;
-    }
-
     const categories = data[state.tabId] ?? [];
     const activeCategory = resolveActiveCategory(categories, state);
 
@@ -102,26 +98,6 @@ function renderSubtabButtons(categories, activeCategory, state, subtabList, pane
         });
         subtabList.appendChild(button);
     });
-}
-
-function renderOverview(data, panel) {
-    const detailItems = data.description.details
-        .map((item) => `<li>${escapeHtml(item)}</li>`)
-        .join("");
-
-    panel.innerHTML = `
-        <p class="game-body-copy">${escapeHtml(data.description.summary)}</p>
-        <div class="detail-grid">
-            <article class="detail-card pixel-box">
-                <h3>장르</h3>
-                <p class="game-body-copy">${escapeHtml(data.description.genre)}</p>
-            </article>
-            <article class="detail-card pixel-box">
-                <h3>핵심 포인트</h3>
-                <ul>${detailItems}</ul>
-            </article>
-        </div>
-    `;
 }
 
 function renderCategory(category, panel) {
@@ -350,6 +326,15 @@ function getMonsterSectionLabel(section) {
     }
 
     return "더미";
+}
+
+function getPreferredCategoryId(categories) {
+    if (!Array.isArray(categories) || categories.length === 0) {
+        return null;
+    }
+
+    const monsterCategory = categories.find((category) => category.id === "monsters");
+    return monsterCategory?.id ?? categories[0].id;
 }
 
 function resolveActiveCategory(categories, state) {
