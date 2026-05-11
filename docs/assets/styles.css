@@ -449,8 +449,31 @@ code {
     width: 220px;
 }
 
+.game-hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
 .game-meta {
-    margin: 14px 0 0;
+    margin: 0;
+    line-height: 1.8;
+}
+
+.game-hero-details {
+    padding: 18px;
+    background:
+        linear-gradient(180deg, rgba(255, 0, 255, 0.08), rgba(255, 0, 255, 0.02)),
+        rgba(0, 0, 0, 0.94);
+}
+
+.game-detail-list {
+    margin: 10px 0 0;
+    padding-left: 20px;
+}
+
+.game-detail-list li + li {
+    margin-top: 8px;
 }
 
 .game-tabs {
