@@ -12,6 +12,8 @@ from utils.storage import FILE as GUILD_CONFIG_FILE
 from utils.storage import get_guild, load_data, update_guild
 from utils.welcome_message import build_welcome_embed
 
+GUIDE_BASE_URL = "https://yeon-sik.github.io/yeonsam_bot/games"
+
 
 def normalize_text(value: str | None) -> str:
     return (value or "").strip().lower()
@@ -88,6 +90,10 @@ def resolve_topic_entry(entries: list[dict], topic: str | None) -> dict | None:
         ),
         None,
     )
+
+
+def build_monster_guide_link(game_slug: str, monster_id: str) -> str:
+    return f"{GUIDE_BASE_URL}/{game_slug}.html#monster-{monster_id}"
 
 
 async def autocomplete_game(
@@ -489,6 +495,11 @@ class Yeonsam(commands.Cog):
                     embed.add_field(name="설명", value=matched_monster["description"], inline=False)
                     embed.add_field(name="공략", value=matched_monster["strategy"], inline=False)
                     embed.add_field(name="체력", value=matched_monster["health"], inline=False)
+                    embed.add_field(
+                        name="안내 링크",
+                        value=build_monster_guide_link(data["slug"], matched_monster["id"]),
+                        inline=False,
+                    )
                 else:
                     section_counts = count_monster_sections(monsters)
                     embed.add_field(
