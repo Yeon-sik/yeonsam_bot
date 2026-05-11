@@ -1,0 +1,891 @@
+@font-face {
+    font-family: "DungGeunMo";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2107@1.1/DungGeunMo.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --black: #000000;
+    --pink: #ff00ff;
+    --pink-soft: rgba(255, 0, 255, 0.12);
+    --pink-line: rgba(255, 0, 255, 0.36);
+    --pink-strong: rgba(255, 0, 255, 0.92);
+    --pink-muted: rgba(255, 0, 255, 0.74);
+    --max-width: 1440px;
+    --pixel: 4px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    color-scheme: dark;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--black);
+    background-image:
+        linear-gradient(90deg, var(--pink-soft) 1px, transparent 1px),
+        linear-gradient(var(--pink-soft) 1px, transparent 1px);
+    background-size: 40px 40px;
+    color: var(--pink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
+a {
+    color: var(--pink);
+    text-decoration: none;
+}
+
+button,
+input {
+    border-radius: 0;
+    font: inherit;
+}
+
+button,
+a,
+input {
+    outline-color: var(--pink);
+}
+
+code {
+    color: var(--pink);
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.site-shell,
+.page-shell {
+    width: min(100%, var(--max-width));
+    min-height: 100vh;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.94);
+    border-left: 2px solid var(--pink);
+    border-right: 2px solid var(--pink);
+}
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 76px;
+    padding: 0 28px;
+    border-bottom: 4px solid var(--pink);
+    background: rgba(0, 0, 0, 0.97);
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 22px;
+    font-weight: 400;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+    text-transform: uppercase;
+}
+
+.brand-mark {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border: 4px solid var(--pink);
+    display: inline-block;
+}
+
+.brand-mark::after {
+    content: "";
+    position: absolute;
+    right: -8px;
+    bottom: -8px;
+    width: 8px;
+    height: 8px;
+    background: var(--pink);
+}
+
+.top-nav,
+.side-nav,
+.placeholder-nav,
+.tab-list {
+    display: flex;
+    gap: 12px;
+}
+
+.top-nav a,
+.side-nav a,
+.placeholder-nav a,
+.search-bar button,
+.tab-button,
+.subtab-button {
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 2px solid var(--pink);
+    background: rgba(0, 0, 0, 0.92);
+    color: var(--pink);
+    box-shadow: var(--pixel) var(--pixel) 0 var(--pink-line);
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+    cursor: pointer;
+    transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease,
+        background-color 0.12s ease,
+        color 0.12s ease,
+        border-color 0.12s ease;
+}
+
+.top-nav a:hover,
+.side-nav a:hover,
+.placeholder-nav a:hover,
+.search-bar button:hover,
+.tab-button:hover,
+.subtab-button:hover,
+.tab-button.is-active,
+.subtab-button.is-active,
+.search-bar button:active,
+.tab-button:active,
+.subtab-button:active {
+    transform: translate(var(--pixel), var(--pixel));
+    box-shadow: 0 0 0 var(--pink);
+}
+
+.search-bar button:active,
+.tab-button.is-active,
+.subtab-button.is-active,
+.tab-button:active,
+.subtab-button:active {
+    border-color: var(--pink);
+    background: var(--pink);
+    color: #000000;
+}
+
+.guide-layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr) 360px;
+    gap: 0;
+    min-height: calc(100vh - 76px);
+}
+
+.side-panel,
+.main-panel,
+.right-panel {
+    min-width: 0;
+}
+
+.side-panel,
+.right-panel {
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.side-panel {
+    border-right: 4px solid var(--pink);
+}
+
+.right-panel {
+    border-left: 4px solid var(--pink);
+}
+
+.main-panel {
+    padding: 36px;
+}
+
+.pixel-box {
+    position: relative;
+    border: 4px solid var(--pink);
+    background: rgba(0, 0, 0, 0.94);
+    box-shadow: 8px 8px 0 var(--pink-line);
+}
+
+.pixel-box::before,
+.pixel-box::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--pink);
+}
+
+.pixel-box::before {
+    top: -4px;
+    right: -4px;
+}
+
+.pixel-box::after {
+    left: -4px;
+    bottom: -4px;
+}
+
+.panel-label {
+    margin: 0 0 12px;
+    font-size: 14px;
+    font-weight: 400;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+    text-transform: uppercase;
+}
+
+.side-nav {
+    flex-direction: column;
+}
+
+.side-nav a {
+    width: 100%;
+}
+
+.intro-block {
+    max-width: 840px;
+    padding: 28px;
+}
+
+.intro-block h1,
+.placeholder-title,
+.game-page-title {
+    margin: 0;
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.34;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.intro-block p,
+.placeholder-copy,
+.guide-row small,
+.info-card p,
+.section-note,
+.notice-box p,
+.game-feature-copy small,
+.game-meta,
+.game-body-copy,
+.detail-card li {
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--pink-strong);
+}
+
+.content-section {
+    margin-top: 40px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.info-card {
+    min-height: 180px;
+    padding: 18px;
+}
+
+.info-card strong,
+.game-feature-copy strong,
+.detail-card h3,
+.quick-stats strong {
+    display: block;
+    font-weight: 400;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.notice-box {
+    margin-top: 24px;
+    padding: 18px;
+}
+
+.section-header {
+    margin-bottom: 16px;
+}
+
+.section-header h2,
+.content-section h2,
+.game-section-title {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.45;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.guide-list,
+.update-list,
+.game-feature-list {
+    border-top: 4px solid var(--pink);
+}
+
+.guide-row {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr) 92px;
+    gap: 18px;
+    align-items: center;
+    min-height: 96px;
+    padding: 18px 0;
+    border-bottom: 4px solid var(--pink);
+}
+
+.guide-row strong,
+.guide-row small,
+.row-type,
+.row-status {
+    display: block;
+}
+
+.guide-row strong,
+.row-type,
+.row-status {
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.guide-row strong {
+    font-weight: 400;
+}
+
+.static-row {
+    cursor: default;
+}
+
+.row-status {
+    text-align: right;
+}
+
+.compact {
+    margin-top: 0;
+    padding-bottom: 28px;
+}
+
+.compact + .compact {
+    padding-top: 28px;
+    border-top: 4px solid var(--pink);
+}
+
+.update-list {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.update-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 4px solid var(--pink);
+}
+
+.section-note {
+    margin: 16px 0 0;
+}
+
+.game-feature {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 4px solid var(--pink);
+}
+
+.game-feature img,
+.game-hero-media img {
+    display: block;
+    width: 120px;
+    aspect-ratio: 1 / 1;
+    border: 4px solid var(--pink);
+    object-fit: cover;
+    image-rendering: pixelated;
+}
+
+.placeholder-layout {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding: 24px;
+}
+
+.placeholder-panel {
+    width: min(760px, 100%);
+    padding: 28px;
+}
+
+.placeholder-kicker {
+    margin: 0 0 14px;
+    font-size: 14px;
+    font-weight: 400;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+    text-transform: uppercase;
+}
+
+.game-page {
+    width: min(1200px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 32px 0 56px;
+}
+
+.game-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.game-page-header .placeholder-nav {
+    margin-top: 0;
+}
+
+.game-hero {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 28px;
+    padding: 28px;
+}
+
+.game-hero-media img {
+    width: 220px;
+}
+
+.game-meta {
+    margin: 14px 0 0;
+}
+
+.game-tabs {
+    margin-top: 28px;
+}
+
+.tab-list {
+    flex-wrap: wrap;
+}
+
+.subtab-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.subtab-list[hidden] {
+    display: none;
+}
+
+.subtab-button {
+    min-height: 40px;
+    padding: 8px 14px;
+}
+
+.game-panel {
+    margin-top: 24px;
+    padding: 24px;
+}
+
+.panel-heading {
+    margin-bottom: 20px;
+}
+
+.panel-heading .panel-label {
+    margin-bottom: 8px;
+}
+
+.section-lead {
+    max-width: 860px;
+    margin: 14px 0 0;
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--pink-strong);
+}
+
+.game-body-copy {
+    margin: 0 0 20px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.detail-card {
+    padding: 18px;
+}
+
+.detail-card h3 {
+    margin: 0 0 12px;
+}
+
+.detail-card ul,
+.detail-card ol {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.detail-card li + li {
+    margin-top: 8px;
+}
+
+.monster-index {
+    margin-bottom: 24px;
+    padding: 20px;
+    background:
+        linear-gradient(180deg, rgba(255, 0, 255, 0.08), rgba(255, 0, 255, 0.02)),
+        rgba(0, 0, 0, 0.94);
+}
+
+.monster-index-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.monster-index-copy {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--pink-muted);
+}
+
+.monster-index-group + .monster-index-group {
+    margin-top: 16px;
+}
+
+.monster-index-group .panel-label {
+    margin-bottom: 10px;
+}
+
+.monster-index-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.monster-index-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 140px;
+    min-height: 54px;
+    justify-content: center;
+    position: relative;
+}
+
+.monster-index-link:hover {
+    border-color: var(--pink);
+}
+
+.monster-index-name {
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.monster-index-subname {
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--pink-muted);
+}
+
+.monster-index-flag {
+    align-self: flex-start;
+    margin-top: 2px;
+    padding: 3px 6px;
+    border: 1px solid currentColor;
+    font-size: 10px;
+    line-height: 1;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.monster-card-list {
+    display: grid;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.monster-summary-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.summary-chip {
+    min-height: 92px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.summary-chip-label {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--pink-muted);
+}
+
+.summary-chip strong {
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 400;
+}
+
+.monster-section + .monster-section {
+    margin-top: 36px;
+}
+
+.monster-section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+    gap: 20px;
+    align-items: end;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 4px solid var(--pink);
+}
+
+.monster-section-copy {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--pink-muted);
+}
+
+.monster-card {
+    display: grid;
+    grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+    gap: 24px;
+    padding: 20px;
+    scroll-margin-top: 110px;
+    background:
+        radial-gradient(circle at top right, rgba(255, 0, 255, 0.12), transparent 34%),
+        rgba(0, 0, 0, 0.94);
+}
+
+.monster-card-media img {
+    display: block;
+    width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+    border: 4px solid var(--pink);
+    image-rendering: pixelated;
+    background: rgba(0, 0, 0, 0.92);
+}
+
+.monster-image-placeholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 320px;
+    border: 4px solid var(--pink);
+    background:
+        linear-gradient(135deg, rgba(255, 0, 255, 0.16), rgba(255, 0, 255, 0.04)),
+        rgba(0, 0, 0, 0.92);
+    color: var(--pink);
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+    letter-spacing: 0.08em;
+}
+
+.monster-card-header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--pink-line);
+}
+
+.monster-card-kicker {
+    margin: 0 0 8px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pink-muted);
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.monster-card-copy h3 {
+    margin: 0;
+}
+
+.monster-card-subtitle {
+    margin: 8px 0 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--pink-muted);
+}
+
+.monster-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 8px;
+}
+
+.monster-tag {
+    padding: 6px 10px;
+    border: 2px solid var(--pink);
+    background: rgba(255, 0, 255, 0.08);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.monster-tag-accent {
+    background: var(--pink);
+    color: #000000;
+}
+
+.monster-tag-dummy {
+    border-color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+}
+
+.monster-meta-list {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.monster-meta-list div {
+    min-height: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--pink-line);
+    background: rgba(255, 0, 255, 0.05);
+}
+
+.monster-meta-wide {
+    grid-column: 1 / -1;
+}
+
+.monster-meta-list dt {
+    margin-bottom: 6px;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+    color: var(--pink);
+}
+
+.monster-meta-list dd {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--pink-strong);
+}
+
+.game-loading,
+.game-error {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--pink-muted);
+}
+
+@media (max-width: 1120px) {
+    .guide-layout {
+        grid-template-columns: 220px minmax(0, 1fr);
+    }
+
+    .right-panel {
+        grid-column: 1 / -1;
+        border-top: 4px solid var(--pink);
+        border-left: 0;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .monster-summary-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .monster-section-heading {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .site-shell,
+    .page-shell {
+        border-left: 0;
+        border-right: 0;
+    }
+
+    .site-header,
+    .top-nav,
+    .game-page-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .site-header {
+        position: static;
+        padding: 18px;
+    }
+
+    .guide-layout {
+        display: block;
+    }
+
+    .side-panel,
+    .right-panel {
+        border: 0;
+        border-bottom: 4px solid var(--pink);
+    }
+
+    .main-panel,
+    .game-page {
+        padding: 24px 18px;
+        width: 100%;
+    }
+
+    .intro-block h1,
+    .placeholder-title,
+    .game-page-title {
+        font-size: 30px;
+    }
+
+    .info-grid,
+    .game-feature,
+    .game-hero,
+    .detail-grid,
+    .monster-card {
+        grid-template-columns: 1fr;
+    }
+
+    .monster-summary-strip,
+    .monster-meta-list {
+        grid-template-columns: 1fr;
+    }
+
+    .monster-card-header {
+        flex-direction: column;
+    }
+
+    .monster-card-tags {
+        justify-content: start;
+    }
+
+    .monster-index-link {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .game-feature img,
+    .game-hero-media img {
+        width: min(220px, 100%);
+    }
+
+    .guide-row {
+        grid-template-columns: 1fr;
+    }
+
+    .row-status {
+        text-align: left;
+    }
+}

@@ -1,0 +1,46 @@
+name: Temporary Discord Bot
+
+on:
+  workflow_dispatch:
+    inputs:
+      duration_minutes:
+        description: How long to keep the bot online
+        required: true
+        default: "350"
+
+concurrency:
+  group: temporary-discord-bot
+  cancel-in-progress: false
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    env:
+      TOKEN: ${{ secrets.TOKEN }}
+      BOT_DATA_DIR: ${{ github.workspace }}/runtime-data
+    steps:
+      - name: Check required secret
+        shell: bash
+        run: |
+          if [ -z "${TOKEN}" ]; then
+            echo "TOKEN secret is required."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run bot
+        working-directory: bot
+        shell: bash
+        run: |
+          timeout "${{ inputs.duration_minutes }}m" python main.py

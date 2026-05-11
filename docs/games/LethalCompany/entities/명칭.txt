@@ -1,0 +1,38 @@
+영문 이름	한국 통용 명칭
+
+Snare Flea	올가미 벼룩
+Bunker Spider	거미
+Hoarding Bug	비축 벌레 
+Hygrodere	슬라임
+Bracken	브래켄
+Thumper	덤퍼
+Coil-head	코일 헤드
+Jester		제스터 
+Nutcracker	호두까기 인형 / 병정
+Masked	마스크
+Maneater	맨이터 / 아기
+
+Eyeless Dog	눈 없는 개
+Forest Giant	숲의 거인
+Earth Leviathan	레비아탄
+Baboon Hawk	개코매
+Circuit Bees	회로 벌
+Manticoil	만티코일
+Roaming Locust	메뚜기
+Tulip Snake	튤립 뱀
+Old Bird	올드 버드 / 로봇
+Kidnapper Fox	여우
+
+영문 이름	한국 통용 명칭
+Backwater Gunkfish	백워터 건크피쉬
+Barber	바버 / 이발사
+Butler	집사
+Cadaver Bloom	시체 꽃
+Cadaver Growth	시체 풀
+Feiopar	늑대
+Ghost Girl	유령 소녀
+Giant Sapsucker	딱따구리
+Lasso Man	올가미 인간 (더미 데이터)
+Mask Hornets	가면 말벌
+Spore Lizard	포자 도마뱀
+Vain Shrouds	허무한 가리개 / 보라색 풀

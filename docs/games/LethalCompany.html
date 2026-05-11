@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lethal Company</title>
+    <link rel="stylesheet" href="../assets/styles.css">
+    <script src="../assets/game-page.js" defer></script>
+</head>
+<body data-game-json="./LethalCompany/LethalCompany.json">
+    <script id="game-data-fallback" type="application/json">
+        {
+            "slug": "LethalCompany",
+            "name": "Lethal Company",
+            "profileImage": "./LethalCompany/LethalCompany_Profile.jpg",
+            "description": {
+                "genre": "협동 생존 호러",
+                "summary": "폐시설을 탐사하며 자원을 회수하고, 팀 단위로 quota를 채우는 협동 생존형 게임입니다.",
+                "details": [
+                    "4인 협동 중심의 긴장감 있는 탐사 흐름이 핵심입니다.",
+                    "맵 이해도, 팀 커뮤니케이션, 탈출 타이밍이 생존 효율을 크게 좌우합니다."
+                ]
+            },
+            "guides": [
+                {
+                    "id": "monsters",
+                    "label": "몬스터",
+                    "title": "몬스터 공략",
+                    "monsters": [
+                        {
+                            "id": "snare-flea",
+                            "section": "inside",
+                            "name": "Snare Flea",
+                            "nameKr": "올가미 벼룩",
+                            "image": "./LethalCompany/entities/Snare Flea.png",
+                            "description": "천장에 붙어 있다가 플레이어 머리를 덮쳐 압박하는 내부 몬스터입니다.",
+                            "strategy": "천장과 통로 상단을 자주 확인하고, 붙었을 때는 팀원이 삽으로 빠르게 대응하는 편이 좋습니다.",
+                            "health": "삽 타격 가능"
+                        },
+                        {
+                            "id": "bunker-spider",
+                            "section": "inside",
+                            "name": "Bunker Spider",
+                            "nameKr": "거미",
+                            "image": "./LethalCompany/entities/Bunker Spider.png",
+                            "description": "거미줄 구역을 만들고 시야에 들어온 대상을 압박하는 내부 몬스터입니다.",
+                            "strategy": "거미줄이 보이면 깊게 들어가지 말고 우회 경로를 우선 찾는 편이 안전합니다.",
+                            "health": "근접 대응 가능"
+                        },
+                        {
+                            "id": "hoarding-bug",
+                            "section": "inside",
+                            "name": "Hoarding Bug",
+                            "nameKr": "비축 벌레",
+                            "image": "./LethalCompany/entities/Hoarding Bug.png",
+                            "description": "아이템을 모으는 성향이 강한 내부 몬스터입니다.",
+                            "strategy": "불필요하게 자극하지 않으면 교전 빈도가 낮습니다. 아이템 회수 시 접근 각도를 짧게 잡으세요.",
+                            "health": "중간"
+                        },
+                        {
+                            "id": "hygrodere",
+                            "section": "inside",
+                            "name": "Hygrodere",
+                            "nameKr": "슬라임",
+                            "image": "./LethalCompany/entities/Hygrodere.png",
+                            "description": "느리게 이동하지만 닿으면 위험한 슬라임형 내부 몬스터입니다.",
+                            "strategy": "속도는 느리므로 무리하게 싸우기보다 점프와 거리 유지로 회피하는 편이 효율적입니다.",
+                            "health": "회피 우선"
+                        },
+                        {
+                            "id": "bracken",
+                            "section": "inside",
+                            "name": "Bracken",
+                            "nameKr": "브래켄",
+                            "image": "./LethalCompany/entities/Bracken.png",
+                            "description": "시야 밖에서 접근해 암살하듯 공격하는 대표적인 내부 몬스터입니다.",
+                            "strategy": "너무 오래 응시하지 말고, 완전히 등을 보이지도 않게 간헐적으로 위치를 확인하며 후퇴하는 편이 좋습니다.",
+                            "health": "매우 위험"
+                        },
+                        {
+                            "id": "thumper",
+                            "section": "inside",
+                            "name": "Thumper",
+                            "nameKr": "덤퍼",
+                            "image": "./LethalCompany/entities/Thumper.png",
+                            "description": "직선 돌진 속도가 매우 빠른 내부 몬스터입니다.",
+                            "strategy": "긴 직선 통로에서 특히 위험하니 코너를 활용해 시야를 끊고 동선을 짧게 바꾸는 것이 핵심입니다.",
+                            "health": "높음"
+                        },
+                        {
+                            "id": "coil-head",
+                            "section": "inside",
+                            "name": "Coil-head",
+                            "nameKr": "코일 헤드",
+                            "image": "./LethalCompany/entities/Coil Head.png",
+                            "description": "누군가 보고 있을 때만 멈추는 특수 내부 몬스터입니다.",
+                            "strategy": "팀원 간 시선 분담이 중요합니다. 혼자 상대하기보다 보고 있는 사람과 이동하는 사람을 분리하세요.",
+                            "health": "특수형, 시선 제어"
+                        },
+                        {
+                            "id": "jester",
+                            "section": "inside",
+                            "name": "Jester",
+                            "nameKr": "제스터",
+                            "image": "./LethalCompany/entities/Juester.png",
+                            "description": "오르골 단계 이후 전장을 강제로 붕괴시키는 최상급 내부 위협입니다.",
+                            "strategy": "소리가 들리면 탐색보다 탈출 준비를 우선해야 합니다. 욕심내지 말고 즉시 이탈 동선을 잡는 편이 안전합니다.",
+                            "health": "무적 단계 존재"
+                        },
+                        {
+                            "id": "nutcracker",
+                            "section": "inside",
+                            "name": "Nutcracker",
+                            "nameKr": "호두까기 인형 / 병정",
+                            "image": "./LethalCompany/entities/Nutcracker.png",
+                            "description": "샷건으로 시야 내 대상을 공격하는 내부 몬스터입니다.",
+                            "strategy": "시야선을 오래 내주지 말고 엄폐를 활용하세요. 접근보다 위치 파악과 각도 관리가 우선입니다.",
+                            "health": "높음"
+                        },
+                        {
+                            "id": "masked",
+                            "section": "inside",
+                            "name": "Masked",
+                            "nameKr": "마스크",
+                            "image": "./LethalCompany/entities/Masked.png",
+                            "description": "플레이어를 감염시켜 아군 위협으로 바꾸는 특수 몬스터입니다.",
+                            "strategy": "가까운 거리에서의 혼전이 위험합니다. 좁은 실내보다는 시야가 확보된 위치에서 간격을 두는 편이 좋습니다.",
+                            "health": "중간"
+                        },
+                        {
+                            "id": "maneater",
+                            "section": "inside",
+                            "name": "Maneater",
+                            "nameKr": "맨이터 / 아기",
+                            "image": "./LethalCompany/entities/Maneater.png",
+                            "description": "초기에는 위협도가 낮아 보이지만 시간이 지나면 치명적으로 변하는 내부 몬스터입니다.",
+                            "strategy": "초기 대응을 가볍게 보면 후반 리스크가 커집니다. 발견 시 팀 전체가 상태를 공유하는 편이 안전합니다.",
+                            "health": "변화형"
+                        },
+                        {
+                            "id": "eyeless-dog",
+                            "section": "outside",
+                            "name": "Eyeless Dog",
+                            "nameKr": "눈 없는 개",
+                            "image": "./LethalCompany/entities/Eyeless Dog.png",
+                            "description": "시각 대신 소리에 매우 민감하게 반응하는 외부 몬스터입니다.",
+                            "strategy": "질주, 점프, 큰 음성 반응을 줄이고 소음 관리 중심으로 움직이는 것이 핵심입니다.",
+                            "health": "회피 우선"
+                        },
+                        {
+                            "id": "forest-giant",
+                            "section": "outside",
+                            "name": "Forest Giant",
+                            "nameKr": "숲의 거인",
+                            "image": "./LethalCompany/entities/Forest Keeper.png",
+                            "description": "시야가 매우 좋고 붙잡히면 즉사급인 대형 외부 몬스터입니다.",
+                            "strategy": "열린 지형에서 오래 노출되지 말고, 나무와 구조물을 이용해 시야를 끊으며 우회하세요.",
+                            "health": "즉사급 위협"
+                        },
+                        {
+                            "id": "earth-leviathan",
+                            "section": "outside",
+                            "name": "Earth Leviathan",
+                            "nameKr": "레비아탄",
+                            "image": "./LethalCompany/entities/Earth Leviathan.png",
+                            "description": "땅속에서 튀어나와 한 번에 삼키는 외부 몬스터입니다.",
+                            "strategy": "지면 울림이나 전조를 보면 곧바로 옆 방향으로 크게 이탈하는 편이 좋습니다.",
+                            "health": "회피 우선"
+                        },
+                        {
+                            "id": "baboon-hawk",
+                            "section": "outside",
+                            "name": "Baboon Hawk",
+                            "nameKr": "개코매",
+                            "image": "./LethalCompany/entities/Baboon Hawk.png",
+                            "description": "무리를 이루며 숫자 우위를 잡으면 공격적으로 변하는 외부 몬스터입니다.",
+                            "strategy": "단독으로 오래 남지 말고, 시야에 여러 마리가 보이면 교전보다 합류를 우선하세요.",
+                            "health": "중간"
+                        },
+                        {
+                            "id": "circuit-bees",
+                            "section": "outside",
+                            "name": "Circuit Bees",
+                            "nameKr": "회로 벌",
+                            "image": "./LethalCompany/entities/Circuit Bees.png",
+                            "description": "벌집 주변을 배회하는 군집형 외부 개체입니다.",
+                            "strategy": "벌집 가까이 오래 머무르지 말고, 회수가 목적이라면 시야를 넓게 확보한 뒤 짧게 진입해 빠르게 이탈하는 편이 안전합니다.",
+                            "health": "즉시 처치보다는 회피 우선"
+                        },
+                        {
+                            "id": "manticoil",
+                            "section": "outside",
+                            "name": "Manticoil",
+                            "nameKr": "만티코일",
+                            "image": "./LethalCompany/entities/Manticoil.png",
+                            "description": "주변을 선회하며 날아다니는 비교적 위협도 낮은 비행 개체입니다.",
+                            "strategy": "직접적인 전투 대상으로 보기보다 위치 확인용 개체로 판단하면 됩니다. 다른 위협과 함께 나타나는지 주변 상황을 먼저 체크하세요.",
+                            "health": "낮음 추정"
+                        },
+                        {
+                            "id": "roaming-locust",
+                            "section": "outside",
+                            "name": "Roaming Locust",
+                            "nameKr": "메뚜기",
+                            "image": "./LethalCompany/entities/Roaming Locust.png",
+                            "description": "군집으로 떠다니지만 플레이어에게 직접적인 압박은 적은 외부 생물입니다.",
+                            "strategy": "공략 대상이라기보다 시야 방해 요소로 취급하는 편이 좋습니다. 주변에 더 치명적인 몬스터가 없는지 함께 확인하세요.",
+                            "health": "낮음 추정"
+                        },
+                        {
+                            "id": "tulip-snake",
+                            "section": "outside",
+                            "name": "Tulip Snake",
+                            "nameKr": "튤립 뱀",
+                            "image": "./LethalCompany/entities/Tulip Snake.png",
+                            "description": "플레이어에게 달라붙어 이동에 영향을 주는 특수 외부 개체입니다.",
+                            "strategy": "높은 지형이나 낙하 위험 구간에서는 특히 조심해야 합니다. 붙기 전에 거리 조절을 하고, 붙었다면 무리한 이동보다 안전 지대로 유도하는 편이 좋습니다.",
+                            "health": "직접 전투보다 회피 우선"
+                        },
+                        {
+                            "id": "old-bird",
+                            "section": "outside",
+                            "name": "Old Bird",
+                            "nameKr": "올드 버드 / 로봇",
+                            "image": "./LethalCompany/entities/Old Bird.png",
+                            "description": "미사일과 화염 공격을 사용하는 거대 이족보행 로봇형 외부 위협입니다.",
+                            "strategy": "정면 교전보다는 거리 확보와 시야 차단이 우선입니다. 개활지에서는 특히 오래 노출되지 마세요.",
+                            "health": "매우 높음"
+                        },
+                        {
+                            "id": "kidnapper-fox",
+                            "section": "outside",
+                            "name": "Kidnapper Fox",
+                            "nameKr": "여우",
+                            "image": "./LethalCompany/entities/Kidnapper Fox.png",
+                            "description": "덤불 속에 숨어 있다가 혀로 플레이어를 끌어가는 외부 몬스터입니다.",
+                            "strategy": "수풀 지역을 지날 때는 경로를 짧게 잡고, 납치 각이 보이면 즉시 팀 콜과 후퇴를 우선하세요.",
+                            "health": "높음"
+                        },
+          {
+            "id": "backwater-gunkfish",
+            "section": "inside",
+            "name": "Backwater Gunkfish",
+            "nameKr": "백워터 건크피쉬",
+            "image": "./LethalCompany/entities/Backwater Gunkfish.png",
+            "description": "물가나 습한 내부 시설에서 발견되는 물고기 형태의 괴생명체입니다.",
+            "strategy": "주로 물 주변에 서식하므로 이동 경로를 주의 깊게 살피고 거리를 두는 것이 좋습니다.",
+            "health": "근접 대응 가능"
+          },
+          {
+            "id": "barber",
+            "section": "inside",
+            "name": "Barber",
+            "nameKr": "바버 / 이발사",
+            "image": "./LethalCompany/entities/Barber.png",
+            "description": "보이지 않는 상태로 거대한 가위 소리를 내며 다가오는 위협적인 존재입니다.",
+            "strategy": "가위질 소리(탁, 탁)가 들리는 방향을 확인하고 소리가 가까워지면 즉시 거리를 벌려야 합니다.",
+            "health": "무적"
+          },
+          {
+            "id": "butler",
+            "section": "inside",
+            "name": "Butler",
+            "nameKr": "집사",
+            "image": "./LethalCompany/entities/Butler.png",
+            "description": "혼자 있는 플레이어를 찾아내 칼로 공격하는 집사 형태의 몬스터입니다.",
+            "strategy": "혼자 있을 때 습격받기 쉬우므로 팀원과 동행하며, 처치 시 몸에서 벌레가 나오므로 주의해야 합니다.",
+            "health": "근접 대응 가능"
+          },
+          {
+            "id": "cadaver-bloom",
+            "section": "inside",
+            "name": "Cadaver Bloom",
+            "nameKr": "시체 꽃",
+            "image": "./LethalCompany/entities/Cadaver Bloom.png",
+            "description": "시체나 어두운 곳에서 피어나는 불길한 식물형 몬스터입니다.",
+            "strategy": "성장하기 전에 제거하거나, 포자가 퍼지지 않도록 해당 구역을 빠르게 벗어나세요.",
+            "health": "제거 가능"
+          },
+          {
+            "id": "cadaver-growth",
+            "section": "inside",
+            "name": "Cadaver Growth",
+            "nameKr": "시체 풀",
+            "image": "./LethalCompany/entities/Cadaver Growth.png",
+            "description": "시설 내부에 증식하여 길을 막거나 환경적 위협을 가하는 변이체입니다.",
+            "strategy": "진로를 방해할 수 있으므로 도구를 사용해 제거하거나 우회로를 찾으십시오.",
+            "health": "제거 가능"
+          },
+          {
+            "id": "feiopar",
+            "section": "outside",
+            "name": "Feiopar",
+            "nameKr": "늑대",
+            "image": "./LethalCompany/entities/Feiopar.png",
+            "description": "외부에서 활동하며 플레이어를 추적하는 기괴한 외형의 생명체입니다.",
+            "strategy": "시야가 넓으므로 지형지물을 이용해 몸을 숨기며 함선으로 복귀하십시오.",
+            "health": "회피 권장"
+          },
+          {
+            "id": "ghost-girl",
+            "section": "inside",
+            "name": "Ghost Girl",
+            "nameKr": "유령 소녀",
+            "image": "./LethalCompany/entities/Ghost Girl.png",
+            "description": "특정 한 명의 플레이어에게만 보이며, 끝까지 추적해 즉사시키는 공포스러운 존재입니다.",
+            "strategy": "추적 대상으로 지정되면 뒤를 돌아보지 말고 최대한 빨리 시설을 탈출해야 합니다.",
+            "health": "무적"
+          },
+          {
+            "id": "giant-sapsucker",
+            "section": "outside",
+            "name": "Giant Sapsucker",
+            "nameKr": "딱따구리",
+            "image": "./LethalCompany/entities/Giant Sapsucker.png",
+            "description": "거대한 크기로 외부 환경에서 플레이어를 위협하는 몬스터입니다.",
+            "strategy": "멀리서 발견하기 쉬우므로 인식 범위에 들지 않도록 크게 돌아가야 합니다.",
+            "health": "회피 권장"
+          },
+          {
+            "id": "lasso-man",
+            "section": "dummy",
+            "name": "Lasso Man",
+            "nameKr": "올가미 인간",
+            "image": "./LethalCompany/entities/Lasso Man.png",
+            "description": "올가미 같은 형태로 기괴하게 움직이며 플레이어를 압박하는 내부 몬스터입니다.",
+            "strategy": "비정상적인 움직임을 보이므로 마주쳤을 때 당황하지 말고 빠르게 퇴로를 확보하세요.",
+            "health": "불확실"
+          },
+          {
+            "id": "mask-hornets",
+            "section": "outside",
+            "name": "Mask Hornets",
+            "nameKr": "가면 말벌",
+            "image": "./LethalCompany/entities/Mask Hornets.png",
+            "description": "군집을 이루어 빠르게 비행하며 대상을 공격하는 벌 형태의 적입니다.",
+            "strategy": "한 번 표적이 되면 따돌리기 어려우므로 물가로 유인하거나 건물 안으로 숨으십시오.",
+            "health": "대응 불가"
+          },
+          {
+            "id": "spore-lizard",
+            "section": "inside",
+            "name": "Spore Lizard",
+            "nameKr": "포자 도마뱀",
+            "image": "./LethalCompany/entities/Spore Lizard.png",
+            "description": "겁이 많지만 위협을 느끼면 보라색 안개를 뿜어 시야를 차단하는 도마뱀입니다.",
+            "strategy": "공격적이지 않으므로 먼저 자극하지 않으면 안전하게 지나갈 수 있습니다.",
+            "health": "근접 대응 가능"
+          },
+          {
+            "id": "vain-shrouds",
+            "section": "outside",
+            "name": "Vain Shrouds",
+            "nameKr": "허무한 가리개 / 보라색 풀",
+            "image": "./LethalCompany/entities/Vain Shrouds.png",
+            "description": "지면에 서식하며 근처를 지나는 플레이어를 낚아채는 식물성 함정입니다.",
+            "strategy": "바닥의 붉은 줄기나 덤불을 확인하고, 잡혔을 경우 팀원의 도움을 받아 탈출해야 합니다.",
+            "health": "제거 가능"
+          }
+                    ]
+                },
+                {
+                    "id": "maps",
+                    "label": "맵",
+                    "title": "맵 공략",
+                    "groups": [
+                        {
+                            "title": "초급 행성 - 입장료 무료",
+                            "items": [
+                                "Experimentation: 초보자용. 시설이 가깝고 위험도가 낮음.",
+                                "Assurance: 지형이 험하지만 고가치 스크랩이 종종 발견됨.",
+                                "Vow: 숲 지형. 숲 거인이 등장할 확률이 높으니 주의."
+                            ]
+                        },
+                        {
+                            "title": "중급 행성 - 입장료 무료",
+                            "items": [
+                                "Offense: 지형이 매우 험난하며, 식인 여우나 숲 거인이 자주 출몰.",
+                                "March: 상시 3개의 외부 출입구가 있어 탈출이 용이하나 늪지가 많음.",
+                                "Adamance: 절벽 지형. 바분 호크가 떼지어 서식하며 시설까지 거리가 멂."
+                            ]
+                        },
+                        {
+                            "title": "상급 및 특수 행성 - 입장료 발생",
+                            "items": [
+                                "Rend (550): 눈보라가 심해 시야가 차단됨. 저택(Manor) 내부가 특징.",
+                                "Dine (600): Rend보다 위험하며, 내부 구조가 매우 복잡함.",
+                                "Titan (700): 가장 높은 보상을 주지만, 시설 입구 근처에 몬스터가 밀집됨.",
+                                "Embrion (150): '올드 버드' 로봇들이 비활성 상태로 깔려있는 황폐한 행성.",
+                                "Artifice (1500): 최고의 난이도와 보상. 올드 버드와 거인들이 판치는 전쟁터.",
+                                "Liquidation (0): 수중 기지 컨셉의 행성 (업데이트에 따라 접근 방식 상이)."
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "items",
+                    "label": "아이템",
+                    "title": "아이템 공략",
+                    "groups": [
+                        {
+                            "title": "소모품 및 도구",
+                            "items": [
+                                "Walkie-talkie (12): 팀원 간 장거리 통신 필수.",
+                                "Flashlight (15): 기본 손전등. 배터리 소모가 빠름.",
+                                "Pro-flashlight (25): 밝기가 강하고 배터리 수명이 김.",
+                                "Shovel (30): 유일한 근접 무기. 몬스터를 타격하여 퇴치 가능.",
+                                "Lockpicker (20): 잠긴 문을 자동으로 열어줌 (시간 소요).",
+                                "Stun Grenade (40): 섬광탄. 몬스터를 잠시 무력화.",
+                                "Extension Ladder (60): 높은 곳을 오르거나 틈을 건널 때 사용.",
+                                "TZP-Inhalant (120): 이동 속도 증가 및 스태미나 소모 감소 (남용 시 부작용).",
+                                "Zap Gun (400): 몬스터를 전기줄로 묶어 이동 봉쇄.",
+                                "Jetpack (900): 비행 가능. 조종이 어렵고 폭발 위험 있음."
+                            ]
+                        },
+                        {
+                            "title": "함선 업그레이드",
+                            "items": [
+                                "Teleporter (375): 살아있는 아군을 함선으로 즉시 소환 (아이템은 드롭됨).",
+                                "Inverse Teleporter (425): 플레이어를 시설 내부 무작위 위치로 전송.",
+                                "Signal Translator (255): 모든 아군 화면에 짧은 텍스트 메시지 전송.",
+                                "Loud Horn (100): 함선에서 큰 소리를 내어 안개 속 아군의 길잡이 역할."
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "mods",
+                    "label": "모드",
+                    "title": "모드 공략",
+                    "groups": [
+                        {
+                            "title": "멀티 모드 운용 팁",
+                            "items": [
+                                "팀 플레이 시에는 사용 모드 목록과 버전을 동일하게 맞춰야 접속 문제가 줄어듭니다.",
+                                "프로필 단위로 모드를 관리하면 기본 게임 세팅과 모드 세팅을 분리하기 쉽습니다.",
+                                "문제가 생기면 최근 추가한 모드부터 비활성화하며 충돌 여부를 확인하는 편이 빠릅니다."
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "install": [
+                {
+                    "id": "game",
+                    "label": "게임",
+                    "title": "게임 설치",
+                    "groups": [
+                        {
+                            "title": "Steam 설치 절차",
+                            "items": [
+                                "Steam에서 Lethal Company를 구매하거나 라이브러리에 추가합니다.",
+                                "설치 후 한 번 실행해서 기본 폴더와 설정 파일이 생성되도록 합니다.",
+                                "멀티플레이 전에 게임 버전이 팀원들과 같은지 확인합니다."
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "mods",
+                    "label": "모드",
+                    "title": "모드 설치",
+                    "groups": [
+                        {
+                            "title": "모드 매니저 사용",
+                            "items": [
+                                "가장 쉬운 방법은 Thunderstore Mod Manager 또는 r2modman을 사용하는 것입니다.",
+                                "프로필을 만든 뒤 Lethal Company를 선택하고 필요한 모드를 추가합니다.",
+                                "팀 플레이 시에는 사용 모드 목록과 버전을 동일하게 맞춰야 접속 문제가 줄어듭니다."
+                            ]
+                        },
+                        {
+                            "title": "수동 설치",
+                            "items": [
+                                "수동 설치가 필요하면 BepInEx를 먼저 적용합니다.",
+                                "이후 모드 파일을 plugins 폴더에 넣고 실행 여부를 확인합니다."
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    </script>
+    <div class="page-shell">
+        <main class="game-page">
+            <header class="game-page-header">
+                <div>
+                    <p class="panel-label">GAME PAGE</p>
+                    <h1 class="game-page-title">Lethal Company</h1>
+                </div>
+                <nav class="placeholder-nav">
+                    <a href="../index.html">인덱스로 돌아가기</a>
+                </nav>
+            </header>
+
+            <section class="game-hero pixel-box">
+                <div class="game-hero-media">
+                    <img id="game-hero-image" src="./LethalCompany/LethalCompany_Profile.jpg" alt="Lethal Company profile">
+                </div>
+                <div class="game-hero-copy">
+                    <p class="panel-label" id="game-panel-label">LETHAL COMPANY</p>
+                    <h2 class="game-section-title" id="game-genre">게임 정보를 불러오는 중</h2>
+                    <p class="game-meta" id="game-summary">JSON 데이터를 읽어와 페이지와 디스코드 봇이 같은 내용을 사용할 수 있게 구성했습니다.</p>
+                </div>
+            </section>
+
+            <section class="game-tabs" aria-label="game sections">
+                <div class="tab-list" id="game-tab-list"></div>
+                <div class="subtab-list" id="game-subtab-list" hidden></div>
+            </section>
+
+            <section class="game-panel pixel-box" id="game-panel">
+                <p class="game-loading">게임 데이터를 불러오는 중입니다.</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

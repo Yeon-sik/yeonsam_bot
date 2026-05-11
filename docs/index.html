@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>yeonsam bot</title>
+    <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+    <div class="site-shell">
+        <header class="site-header">
+            <a class="brand" href="./index.html" aria-label="yeonsam bot home">
+                <span class="brand-mark" aria-hidden="true"></span>
+                <span>YEONSAM</span>
+            </a>
+
+            <nav class="top-nav" aria-label="primary navigation">
+                <a href="#intro">INTRO</a>
+                <a href="#update">UPDATE</a>
+                <a href="#game">GAME</a>
+            </nav>
+        </header>
+
+        <main class="guide-layout">
+            <aside class="side-panel" aria-label="page sections">
+                <p class="panel-label">MENU</p>
+                <nav class="side-nav">
+                    <a href="#intro">봇 소개</a>
+                    <a href="#add-bot">디스코드에 추가</a>
+                    <a href="#features">주요 기능</a>
+                    <a href="#update">릴리즈 내역</a>
+                    <a href="#game">연결된 게임</a>
+                </nav>
+            </aside>
+
+            <section class="main-panel" aria-labelledby="page-title">
+                <div id="intro" class="intro-block pixel-box">
+                    <p class="panel-label">YEONSAM BOT</p>
+                    <h1 id="page-title">심플하게 쓰는 서버 안내용 디스코드 봇</h1>
+                    <p>
+                        yeonsam bot은 서버 입장 안내, 간단한 서버 프로필 수정,
+                        관리자용 안내 문구 편집처럼 자주 쓰는 흐름을 빠르게 다루기 위한
+                        디스코드 봇입니다.
+                    </p>
+                    <p>
+                        메인 페이지는 소개 중심 구조로 다시 정리했고, 핵심 설명과 다음 행동이
+                        한눈에 읽히도록 여백과 대비를 강화했습니다.
+                    </p>
+                </div>
+
+                <section id="add-bot" class="content-section">
+                    <div class="section-header">
+                        <p class="panel-label">ADD TO DISCORD</p>
+                        <h2>디스코드에 추가하는 법</h2>
+                    </div>
+
+                    <div class="info-grid">
+                        <article class="pixel-box info-card">
+                            <strong>1. 초대 링크 열기</strong>
+                            <p>봇 전용 초대 링크를 열고 추가할 서버를 선택합니다.</p>
+                        </article>
+                        <article class="pixel-box info-card">
+                            <strong>2. 권한 확인</strong>
+                            <p>봇이 필요한 권한을 확인한 뒤 서버에 추가합니다.</p>
+                        </article>
+                        <article class="pixel-box info-card">
+                            <strong>3. 슬래시 명령 사용</strong>
+                            <p><code>/yeonsam</code>으로 안내 화면을 확인하고 기능을 시작합니다.</p>
+                        </article>
+                    </div>
+
+                    <div class="pixel-box notice-box">
+                        <p class="panel-label">NOTICE</p>
+                        <p>현재는 테스트 단계라 공개 초대 링크는 아직 연결하지 않았습니다.</p>
+                    </div>
+                </section>
+
+                <section id="features" class="content-section">
+                    <div class="section-header">
+                        <p class="panel-label">FEATURES</p>
+                        <h2>간략한 설명</h2>
+                    </div>
+
+                    <div class="guide-list">
+                        <div class="guide-row static-row">
+                            <span class="row-type">WELCOME</span>
+                            <span>
+                                <strong>입장 안내 메시지</strong>
+                                <small>신규 멤버가 들어오면 서버 안내용 임베드와 버튼을 함께 보여줍니다.</small>
+                            </span>
+                            <span class="row-status">ACTIVE</span>
+                        </div>
+
+                        <div class="guide-row static-row">
+                            <span class="row-type">PROFILE</span>
+                            <span>
+                                <strong>서버 프로필 수정</strong>
+                                <small>유저가 서버 안에서 닉네임을 바꾸는 흐름을 버튼과 모달로 처리합니다.</small>
+                            </span>
+                            <span class="row-status">ACTIVE</span>
+                        </div>
+
+                        <div class="guide-row static-row">
+                            <span class="row-type">ADMIN</span>
+                            <span>
+                                <strong>관리자용 메시지 편집</strong>
+                                <small>관리자는 환영 문구와 링크를 바로 수정해서 안내 메시지에 반영할 수 있습니다.</small>
+                            </span>
+                            <span class="row-status">ACTIVE</span>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <aside class="right-panel" aria-label="supporting information">
+                <section id="update" class="content-section compact">
+                    <p class="panel-label">UPDATE</p>
+                    <h2>릴리즈 내역</h2>
+                    <ol class="update-list">
+                        <li>
+                            <span>v0.0</span>
+                            <time datetime="2026-05-06">TEST</time>
+                        </li>
+                    </ol>
+                    <p class="section-note">현재는 테스트 단계이며 아직 기록된 릴리즈 내역은 없습니다.</p>
+                </section>
+
+                <section id="game" class="content-section compact">
+                    <p class="panel-label">GAME</p>
+                    <h2>연결된 게임 페이지</h2>
+                    <div class="game-feature-list">
+                        <a class="game-feature" href="./games/LethalCompany.html">
+                            <img src="./games/LethalCompany/LethalCompany_Profile.jpg" alt="Lethal Company profile">
+                            <span class="game-feature-copy">
+                                <strong>Lethal Company</strong>
+                                <small>봇과 문서가 함께 사용하는 JSON 기반 게임 페이지</small>
+                            </span>
+                        </a>
+                    </div>
+                </section>
+            </aside>
+        </main>
+    </div>
+</body>
+</html>
