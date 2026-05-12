@@ -7,6 +7,11 @@ param(
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $botRoot = Join-Path $repoRoot "bot"
+$venvPython = Join-Path $repoRoot ".venv\Scripts\python.exe"
+$dependencyPaths = @(
+    (Join-Path $repoRoot ".bot_runtime_deps"),
+    (Join-Path $repoRoot ".bot_deps")
+)
 
 if (-not $Token) {
     throw "TOKEN environment variable or -Token argument is required."
@@ -19,12 +24,7 @@ if ($resolvedDataDir) {
     $env:BOT_DATA_DIR = $DataDir
 }
 
-if ($UseLocalDeps) {
-    $dependencyPaths = @(
-        Join-Path $repoRoot ".bot_runtime_deps",
-        Join-Path $repoRoot ".bot_deps"
-    )
-
+function Add-LocalDependencyPaths {
     foreach ($dependencyPath in $dependencyPaths) {
         $depsDir = Resolve-Path $dependencyPath -ErrorAction SilentlyContinue
         if ($depsDir) {
@@ -44,6 +44,12 @@ $env:TOKEN = $Token
 Set-Location $botRoot
 
 if (-not $PythonExe) {
+    if (Test-Path $venvPython) {
+        $PythonExe = $venvPython
+    }
+}
+
+if (-not $PythonExe) {
     $pythonCommand = Get-Command python -ErrorAction SilentlyContinue
     if ($pythonCommand) {
         $PythonExe = $pythonCommand.Source
@@ -59,6 +65,10 @@ if (-not $PythonExe) {
 
 if (-not $PythonExe) {
     throw "Python executable was not found. Set BOT_PYTHON or pass -PythonExe."
+}
+
+if ($UseLocalDeps -or ($PythonExe -eq $venvPython)) {
+    Add-LocalDependencyPaths
 }
 
 & $PythonExe main.py
