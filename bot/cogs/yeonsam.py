@@ -13,22 +13,22 @@ from utils.storage import get_guild, load_data, update_guild
 from utils.welcome_message import build_welcome_embed
 
 GUIDE_BASE_URL = "https://yeon-sik.github.io/yeonsam_bot/games"
+SECTION_CHOICES = [
+    ("개요", "overview"),
+    ("공략", "guides"),
+    ("설치", "install"),
+]
 
 
 def normalize_text(value: str | None) -> str:
     return (value or "").strip().lower()
 
 
-def get_namespace_value(interaction: discord.Interaction, *keys: str) -> str | None:
-    for key in keys:
-        value = getattr(interaction.namespace, key, None)
-        if value not in (None, ""):
-            return value
-    return None
-
-
-def resolve_section(section: str | None) -> str:
+def resolve_section(section: str | None) -> str | None:
     normalized = normalize_text(section)
+    if not normalized:
+        return None
+
     section_map = {
         "overview": "overview",
         "개요": "overview",
@@ -39,7 +39,7 @@ def resolve_section(section: str | None) -> str:
         "installation": "install",
         "설치": "install",
     }
-    return section_map.get(normalized, "overview")
+    return section_map.get(normalized)
 
 
 def get_section_entries(data: dict, section: str | None) -> list[dict]:
@@ -96,117 +96,641 @@ def build_monster_guide_link(game_slug: str, monster_id: str) -> str:
     return f"{GUIDE_BASE_URL}/{game_slug}.html#monster-{monster_id}"
 
 
-async def autocomplete_game(
-    interaction: discord.Interaction,
-    current: str,
-) -> list[app_commands.Choice[str]]:
-    current_lower = normalize_text(current)
-    choices: list[app_commands.Choice[str]] = []
+def build_category_entry_link(game_slug: str, category_id: str, entry_id: str) -> str:
+    return f"{GUIDE_BASE_URL}/{game_slug}.html#{category_id}-{entry_id}"
 
+
+def shorten_text(value: str | None, limit: int = 100) -> str:
+    text = " ".join((value or "").split())
+    if len(text) <= limit:
+        return text
+    return f"{text[: limit - 1]}…"
+
+
+def list_game_catalog() -> list[dict[str, str]]:
+    catalog: list[dict[str, str]] = []
     for slug in list_games():
         try:
             data = load_game_data(slug)
-            display_name = data.get("name", slug)
-        except Exception:
-            display_name = slug
-
-        haystack = f"{slug} {display_name}".lower()
-        if current_lower and current_lower not in haystack:
+        except FileNotFoundError:
             continue
 
-        choices.append(app_commands.Choice(name=f"{display_name} ({slug})", value=slug))
-
-    return choices[:25]
-
-
-async def autocomplete_topic(
-    interaction: discord.Interaction,
-    current: str,
-) -> list[app_commands.Choice[str]]:
-    game = get_namespace_value(interaction, "게임", "game") or "LethalCompany"
-    section = resolve_section(get_namespace_value(interaction, "구역", "section"))
-
-    if section == "overview":
-        return []
-
-    try:
-        data = load_game_data(game)
-    except FileNotFoundError:
-        return []
-
-    entries = get_section_entries(data, section)
-    current_lower = normalize_text(current)
-    choices: list[app_commands.Choice[str]] = []
-
-    for item in entries:
-        label = item["label"]
-        title = item["title"]
-        extra_count = len(item.get("monsters", item.get("groups", [])))
-        haystack = f"{item['id']} {label} {title}".lower()
-
-        if current_lower and current_lower not in haystack:
-            continue
-
-        choices.append(
-            app_commands.Choice(
-                name=f"{label} ({item['id']}) - {extra_count}개",
-                value=item["id"],
-            )
+        description = data.get("description", {})
+        catalog.append(
+            {
+                "slug": slug,
+                "name": data.get("name", slug),
+                "summary": description.get("summary", ""),
+            }
         )
 
-    return choices[:25]
+    return catalog
 
 
-async def autocomplete_entry(
-    interaction: discord.Interaction,
-    current: str,
-) -> list[app_commands.Choice[str]]:
-    game = get_namespace_value(interaction, "게임", "game") or "LethalCompany"
-    section = resolve_section(get_namespace_value(interaction, "구역", "section"))
-    topic = get_namespace_value(interaction, "주제", "topic")
+def resolve_selected_monster(monsters: list[dict], entry: str | None) -> dict | None:
+    normalized_entry = normalize_text(entry)
+    if not normalized_entry:
+        return None
 
-    if section == "overview" or not topic:
-        return []
+    return next(
+        (
+            monster
+            for monster in monsters
+            if normalize_text(monster.get("id")) == normalized_entry
+            or normalize_text(monster.get("name")) == normalized_entry
+            or normalize_text(monster.get("nameKr")) == normalized_entry
+        ),
+        None,
+    )
 
-    try:
-        data = load_game_data(game)
-    except FileNotFoundError:
-        return []
 
-    matched_entry = resolve_topic_entry(get_section_entries(data, section), topic)
+def resolve_selected_group(groups: list[dict], entry: str | None) -> dict | None:
+    normalized_entry = normalize_text(entry)
+    if not normalized_entry:
+        return None
+
+    return next(
+        (group for group in groups if normalize_text(group.get("title")) == normalized_entry),
+        None,
+    )
+
+
+def category_has_record_entries(category: dict) -> bool:
+    return any(group.get("entries") for group in category.get("groups", []))
+
+
+def flatten_category_entries(category: dict) -> list[tuple[dict, dict]]:
+    flattened: list[tuple[dict, dict]] = []
+    for group in category.get("groups", []):
+        for item in group.get("entries", []):
+            flattened.append((group, item))
+    return flattened
+
+
+def resolve_selected_record_entry(category: dict, entry: str | None) -> tuple[dict, dict] | None:
+    normalized_entry = normalize_text(entry)
+    if not normalized_entry:
+        return None
+
+    for group, item in flatten_category_entries(category):
+        haystacks = [
+            item.get("id"),
+            item.get("name"),
+            item.get("nameKr"),
+            item.get("terminalCommand"),
+        ]
+        if any(normalize_text(value) == normalized_entry for value in haystacks if value):
+            return group, item
+
+    return None
+
+
+def build_record_group_summary(group: dict) -> str:
+    entries = group.get("entries", [])
+    if not entries:
+        return "등록된 항목이 없습니다."
+
+    preview = ", ".join(
+        f"`{item['id']}` ({item.get('nameKr') or item.get('name') or item['id']})"
+        for item in entries[:5]
+    )
+    suffix = "" if len(entries) <= 5 else f" 외 {len(entries) - 5}개"
+    return f"{preview}{suffix}"
+
+
+def build_spawn_lines(spawns: list[dict]) -> str:
+    if not spawns:
+        return "-"
+
+    return "\n".join(
+        f"- {item.get('nameKr') or item.get('name', '-')}: {item.get('chance', '-')}"
+        for item in spawns
+    )
+
+
+def add_record_entry_fields(embed: discord.Embed, game_slug: str, category_id: str, group: dict, item: dict):
+    name = item.get("name", item.get("id", "-"))
+    name_kr = item.get("nameKr")
+    if name_kr:
+        embed.add_field(name="한글 이름", value=name_kr, inline=False)
+        embed.add_field(name="영문 이름", value=name, inline=False)
+    else:
+        embed.add_field(name="이름", value=name, inline=False)
+
+    if group.get("title"):
+        embed.add_field(name="구분", value=group["title"], inline=False)
+
+    if category_id == "maps":
+        embed.add_field(name="입장료", value=str(item.get("price", "-")), inline=False)
+    elif "price" in item:
+        embed.add_field(name="가격", value=str(item.get("price", "-")), inline=False)
+
+    if item.get("terminalCommand"):
+        embed.add_field(name="터미널 명령어", value=item["terminalCommand"], inline=False)
+
+    if item.get("description"):
+        embed.add_field(name="설명", value=item["description"], inline=False)
+
+    if item.get("usage"):
+        embed.add_field(name="사용법", value=item["usage"], inline=False)
+
+    if item.get("spawnMonsters"):
+        embed.add_field(name="출현 몬스터 및 확률", value=build_spawn_lines(item["spawnMonsters"]), inline=False)
+
+    install_link = item.get("installLink")
+    if install_link:
+        embed.add_field(name="설치 링크", value=install_link, inline=False)
+
+    embed.add_field(
+        name="페이지 바로가기",
+        value=build_category_entry_link(game_slug, category_id, item["id"]),
+        inline=False,
+    )
+
+
+def build_game_browser_embed(
+    game: str | None = None,
+    section: str | None = None,
+    topic: str | None = None,
+    entry: str | None = None,
+) -> discord.Embed:
+    if not game:
+        embed = discord.Embed(
+            title="연삼 게임 탐색기",
+            description="아래 선택 메뉴에서 게임을 고르면 `구역 -> 주제 -> 항목` 순서로 이어서 클릭할 수 있습니다.",
+            color=0xFF00FF,
+        )
+        catalog = list_game_catalog()
+        if catalog:
+            embed.add_field(
+                name="등록된 게임",
+                value=", ".join(item["name"] for item in catalog[:25]),
+                inline=False,
+            )
+        return embed
+
+    data = load_game_data(game)
+    embed = discord.Embed(title=data["name"], color=0xFF00FF)
+    resolved_section = resolve_section(section)
+
+    if resolved_section is None:
+        description = data["description"]
+        embed.description = description["summary"]
+        embed.add_field(name="장르", value=description["genre"], inline=False)
+        embed.add_field(
+            name="핵심 포인트",
+            value="\n".join(f"- {item}" for item in description["details"]),
+            inline=False,
+        )
+        embed.add_field(
+            name="다음 단계",
+            value="`구역 선택` 메뉴에서 `개요`, `공략`, `설치` 중 하나를 고르세요.",
+            inline=False,
+        )
+        return embed
+
+    if resolved_section == "overview":
+        description = data["description"]
+        embed.description = description["summary"]
+        embed.add_field(name="장르", value=description["genre"], inline=False)
+        embed.add_field(
+            name="핵심 포인트",
+            value="\n".join(f"- {item}" for item in description["details"]),
+            inline=False,
+        )
+        return embed
+
+    entries = get_section_entries(data, resolved_section)
+    matched_entry = resolve_topic_entry(entries, topic)
+    embed.description = f"{data['name']} {page_section_label(resolved_section)}"
+
     if matched_entry is None:
-        return []
+        embed.add_field(
+            name="선택 가능한 주제",
+            value=", ".join(f"`{item['id']}` ({item['label']})" for item in entries[:25]) or "없음",
+            inline=False,
+        )
 
-    current_lower = normalize_text(current)
-
-    if matched_entry["id"] == "monsters" and matched_entry.get("monsters"):
-        choices: list[app_commands.Choice[str]] = []
-        for monster in matched_entry["monsters"]:
-            name = monster["name"]
-            name_kr = monster.get("nameKr", "-")
-            section_name = monster_section_label(monster.get("section", "-"))
-            haystack = f"{monster['id']} {name} {name_kr} {section_name}".lower()
-
-            if current_lower and current_lower not in haystack:
-                continue
-
-            choices.append(
-                app_commands.Choice(
-                    name=f"{name} / {name_kr} [{section_name}]",
-                    value=monster["id"],
+        for item in entries[:25]:
+            if item["id"] == "monsters" and item.get("monsters"):
+                value = "\n".join(
+                    f"- {name}: {count}"
+                    for name, count in count_monster_sections(item["monsters"]).items()
                 )
+            else:
+                value = f"{len(item.get('groups', []))}개 그룹"
+
+            embed.add_field(
+                name=item["title"],
+                value=value,
+                inline=False,
             )
 
-        return choices[:25]
+        return embed
 
-    choices: list[app_commands.Choice[str]] = []
-    for group in matched_entry.get("groups", []):
-        haystack = group["title"].lower()
-        if current_lower and current_lower not in haystack:
-            continue
-        choices.append(app_commands.Choice(name=group["title"], value=group["title"]))
+    embed.description = f"{data['name']} - {matched_entry['label']}"
 
-    return choices[:25]
+    if matched_entry["id"] == "monsters" and matched_entry.get("monsters"):
+        monsters = matched_entry["monsters"]
+        matched_monster = resolve_selected_monster(monsters, entry)
+
+        if matched_monster is None:
+            section_counts = count_monster_sections(monsters)
+            embed.add_field(
+                name="몬스터 가짓수",
+                value="\n".join(f"- {name}: {count}" for name, count in section_counts.items()),
+                inline=False,
+            )
+            embed.add_field(
+                name="선택 가능한 항목",
+                value=", ".join(
+                    f"`{monster['id']}` ({monster['name']} / {monster.get('nameKr', '-')})"
+                    for monster in monsters[:25]
+                )
+                or "없음",
+                inline=False,
+            )
+            return embed
+
+        embed.description = f"{data['name']} - {matched_entry['label']} - {matched_monster['name']}"
+        embed.add_field(name="영문 이름", value=matched_monster["name"], inline=False)
+        embed.add_field(
+            name="한글 이름",
+            value=matched_monster.get("nameKr", "-"),
+            inline=False,
+        )
+        embed.add_field(
+            name="분류",
+            value=monster_section_label(matched_monster.get("section", "-")),
+            inline=False,
+        )
+        embed.add_field(name="설명", value=matched_monster["description"], inline=False)
+        embed.add_field(name="공략", value=matched_monster["strategy"], inline=False)
+        embed.add_field(name="체력", value=matched_monster["health"], inline=False)
+        embed.add_field(
+            name="안내 링크",
+            value=build_monster_guide_link(data["slug"], matched_monster["id"]),
+            inline=False,
+        )
+        return embed
+
+    if category_has_record_entries(matched_entry):
+        selected_record = resolve_selected_record_entry(matched_entry, entry)
+        if selected_record is None:
+            for group in matched_entry.get("groups", [])[:25]:
+                embed.add_field(
+                    name=group["title"],
+                    value=build_record_group_summary(group),
+                    inline=False,
+                )
+            return embed
+
+        matched_group, matched_item = selected_record
+        display_name = matched_item.get("nameKr") or matched_item.get("name") or matched_item["id"]
+        embed.description = f"{data['name']} - {matched_entry['label']} - {display_name}"
+        add_record_entry_fields(embed, data["slug"], matched_entry["id"], matched_group, matched_item)
+        return embed
+
+    groups = matched_entry.get("groups", [])
+    matched_group = resolve_selected_group(groups, entry)
+    if matched_group is None:
+        for group in groups[:25]:
+            embed.add_field(
+                name=group["title"],
+                value="\n".join(f"- {item}" for item in group["items"]),
+                inline=False,
+            )
+        return embed
+
+    embed.description = f"{data['name']} - {matched_entry['label']} - {matched_group['title']}"
+    embed.add_field(
+        name=matched_group["title"],
+        value="\n".join(f"- {item}" for item in matched_group["items"]),
+        inline=False,
+    )
+    return embed
+
+
+def build_disabled_select_options(label: str) -> list[discord.SelectOption]:
+    return [discord.SelectOption(label=label, value="__disabled__")]
+
+
+class GameBrowserView(discord.ui.View):
+    def __init__(
+        self,
+        user_id: int,
+        game: str | None = None,
+        section: str | None = None,
+        topic: str | None = None,
+        entry: str | None = None,
+    ):
+        super().__init__(timeout=300)
+        self.user_id = user_id
+        self.game = game
+        self.section = resolve_section(section)
+        self.topic = topic
+        self.entry = entry
+        self.catalog = list_game_catalog()
+        self.data: dict | None = None
+        self.topic_entry: dict | None = None
+        self._normalize_state()
+        self._build_items()
+
+    def _normalize_state(self):
+        if not self.game:
+            self.section = None
+            self.topic = None
+            self.entry = None
+            return
+
+        try:
+            self.data = load_game_data(self.game)
+        except FileNotFoundError:
+            self.game = None
+            self.section = None
+            self.topic = None
+            self.entry = None
+            return
+
+        if self.section is None:
+            self.topic = None
+            self.entry = None
+            return
+
+        if self.section == "overview":
+            self.topic = None
+            self.entry = None
+            return
+
+        entries = get_section_entries(self.data, self.section)
+        self.topic_entry = resolve_topic_entry(entries, self.topic)
+        if self.topic_entry is None:
+            self.topic = None
+            self.entry = None
+            return
+
+        if self.topic_entry["id"] == "monsters" and self.topic_entry.get("monsters"):
+            if resolve_selected_monster(self.topic_entry["monsters"], self.entry) is None:
+                self.entry = None
+            return
+
+        if category_has_record_entries(self.topic_entry):
+            if resolve_selected_record_entry(self.topic_entry, self.entry) is None:
+                self.entry = None
+            return
+
+        if resolve_selected_group(self.topic_entry.get("groups", []), self.entry) is None:
+            self.entry = None
+
+    def _build_items(self):
+        self.add_item(GameSelect(self))
+        self.add_item(SectionSelect(self))
+        self.add_item(TopicSelect(self))
+        self.add_item(EntrySelect(self))
+        self.add_item(QueryGameBrowserButton())
+        self.add_item(ResetGameBrowserButton())
+
+    def build_embed(self) -> discord.Embed:
+        return build_game_browser_embed(
+            game=self.game,
+            section=self.section,
+            topic=self.topic,
+            entry=self.entry,
+        )
+
+    def game_options(self) -> list[discord.SelectOption]:
+        options: list[discord.SelectOption] = []
+        for item in self.catalog[:25]:
+            options.append(
+                discord.SelectOption(
+                    label=item["name"][:100],
+                    value=item["slug"],
+                    description=shorten_text(item["summary"], 100) or item["slug"],
+                    default=item["slug"] == self.game,
+                )
+            )
+        return options
+
+    def section_options(self) -> list[discord.SelectOption]:
+        options: list[discord.SelectOption] = []
+        for label, value in SECTION_CHOICES:
+            options.append(
+                discord.SelectOption(
+                    label=label,
+                    value=value,
+                    description=f"{label} 정보 보기",
+                    default=value == self.section,
+                )
+            )
+        return options
+
+    def topic_options(self) -> list[discord.SelectOption]:
+        if not self.data or not self.section or self.section == "overview":
+            return build_disabled_select_options("먼저 게임과 구역을 선택하세요")
+
+        options: list[discord.SelectOption] = []
+        for item in get_section_entries(self.data, self.section)[:25]:
+            extra_count = len(item.get("monsters", item.get("groups", [])))
+            options.append(
+                discord.SelectOption(
+                    label=item["label"][:100],
+                    value=item["id"],
+                    description=shorten_text(f"{item['title']} · {extra_count}개 세부 항목", 100),
+                    default=item["id"] == self.topic,
+                )
+            )
+        return options or build_disabled_select_options("선택 가능한 주제가 없습니다")
+
+    def entry_options(self) -> list[discord.SelectOption]:
+        if not self.topic_entry:
+            return build_disabled_select_options("먼저 주제를 선택하세요")
+
+        if self.topic_entry["id"] == "monsters" and self.topic_entry.get("monsters"):
+            options: list[discord.SelectOption] = []
+            for monster in self.topic_entry["monsters"][:25]:
+                label = monster.get("nameKr") or monster["name"]
+                description = shorten_text(
+                    f"{monster['name']} · {monster_section_label(monster.get('section', '-'))}",
+                    100,
+                )
+                options.append(
+                    discord.SelectOption(
+                        label=label[:100],
+                        value=monster["id"],
+                        description=description,
+                        default=monster["id"] == self.entry,
+                    )
+                )
+            return options or build_disabled_select_options("선택 가능한 항목이 없습니다")
+
+        if category_has_record_entries(self.topic_entry):
+            options = []
+            for group, item in flatten_category_entries(self.topic_entry)[:25]:
+                label = item.get("nameKr") or item.get("name") or item["id"]
+                description_parts = [group.get("title", "")]
+                if item.get("price") is not None:
+                    price_label = "입장료" if self.topic_entry.get("id") == "maps" else "가격"
+                    description_parts.append(f"{price_label} {item['price']}")
+                if item.get("terminalCommand"):
+                    description_parts.append(item["terminalCommand"])
+
+                options.append(
+                    discord.SelectOption(
+                        label=label[:100],
+                        value=item["id"],
+                        description=shorten_text(" · ".join(part for part in description_parts if part), 100),
+                        default=item["id"] == self.entry,
+                    )
+                )
+
+            return options or build_disabled_select_options("선택 가능한 항목이 없습니다")
+
+        options = []
+        for group in self.topic_entry.get("groups", [])[:25]:
+            options.append(
+                discord.SelectOption(
+                    label=group["title"][:100],
+                    value=group["title"],
+                    description=shorten_text(f"{len(group['items'])}개 항목", 100),
+                    default=group["title"] == self.entry,
+                )
+            )
+        return options or build_disabled_select_options("선택 가능한 항목이 없습니다")
+
+    async def refresh_message(self, interaction: discord.Interaction):
+        view = GameBrowserView(
+            user_id=self.user_id,
+            game=self.game,
+            section=self.section,
+            topic=self.topic,
+            entry=self.entry,
+        )
+        await interaction.response.edit_message(embed=view.build_embed(), view=view)
+
+    async def refresh_controls(self, interaction: discord.Interaction):
+        view = GameBrowserView(
+            user_id=self.user_id,
+            game=self.game,
+            section=self.section,
+            topic=self.topic,
+            entry=self.entry,
+        )
+        await interaction.response.edit_message(view=view)
+
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        if interaction.user.id != self.user_id:
+            await interaction.response.send_message(
+                "이 선택 메뉴는 명령을 실행한 사용자만 사용할 수 있어요.",
+                ephemeral=True,
+            )
+            return False
+        return True
+
+
+class GameSelect(discord.ui.Select):
+    def __init__(self, game_view: GameBrowserView):
+        self.game_view = game_view
+        super().__init__(
+            placeholder="게임 선택",
+            min_values=1,
+            max_values=1,
+            options=game_view.game_options() or build_disabled_select_options("등록된 게임이 없습니다"),
+            row=0,
+            disabled=not game_view.catalog,
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        self.game_view.game = self.values[0]
+        self.game_view.section = None
+        self.game_view.topic = None
+        self.game_view.entry = None
+        await self.game_view.refresh_controls(interaction)
+
+
+class SectionSelect(discord.ui.Select):
+    def __init__(self, game_view: GameBrowserView):
+        self.game_view = game_view
+        has_game = game_view.game is not None
+        super().__init__(
+            placeholder="구역 선택",
+            min_values=1,
+            max_values=1,
+            options=game_view.section_options() if has_game else build_disabled_select_options("먼저 게임을 선택하세요"),
+            row=1,
+            disabled=not has_game,
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        self.game_view.section = self.values[0]
+        self.game_view.topic = None
+        self.game_view.entry = None
+        await self.game_view.refresh_controls(interaction)
+
+
+class TopicSelect(discord.ui.Select):
+    def __init__(self, game_view: GameBrowserView):
+        self.game_view = game_view
+        enabled = game_view.data is not None and game_view.section not in (None, "overview")
+        super().__init__(
+            placeholder="주제 선택",
+            min_values=1,
+            max_values=1,
+            options=game_view.topic_options(),
+            row=2,
+            disabled=not enabled,
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        self.game_view.topic = self.values[0]
+        self.game_view.entry = None
+        await self.game_view.refresh_controls(interaction)
+
+
+class EntrySelect(discord.ui.Select):
+    def __init__(self, game_view: GameBrowserView):
+        self.game_view = game_view
+        super().__init__(
+            placeholder="항목 선택",
+            min_values=1,
+            max_values=1,
+            options=game_view.entry_options(),
+            row=3,
+            disabled=game_view.topic_entry is None,
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        self.game_view.entry = self.values[0]
+        await self.game_view.refresh_controls(interaction)
+
+
+class QueryGameBrowserButton(discord.ui.Button):
+    def __init__(self):
+        super().__init__(
+            label="조회",
+            style=discord.ButtonStyle.primary,
+            row=4,
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        game_view = self.view
+        if not isinstance(game_view, GameBrowserView):
+            await interaction.response.defer()
+            return
+
+        await game_view.refresh_message(interaction)
+
+
+class ResetGameBrowserButton(discord.ui.Button):
+    def __init__(self):
+        super().__init__(
+            label="처음부터 다시 선택",
+            style=discord.ButtonStyle.secondary,
+            row=4,
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        view = GameBrowserView(user_id=interaction.user.id)
+        await interaction.response.edit_message(embed=view.build_embed(), view=view)
 
 
 class EditMessageModal(discord.ui.Modal):
@@ -349,18 +873,18 @@ class Yeonsam(commands.Cog):
         embed.add_field(
             name="/연삼게임",
             value=(
-                "`게임`은 자동완성으로 선택할 수 있습니다.\n"
-                "`구역`은 개요 / 공략 / 설치 중에서 고릅니다.\n"
-                "`주제`는 선택한 게임과 구역에 맞는 목록이 자동완성으로 나옵니다.\n"
-                "`항목`은 선택한 주제 안의 세부 항목이 자동완성으로 나옵니다."
+                "명령어 입력 후 선택 메뉴가 열립니다.\n"
+                "`게임 -> 구역 -> 주제 -> 항목` 순서로 클릭해서 탐색합니다.\n"
+                "게임 JSON만 추가하면 같은 UI에 자동으로 포함되도록 구성되어 있습니다."
             ),
             inline=False,
         )
         embed.add_field(
             name="예시",
             value=(
-                "/연삼게임 게임:LethalCompany 구역:공략 주제:monsters\n"
-                "/연삼게임 게임:LethalCompany 구역:공략 주제:monsters 항목:lasso-man"
+                "1. `/연삼게임` 입력\n"
+                "2. `게임 선택`에서 Lethal Company 클릭\n"
+                "3. `구역 -> 주제 -> 항목` 순서로 선택"
             ),
             inline=False,
         )
@@ -377,174 +901,14 @@ class Yeonsam(commands.Cog):
 
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    @app_commands.command(name="연삼게임", description="게임 JSON 데이터를 봅니다.")
-    @app_commands.rename(
-        game="게임",
-        section="구역",
-        topic="주제",
-        entry="항목",
-    )
-    @app_commands.describe(
-        game="게임 선택",
-        section="개요, 공략, 설치 중 하나를 고릅니다.",
-        topic="선택한 구역의 세부 주제",
-        entry="선택한 주제 안의 세부 항목",
-    )
-    @app_commands.choices(
-        section=[
-            app_commands.Choice(name="개요", value="overview"),
-            app_commands.Choice(name="공략", value="guides"),
-            app_commands.Choice(name="설치", value="install"),
-        ]
-    )
-    @app_commands.autocomplete(
-        game=autocomplete_game,
-        topic=autocomplete_topic,
-        entry=autocomplete_entry,
-    )
-    async def yeonsam_game(
-        self,
-        interaction: discord.Interaction,
-        game: str = "LethalCompany",
-        section: str = "overview",
-        topic: str | None = None,
-        entry: str | None = None,
-    ):
-        try:
-            data = load_game_data(game)
-        except FileNotFoundError:
-            games = ", ".join(list_games()) or "없음"
-            await interaction.response.send_message(
-                f"게임 데이터를 찾지 못했습니다. 사용 가능한 게임: {games}",
-                ephemeral=True,
-            )
-            return
-
-        embed = discord.Embed(title=data["name"], color=0xFF00FF)
-
-        resolved_section = resolve_section(section)
-
-        if resolved_section == "overview":
-            description = data["description"]
-            embed.description = description["summary"]
-            embed.add_field(name="장르", value=description["genre"], inline=False)
-            embed.add_field(
-                name="핵심 포인트",
-                value="\n".join(f"- {item}" for item in description["details"]),
-                inline=False,
-            )
-            await interaction.response.send_message(embed=embed, ephemeral=True)
-            return
-
-        entries = get_section_entries(data, resolved_section)
-        embed.description = f"{data['name']} {page_section_label(resolved_section)}"
-
-        if topic:
-            matched_entry = resolve_topic_entry(entries, topic)
-            if matched_entry is None:
-                available_topics = ", ".join(item["label"] for item in entries)
-                await interaction.response.send_message(
-                    f"주제 '{topic}'을 찾지 못했습니다. 사용 가능한 주제: {available_topics}",
-                    ephemeral=True,
-                )
-                return
-
-            embed.description = f"{data['name']} - {matched_entry['label']}"
-
-            if matched_entry["id"] == "monsters" and matched_entry.get("monsters"):
-                monsters = matched_entry["monsters"]
-
-                if entry:
-                    normalized_entry = normalize_text(entry)
-                    matched_monster = next(
-                        (
-                            monster
-                            for monster in monsters
-                            if normalize_text(monster.get("id")) == normalized_entry
-                            or normalize_text(monster.get("name")) == normalized_entry
-                            or normalize_text(monster.get("nameKr")) == normalized_entry
-                        ),
-                        None,
-                    )
-
-                    if matched_monster is None:
-                        available_monsters = ", ".join(
-                            f"{monster['name']} / {monster.get('nameKr', '-')}"
-                            for monster in monsters
-                        )
-                        await interaction.response.send_message(
-                            f"몬스터 '{entry}'을(를) 찾지 못했습니다. 사용 가능한 몬스터: {available_monsters}",
-                            ephemeral=True,
-                        )
-                        return
-
-                    embed.description = (
-                        f"{data['name']} - {matched_entry['label']} - {matched_monster['name']}"
-                    )
-                    embed.add_field(name="영문 이름", value=matched_monster["name"], inline=False)
-                    embed.add_field(
-                        name="한글 이름",
-                        value=matched_monster.get("nameKr", "-"),
-                        inline=False,
-                    )
-                    embed.add_field(
-                        name="분류",
-                        value=monster_section_label(matched_monster.get("section", "-")),
-                        inline=False,
-                    )
-                    embed.add_field(name="설명", value=matched_monster["description"], inline=False)
-                    embed.add_field(name="공략", value=matched_monster["strategy"], inline=False)
-                    embed.add_field(name="체력", value=matched_monster["health"], inline=False)
-                    embed.add_field(
-                        name="안내 링크",
-                        value=build_monster_guide_link(data["slug"], matched_monster["id"]),
-                        inline=False,
-                    )
-                else:
-                    section_counts = count_monster_sections(monsters)
-                    embed.add_field(
-                        name="몬스터 가짓수",
-                        value="\n".join(f"- {name}: {count}" for name, count in section_counts.items()),
-                        inline=False,
-                    )
-                    embed.add_field(
-                        name="선택 가능한 항목",
-                        value=", ".join(
-                            f"`{monster['id']}` ({monster['name']} / {monster.get('nameKr', '-')})"
-                            for monster in monsters[:25]
-                        ),
-                        inline=False,
-                    )
-            else:
-                for group in matched_entry["groups"]:
-                    embed.add_field(
-                        name=group["title"],
-                        value="\n".join(f"- {item}" for item in group["items"]),
-                        inline=False,
-                    )
-        else:
-            embed.add_field(
-                name="선택 가능한 주제",
-                value=", ".join(f"`{item['id']}` ({item['label']})" for item in entries),
-                inline=False,
-            )
-
-            for item in entries:
-                if item["id"] == "monsters" and item.get("monsters"):
-                    value = "\n".join(
-                        f"- {name}: {count}"
-                        for name, count in count_monster_sections(item["monsters"]).items()
-                    )
-                else:
-                    value = f"{len(item['groups'])}개 그룹"
-
-                embed.add_field(
-                    name=item["title"],
-                    value=value,
-                    inline=False,
-                )
-
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+    @app_commands.command(name="연삼게임", description="게임 JSON 데이터를 선택형 UI로 봅니다.")
+    async def yeonsam_game(self, interaction: discord.Interaction):
+        view = GameBrowserView(user_id=interaction.user.id)
+        await interaction.response.send_message(
+            embed=view.build_embed(),
+            view=view,
+            ephemeral=True,
+        )
 
     @app_commands.command(name="연삼환영디버그", description="환영 메시지 화면을 테스트합니다.")
     @app_commands.default_permissions(administrator=True)

@@ -49,8 +49,11 @@ def start_health_server():
 
 async def sync_guild_commands(guild: discord.Guild):
     ensure_guild(guild.id)
-    # Clear the guild-scoped cache before copying globals so option order and
-    # autocomplete metadata are rebuilt from the current source of truth.
+    # Push an empty guild command set first, then copy globals back in.
+    # This forces Discord to drop any stale option schema from older versions.
+    bot.tree.clear_commands(guild=guild)
+    await bot.tree.sync(guild=guild)
+
     bot.tree.clear_commands(guild=guild)
     bot.tree.copy_global_to(guild=guild)
     synced = await bot.tree.sync(guild=guild)
