@@ -682,6 +682,10 @@ code {
     margin-top: 36px;
 }
 
+.record-section + .record-section {
+    margin-top: 36px;
+}
+
 .monster-section-heading {
     display: grid;
     grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
@@ -699,6 +703,23 @@ code {
     color: var(--pink-muted);
 }
 
+.record-section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+    gap: 20px;
+    align-items: end;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 4px solid var(--pink);
+}
+
+.record-section-copy {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--pink-muted);
+}
+
 .monster-card {
     display: grid;
     grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
@@ -708,6 +729,15 @@ code {
     background:
         radial-gradient(circle at top right, rgba(255, 0, 255, 0.12), transparent 34%),
         rgba(0, 0, 0, 0.94);
+}
+
+.record-card-list {
+    display: grid;
+    gap: 24px;
+}
+
+.record-card {
+    scroll-margin-top: 110px;
 }
 
 .monster-card-media img {
@@ -824,6 +854,15 @@ code {
     color: var(--pink-strong);
 }
 
+.monster-meta-list dd ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.monster-meta-list dd a {
+    color: var(--pink);
+}
+
 .game-loading,
 .game-error {
     margin: 0;
@@ -852,6 +891,10 @@ code {
     }
 
     .monster-section-heading {
+        grid-template-columns: 1fr;
+    }
+
+    .record-section-heading {
         grid-template-columns: 1fr;
     }
 }
