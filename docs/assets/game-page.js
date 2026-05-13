@@ -25,6 +25,7 @@ async function loadGamePage() {
             tabId: "guides",
             subtabId: getPreferredCategoryId(data.guides)
         };
+        const hashRoutes = buildHashRoutes(data);
 
         panelLabel.textContent = data.slug.toUpperCase();
         title.textContent = data.name;
@@ -36,8 +37,10 @@ async function loadGamePage() {
         heroImage.src = data.profileImage;
         heroImage.alt = `${data.name} profile`;
 
-        renderTabButtons(tabs, state, data, tabList, subtabList, panel);
-        renderContent(state, data, subtabList, panel);
+        applyHashState(window.location.hash, state, hashRoutes);
+        renderPage(tabs, state, data, tabList, subtabList, panel);
+        scrollToHashTarget(window.location.hash);
+        bindHashNavigation(tabs, state, data, hashRoutes, tabList, subtabList, panel);
     } catch (error) {
         panel.innerHTML = '<p class="game-error">게임 데이터를 불러오지 못했습니다.</p>';
     }
@@ -77,6 +80,11 @@ function renderTabButtons(tabs, state, data, tabList, subtabList, panel) {
     });
 }
 
+function renderPage(tabs, state, data, tabList, subtabList, panel) {
+    renderTabButtons(tabs, state, data, tabList, subtabList, panel);
+    renderContent(state, data, subtabList, panel);
+}
+
 function renderContent(state, data, subtabList, panel) {
     const categories = data[state.tabId] ?? [];
     const activeCategory = resolveActiveCategory(categories, state);
@@ -111,6 +119,11 @@ function renderCategory(category, panel) {
         return;
     }
 
+    if (category.groups?.some((group) => Array.isArray(group.entries) && group.entries.length > 0)) {
+        renderRecordCategory(category, panel);
+        return;
+    }
+
     const cards = category.groups
         .map((group) => {
             const items = group.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
@@ -129,6 +142,37 @@ function renderCategory(category, panel) {
             <h2 class="game-section-title">${escapeHtml(category.title)}</h2>
         </div>
         <div class="detail-grid">${cards}</div>
+    `;
+}
+
+function renderRecordCategory(category, panel) {
+    const sections = category.groups
+        .map((group) => {
+            const cards = (group.entries ?? [])
+                .map((entry) => renderRecordCard(category, group, entry))
+                .join("");
+
+            return `
+                <section class="record-section">
+                    <div class="record-section-heading">
+                        <div>
+                            <p class="panel-label">${escapeHtml((group.label ?? group.title ?? "").toUpperCase())}</p>
+                            <h3 class="game-section-title">${escapeHtml(group.title)}</h3>
+                        </div>
+                        ${group.description ? `<p class="record-section-copy">${escapeHtml(group.description)}</p>` : ""}
+                    </div>
+                    <div class="record-card-list">${cards}</div>
+                </section>
+            `;
+        })
+        .join("");
+
+    panel.innerHTML = `
+        <div class="panel-heading">
+            <p class="panel-label">DETAIL</p>
+            <h2 class="game-section-title">${escapeHtml(category.title)}</h2>
+        </div>
+        ${sections}
     `;
 }
 
@@ -286,6 +330,85 @@ function renderMonsterCard(monster) {
     `;
 }
 
+function renderRecordCard(category, group, entry) {
+    const name = entry.name ?? entry.id;
+    const subtitle = entry.nameKr ? `<p class="record-card-subtitle">${escapeHtml(entry.nameKr)}</p>` : "";
+    const tags = [];
+
+    if (group.title) {
+        tags.push(`<span class="monster-tag">${escapeHtml(group.title)}</span>`);
+    }
+    if (entry.price !== undefined) {
+        const priceLabel = category.id === "maps" ? "입장료" : "가격";
+        tags.push(`<span class="monster-tag monster-tag-accent">${escapeHtml(priceLabel)} ${escapeHtml(entry.price)}</span>`);
+    }
+    if (entry.terminalCommand) {
+        tags.push(`<span class="monster-tag">${escapeHtml(entry.terminalCommand)}</span>`);
+    }
+
+    const metaBlocks = [];
+
+    if (entry.description) {
+        metaBlocks.push(renderMetaBlock("설명", entry.description, true));
+    }
+    if (entry.usage) {
+        metaBlocks.push(renderMetaBlock("사용법", entry.usage, true));
+    }
+    if (entry.spawnMonsters?.length) {
+        const spawnMarkup = entry.spawnMonsters
+            .map((monster) => `<li>${escapeHtml(monster.nameKr ?? monster.name ?? "-")}: ${escapeHtml(monster.chance ?? "-")}</li>`)
+            .join("");
+        metaBlocks.push(renderMetaBlock("출현 몬스터 및 확률", `<ul>${spawnMarkup}</ul>`, true, true));
+    }
+    if (entry.installLink) {
+        const installMarkup = /^https?:\/\//.test(entry.installLink)
+            ? `<a href="${escapeHtml(entry.installLink)}" target="_blank" rel="noreferrer">설치 링크 열기</a>`
+            : escapeHtml(entry.installLink);
+        metaBlocks.push(
+            renderMetaBlock(
+                "설치 링크",
+                installMarkup,
+                false,
+                true,
+            )
+        );
+    }
+
+    metaBlocks.push(
+        renderMetaBlock(
+            "페이지 바로가기",
+            `<a href="#${escapeHtml(category.id)}-${escapeHtml(entry.id)}">현재 카드 위치</a>`,
+            false,
+            true,
+        )
+    );
+
+    return `
+        <article class="monster-card record-card pixel-box" id="${escapeHtml(category.id)}-${escapeHtml(entry.id)}">
+            <div class="monster-card-copy">
+                <div class="monster-card-header">
+                    <div>
+                        <p class="monster-card-kicker">${escapeHtml(category.label)}</p>
+                        <h3>${escapeHtml(name)}</h3>
+                        ${subtitle}
+                    </div>
+                    <div class="monster-card-tags">${tags.join("")}</div>
+                </div>
+                <dl class="monster-meta-list">${metaBlocks.join("")}</dl>
+            </div>
+        </article>
+    `;
+}
+
+function renderMetaBlock(label, value, wide = false, raw = false) {
+    return `
+        <div class="${wide ? "monster-meta-wide" : ""}">
+            <dt>${escapeHtml(label)}</dt>
+            <dd>${raw ? value : escapeHtml(value)}</dd>
+        </div>
+    `;
+}
+
 function buildThreatTag(health) {
     const value = String(health);
 
@@ -350,6 +473,73 @@ function resolveActiveCategory(categories, state) {
 
     state.subtabId = categories[0].id;
     return categories[0];
+}
+
+function buildHashRoutes(data) {
+    const routes = new Map();
+
+    for (const tabId of ["guides", "install"]) {
+        const categories = data[tabId] ?? [];
+
+        categories.forEach((category) => {
+            routes.set(category.id, { tabId, subtabId: category.id });
+
+            if (Array.isArray(category.monsters)) {
+                category.monsters.forEach((monster) => {
+                    routes.set(`monster-${monster.id}`, { tabId, subtabId: category.id });
+                });
+            }
+
+            (category.groups ?? []).forEach((group) => {
+                (group.entries ?? []).forEach((entry) => {
+                    routes.set(`${category.id}-${entry.id}`, { tabId, subtabId: category.id });
+                });
+            });
+        });
+    }
+
+    return routes;
+}
+
+function applyHashState(hash, state, hashRoutes) {
+    const route = hashRoutes.get(normalizeHash(hash));
+    if (!route) {
+        return false;
+    }
+
+    state.tabId = route.tabId;
+    state.subtabId = route.subtabId;
+    return true;
+}
+
+function bindHashNavigation(tabs, state, data, hashRoutes, tabList, subtabList, panel) {
+    window.addEventListener("hashchange", () => {
+        const routeMatched = applyHashState(window.location.hash, state, hashRoutes);
+        if (routeMatched) {
+            renderPage(tabs, state, data, tabList, subtabList, panel);
+        }
+        scrollToHashTarget(window.location.hash);
+    });
+}
+
+function scrollToHashTarget(hash) {
+    const targetId = normalizeHash(hash);
+    if (!targetId) {
+        return;
+    }
+
+    requestAnimationFrame(() => {
+        const target = document.getElementById(targetId);
+        if (!target) {
+            return;
+        }
+
+        target.scrollIntoView({ block: "start", behavior: "auto" });
+    });
+}
+
+function normalizeHash(hash) {
+    return String(hash ?? "").replace(/^#/, "");
 }
 
 function createSectionButton(label, className, isActive) {
