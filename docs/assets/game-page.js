@@ -82,7 +82,7 @@ function renderContent(state, data, subtabList, panel) {
     const activeCategory = resolveActiveCategory(categories, state);
 
     renderSubtabButtons(categories, activeCategory, state, subtabList, panel);
-    renderCategory(activeCategory, panel);
+    renderCategory(activeCategory, panel, state.tabId);
 }
 
 function renderSubtabButtons(categories, activeCategory, state, subtabList, panel) {
@@ -94,13 +94,13 @@ function renderSubtabButtons(categories, activeCategory, state, subtabList, pane
         button.addEventListener("click", () => {
             state.subtabId = category.id;
             syncActiveButton(subtabList, button);
-            renderCategory(category, panel);
+            renderCategory(category, panel, state.tabId);
         });
         subtabList.appendChild(button);
     });
 }
 
-function renderCategory(category, panel) {
+function renderCategory(category, panel, tabId) {
     if (!category) {
         panel.innerHTML = '<p class="game-error">표시할 세부 항목이 없습니다.</p>';
         return;
@@ -112,15 +112,9 @@ function renderCategory(category, panel) {
     }
 
     const cards = category.groups
-        .map((group) => {
-            const items = group.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
-            return `
-                <article class="detail-card pixel-box">
-                    <h3>${escapeHtml(group.title)}</h3>
-                    <ul>${items}</ul>
-                </article>
-            `;
-        })
+        .map((group) => (shouldRenderGuideMediaCards(category, tabId)
+            ? renderGuideGroupCard(group, category)
+            : renderDefaultGroupCard(group)))
         .join("");
 
     panel.innerHTML = `
@@ -130,6 +124,50 @@ function renderCategory(category, panel) {
         </div>
         <div class="detail-grid">${cards}</div>
     `;
+}
+
+function renderDefaultGroupCard(group) {
+    const items = group.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+
+    return `
+        <article class="detail-card pixel-box">
+            <h3>${escapeHtml(group.title)}</h3>
+            <ul>${items}</ul>
+        </article>
+    `;
+}
+
+function renderGuideGroupCard(group, category) {
+    const items = group.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+    const media = renderCardMedia(group.image, group.imageAlt ?? `${group.title} image`);
+
+    return `
+        <article class="detail-card detail-card-media pixel-box">
+            <div class="monster-card-media">
+                ${media}
+            </div>
+            <div class="detail-card-copy">
+                <div class="monster-card-header">
+                    <div>
+                        <p class="monster-card-kicker">${escapeHtml(category.label)} GUIDE</p>
+                        <h3>${escapeHtml(group.title)}</h3>
+                    </div>
+                    <div class="monster-card-tags">
+                        <span class="monster-tag">${escapeHtml(category.label)}</span>
+                    </div>
+                </div>
+                <ul>${items}</ul>
+            </div>
+        </article>
+    `;
+}
+
+function shouldRenderGuideMediaCards(category, tabId) {
+    if (tabId !== "guides") {
+        return false;
+    }
+
+    return ["maps", "items", "mods"].includes(category.id);
 }
 
 function renderMonsterCategory(category, panel) {
@@ -245,9 +283,7 @@ function renderMonsterCard(monster) {
     const threatTag = buildThreatTag(monster.health);
     const sectionTag = getMonsterSectionLabel(monster.section);
     const dummyTag = isDummyMonster(monster) ? '<span class="monster-tag monster-tag-dummy">DUMMY</span>' : "";
-    const media = monster.image
-        ? `<img src="${escapeHtml(monster.image)}" alt="${escapeHtml(monster.name)}">`
-        : `<div class="monster-image-placeholder" aria-label="${escapeHtml(monster.name)} image unavailable">NO IMAGE</div>`;
+    const media = renderCardMedia(monster.image, monster.name);
 
     return `
         <article class="monster-card pixel-box" id="monster-${escapeHtml(monster.id)}">
@@ -284,6 +320,14 @@ function renderMonsterCard(monster) {
             </div>
         </article>
     `;
+}
+
+function renderCardMedia(image, alt) {
+    if (image) {
+        return `<img src="${escapeHtml(image)}" alt="${escapeHtml(alt)}">`;
+    }
+
+    return `<div class="monster-image-placeholder" aria-label="${escapeHtml(alt)} image unavailable">NO IMAGE</div>`;
 }
 
 function buildThreatTag(health) {

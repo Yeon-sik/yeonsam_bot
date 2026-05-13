@@ -549,6 +549,30 @@ code {
     margin-top: 8px;
 }
 
+.detail-card-media {
+    display: grid;
+    grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+    gap: 24px;
+    padding: 20px;
+    background:
+        radial-gradient(circle at top right, rgba(255, 0, 255, 0.12), transparent 34%),
+        rgba(0, 0, 0, 0.94);
+}
+
+.detail-card-copy {
+    min-width: 0;
+}
+
+.detail-card-copy h3 {
+    margin: 0;
+}
+
+.detail-card-copy ul,
+.detail-card-copy ol {
+    margin: 0;
+    padding-left: 20px;
+}
+
 .monster-index {
     margin-bottom: 24px;
     padding: 20px;
@@ -877,6 +901,7 @@ code {
     .game-feature,
     .game-hero,
     .detail-grid,
+    .detail-card-media,
     .monster-card {
         grid-template-columns: 1fr;
     }
