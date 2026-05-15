@@ -297,7 +297,6 @@ function renderIndexLinks(monsters) {
 }
 
 function renderMonsterCard(monster) {
-    const threatTag = buildThreatTag(monster.health);
     const sectionTag = getMonsterSectionLabel(monster.section);
     const dummyTag = isDummyMonster(monster) ? '<span class="monster-tag monster-tag-dummy">DUMMY</span>' : "";
 
@@ -315,13 +314,12 @@ function renderMonsterCard(monster) {
                     </div>
                     <div class="monster-card-tags">
                         <span class="monster-tag">${escapeHtml(sectionTag)}</span>
-                        <span class="monster-tag monster-tag-accent">${escapeHtml(threatTag)}</span>
                         ${dummyTag}
                     </div>
                 </div>
                 <dl class="monster-meta-list">
                     <div>
-                        <dt>체감 위협</dt>
+                        <dt>체력</dt>
                         <dd>${escapeHtml(monster.health)}</dd>
                     </div>
                     <div class="monster-meta-wide">
@@ -418,28 +416,6 @@ function renderCardMedia(image, alt) {
     }
 
     return `<div class="monster-image-placeholder" aria-label="${escapeHtml(alt)} image unavailable">NO IMAGE</div>`;
-}
-
-function buildThreatTag(health) {
-    const value = String(health ?? "");
-
-    if (value.includes("매우")) {
-        return "최상급";
-    }
-    if (value.includes("즉사") || value.includes("무적")) {
-        return "고위험";
-    }
-    if (value.includes("높")) {
-        return "위험";
-    }
-    if (value.includes("중간")) {
-        return "주의";
-    }
-    if (value.includes("낮")) {
-        return "저위험";
-    }
-
-    return "특수";
 }
 
 function isDummyMonster(monster) {
