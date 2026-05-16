@@ -204,66 +204,140 @@ function renderRecordCategory(category, panel) {
         <div class="panel-heading">
             <p class="panel-label">DETAIL</p>
             <h2 class="game-section-title">${escapeHtml(category.title)}</h2>
+            ${category.description ? `<p class="section-lead">${escapeHtml(category.description)}</p>` : ""}
         </div>
         ${sections}
     `;
 }
 
 function renderMonsterCategory(category, panel) {
-    const insideMonsters = category.monsters.filter((monster) => monster.section === "inside");
-    const outsideMonsters = category.monsters.filter((monster) => monster.section === "outside");
-    const dummyMonsters = category.monsters.filter((monster) => monster.section === "dummy");
+    const monsters = category.monsters ?? [];
+    const hasSections = monsters.some((monster) => typeof monster.section === "string" && monster.section.length > 0);
+    const hasTiers = monsters.some((monster) => monster.tier !== undefined && monster.tier !== null && monster.tier !== "");
+    let summaryChips = [];
+    let indexGroups = [];
+    let sections = [];
+    let lead = category.description ?? "";
+
+    if (hasSections) {
+        const insideMonsters = monsters.filter((monster) => monster.section === "inside");
+        const outsideMonsters = monsters.filter((monster) => monster.section === "outside");
+        const dummyMonsters = monsters.filter((monster) => monster.section === "dummy");
+
+        summaryChips = [
+            { label: "전체 몬스터", value: monsters.length },
+            { label: "내부 위협", value: insideMonsters.length },
+            { label: "외부 위협", value: outsideMonsters.length },
+            { label: "더미 데이터", value: dummyMonsters.length }
+        ];
+        indexGroups = [
+            { label: "내부", monsters: insideMonsters },
+            { label: "외부", monsters: outsideMonsters },
+            { label: "더미", monsters: dummyMonsters }
+        ];
+        sections = [
+            {
+                label: "INSIDE",
+                title: "내부 몬스터",
+                copy: "시설 내부 탐사 중 마주치는 핵심 위협입니다. 시야 관리와 동선 통제가 중요합니다.",
+                monsters: insideMonsters
+            },
+            {
+                label: "OUTSIDE",
+                title: "외부 몬스터",
+                copy: "기지 복귀와 회수 동선에서 자주 마주치는 위협입니다. 개활지 노출과 소음 관리가 핵심입니다.",
+                monsters: outsideMonsters
+            },
+            {
+                label: "DUMMY",
+                title: "더미 몬스터",
+                copy: "정식 분류 전 참고용으로만 남겨 둔 데이터입니다.",
+                monsters: dummyMonsters
+            }
+        ];
+
+        if (!lead) {
+            lead = "내부, 외부, 더미 기준으로 나눠서 필요한 카드로 바로 이동할 수 있게 정리했습니다.";
+        }
+    } else if (hasTiers) {
+        const tier1Monsters = monsters.filter((monster) => Number(monster.tier) === 1);
+        const tier2Monsters = monsters.filter((monster) => Number(monster.tier) === 2);
+        const tier3Monsters = monsters.filter((monster) => Number(monster.tier) === 3);
+        const unrankedMonsters = monsters.filter((monster) => ![1, 2, 3].includes(Number(monster.tier)));
+
+        summaryChips = [
+            { label: "전체 몬스터", value: monsters.length },
+            { label: "Tier 1", value: tier1Monsters.length },
+            { label: "Tier 2", value: tier2Monsters.length },
+            { label: "Tier 3", value: tier3Monsters.length }
+        ];
+        indexGroups = [
+            { label: "Tier 1", monsters: tier1Monsters },
+            { label: "Tier 2", monsters: tier2Monsters },
+            { label: "Tier 3", monsters: tier3Monsters },
+            { label: "기타", monsters: unrankedMonsters }
+        ];
+        sections = [
+            {
+                label: "TIER 1",
+                title: "Tier 1 몬스터",
+                copy: "비교적 자주 보이며 기본 대응만 알아도 피해를 크게 줄일 수 있는 위협군입니다.",
+                monsters: tier1Monsters
+            },
+            {
+                label: "TIER 2",
+                title: "Tier 2 몬스터",
+                copy: "동선 방해와 교전 리스크가 커서 팀 호흡이 중요한 중간 위험군입니다.",
+                monsters: tier2Monsters
+            },
+            {
+                label: "TIER 3",
+                title: "Tier 3 몬스터",
+                copy: "판 전체를 무너뜨릴 수 있는 상위 위협입니다. 발견 즉시 회피와 콜이 필요합니다.",
+                monsters: tier3Monsters
+            },
+            {
+                label: "OTHER",
+                title: "기타 분류",
+                copy: "등급이 명확하지 않거나 별도 정리가 필요한 항목입니다.",
+                monsters: unrankedMonsters
+            }
+        ];
+
+        if (!lead) {
+            lead = "위험 등급 기준으로 묶어서 바로 탐색할 수 있게 정리했습니다.";
+        }
+    } else {
+        summaryChips = [{ label: "전체 몬스터", value: monsters.length }];
+        indexGroups = [{ label: "목록", monsters }];
+        sections = [
+            {
+                label: "MONSTER",
+                title: "몬스터 목록",
+                copy: "수집된 위협 데이터를 카드 형태로 정리했습니다.",
+                monsters
+            }
+        ];
+
+        if (!lead) {
+            lead = "몬스터 데이터를 빠르게 훑어볼 수 있게 구성했습니다.";
+        }
+    }
 
     panel.innerHTML = `
         <div class="panel-heading">
             <p class="panel-label">DETAIL</p>
             <h2 class="game-section-title">${escapeHtml(category.title)}</h2>
-            <p class="section-lead">
-                내부, 외부, 더미 몬스터를 분리해 빠르게 판단할 수 있도록 정리한 실전형 몬스터 브리핑입니다.
-                탐사 도중 필요한 핵심 정보만 바로 찾을 수 있게 구성했습니다.
-            </p>
+            ${lead ? `<p class="section-lead">${escapeHtml(lead)}</p>` : ""}
             <div class="monster-summary-strip">
-                <article class="summary-chip pixel-box">
-                    <span class="summary-chip-label">전체 몬스터</span>
-                    <strong>${category.monsters.length}</strong>
-                </article>
-                <article class="summary-chip pixel-box">
-                    <span class="summary-chip-label">내부 위협</span>
-                    <strong>${insideMonsters.length}</strong>
-                </article>
-                <article class="summary-chip pixel-box">
-                    <span class="summary-chip-label">외부 위협</span>
-                    <strong>${outsideMonsters.length}</strong>
-                </article>
-                <article class="summary-chip pixel-box">
-                    <span class="summary-chip-label">더미 데이터</span>
-                    <strong>${dummyMonsters.length}</strong>
-                </article>
+                ${summaryChips.map((chip) => renderSummaryChip(chip.label, chip.value)).join("")}
             </div>
         </div>
-        <div class="monster-index pixel-box">
-            <div class="monster-index-header">
-                <div>
-                    <p class="panel-label">MONSTER INDEX</p>
-                    <p class="monster-index-copy">이름을 누르면 해당 몬스터 카드로 바로 이동합니다.</p>
-                </div>
-            </div>
-            <div class="monster-index-group">
-                <p class="panel-label">내부</p>
-                <div class="monster-index-list">${renderIndexLinks(insideMonsters)}</div>
-            </div>
-            <div class="monster-index-group">
-                <p class="panel-label">외부</p>
-                <div class="monster-index-list">${renderIndexLinks(outsideMonsters)}</div>
-            </div>
-            <div class="monster-index-group">
-                <p class="panel-label">더미</p>
-                <div class="monster-index-list">${renderIndexLinks(dummyMonsters)}</div>
-            </div>
-        </div>
-        ${renderMonsterSection("INSIDE", "내부 몬스터", "시설 내부에서 조우하는 위협입니다. 시야 차단, 통로 구조, 근접 거리 관리가 핵심입니다.", insideMonsters)}
-        ${renderMonsterSection("OUTSIDE", "외부 몬스터", "기지 귀환과 이동 동선에서 만나는 위협입니다. 소음, 개활지 노출, 우회 경로 정보가 중요합니다.", outsideMonsters)}
-        ${renderMonsterSection("DUMMY", "더미 몬스터", "정식 분류와 별도로 확인된 더미 데이터입니다. 현재는 실전보다 참고용 성격이 큽니다.", dummyMonsters)}
+        ${renderMonsterIndex(indexGroups)}
+        ${sections
+            .filter((section) => section.monsters.length > 0)
+            .map((section) => renderMonsterSection(section.label, section.title, section.copy, section.monsters))
+            .join("")}
     `;
 }
 
@@ -290,15 +364,49 @@ function renderIndexLinks(monsters) {
             <a class="tab-button monster-index-link" href="#monster-${escapeHtml(monster.id)}">
                 <span class="monster-index-name">${escapeHtml(monster.name)}</span>
                 <span class="monster-index-subname">${escapeHtml(monster.nameKr ?? "-")}</span>
-                ${isDummyMonster(monster) ? '<span class="monster-index-flag">DUMMY</span>' : ""}
+                ${renderMonsterIndexFlag(monster)}
             </a>
         `)
         .join("");
 }
 
 function renderMonsterCard(monster) {
-    const sectionTag = getMonsterSectionLabel(monster.section);
-    const dummyTag = isDummyMonster(monster) ? '<span class="monster-tag monster-tag-dummy">DUMMY</span>' : "";
+    const sectionTag = monster.section ? getMonsterSectionLabel(monster.section) : null;
+    const tags = [];
+    const metaBlocks = [];
+
+    if (sectionTag) {
+        tags.push(`<span class="monster-tag">${escapeHtml(sectionTag)}</span>`);
+    }
+    if (monster.tier !== undefined && monster.tier !== null && monster.tier !== "") {
+        tags.push(`<span class="monster-tag">${escapeHtml(`TIER ${monster.tier}`)}</span>`);
+        metaBlocks.push(renderMetaBlock("Tier", `Tier ${monster.tier}`));
+    }
+    if (monster.threatLevel) {
+        tags.push(`<span class="monster-tag monster-tag-accent">${escapeHtml(`THREAT ${monster.threatLevel}`)}</span>`);
+        metaBlocks.push(renderMetaBlock("위협도", monster.threatLevel));
+    }
+    if (isDummyMonster(monster)) {
+        tags.push('<span class="monster-tag monster-tag-dummy">DUMMY</span>');
+    }
+    if (monster.health) {
+        metaBlocks.unshift(renderMetaBlock("체력", monster.health));
+    }
+    if (monster.cashDrop) {
+        metaBlocks.push(renderMetaBlock("드롭", monster.cashDrop));
+    }
+    if (monster.description) {
+        metaBlocks.push(renderMetaBlock("설명", monster.description, true));
+    }
+    if (monster.strategy) {
+        metaBlocks.push(renderMetaBlock("공략", monster.strategy, true));
+    }
+
+    const kicker = monster.section
+        ? `${sectionTag} 몬스터`
+        : (monster.tier !== undefined && monster.tier !== null && monster.tier !== "")
+            ? `Tier ${monster.tier} 몬스터`
+            : "MONSTER";
 
     return `
         <article class="monster-card pixel-box" id="monster-${escapeHtml(monster.id)}">
@@ -308,29 +416,15 @@ function renderMonsterCard(monster) {
             <div class="monster-card-copy">
                 <div class="monster-card-header">
                     <div>
-                        <p class="monster-card-kicker">${escapeHtml(sectionTag)} 몬스터</p>
+                        <p class="monster-card-kicker">${escapeHtml(kicker)}</p>
                         <h3>${escapeHtml(monster.name)}</h3>
                         <p class="monster-card-subtitle">${escapeHtml(monster.nameKr ?? "-")}</p>
                     </div>
                     <div class="monster-card-tags">
-                        <span class="monster-tag">${escapeHtml(sectionTag)}</span>
-                        ${dummyTag}
+                        ${tags.join("")}
                     </div>
                 </div>
-                <dl class="monster-meta-list">
-                    <div>
-                        <dt>체력</dt>
-                        <dd>${escapeHtml(monster.health)}</dd>
-                    </div>
-                    <div class="monster-meta-wide">
-                        <dt>설명</dt>
-                        <dd>${escapeHtml(monster.description)}</dd>
-                    </div>
-                    <div class="monster-meta-wide">
-                        <dt>공략</dt>
-                        <dd>${escapeHtml(monster.strategy)}</dd>
-                    </div>
-                </dl>
+                <dl class="monster-meta-list">${metaBlocks.join("")}</dl>
             </div>
         </article>
     `;
@@ -339,15 +433,16 @@ function renderMonsterCard(monster) {
 function renderRecordCard(category, group, entry) {
     const name = entry.name ?? entry.id;
     const subtitle = entry.nameKr ? `<p class="monster-card-subtitle">${escapeHtml(entry.nameKr)}</p>` : "";
-    const priceLabel = category.id === "maps" ? "입장료" : "가격";
+    const priceValue = entry.price ?? entry.priceRange;
+    const priceLabel = category.id === "maps" ? "입장료" : (entry.priceRange !== undefined ? "가격대" : "가격");
     const tags = [];
     const metaBlocks = [];
 
     if (group.label ?? group.title) {
         tags.push(`<span class="monster-tag">${escapeHtml(group.label ?? group.title)}</span>`);
     }
-    if (entry.price !== undefined) {
-        tags.push(`<span class="monster-tag monster-tag-accent">${escapeHtml(priceLabel)} ${escapeHtml(entry.price)}</span>`);
+    if (priceValue !== undefined) {
+        tags.push(`<span class="monster-tag monster-tag-accent">${escapeHtml(priceLabel)} ${escapeHtml(priceValue)}</span>`);
     }
     if (entry.terminalCommand) {
         tags.push(`<span class="monster-tag">${escapeHtml(entry.terminalCommand)}</span>`);
@@ -416,6 +511,51 @@ function renderCardMedia(image, alt) {
     }
 
     return `<div class="monster-image-placeholder" aria-label="${escapeHtml(alt)} image unavailable">NO IMAGE</div>`;
+}
+
+function renderSummaryChip(label, value) {
+    return `
+        <article class="summary-chip pixel-box">
+            <span class="summary-chip-label">${escapeHtml(label)}</span>
+            <strong>${escapeHtml(value)}</strong>
+        </article>
+    `;
+}
+
+function renderMonsterIndex(groups) {
+    const visibleGroups = groups.filter((group) => group.monsters.length > 0);
+    if (visibleGroups.length === 0) {
+        return "";
+    }
+
+    return `
+        <div class="monster-index pixel-box">
+            <div class="monster-index-header">
+                <div>
+                    <p class="panel-label">MONSTER INDEX</p>
+                    <p class="monster-index-copy">이름을 누르면 해당 몬스터 카드로 바로 이동합니다.</p>
+                </div>
+            </div>
+            ${visibleGroups
+                .map((group) => `
+                    <div class="monster-index-group">
+                        <p class="panel-label">${escapeHtml(group.label)}</p>
+                        <div class="monster-index-list">${renderIndexLinks(group.monsters)}</div>
+                    </div>
+                `)
+                .join("")}
+        </div>
+    `;
+}
+
+function renderMonsterIndexFlag(monster) {
+    if (isDummyMonster(monster)) {
+        return '<span class="monster-index-flag">DUMMY</span>';
+    }
+    if (monster.tier !== undefined && monster.tier !== null && monster.tier !== "") {
+        return `<span class="monster-index-flag">${escapeHtml(`TIER ${monster.tier}`)}</span>`;
+    }
+    return "";
 }
 
 function isDummyMonster(monster) {

@@ -59,6 +59,18 @@ def monster_section_label(section: str) -> str:
     }.get(section, section)
 
 
+def monster_category_label(monster: dict) -> str:
+    section = normalize_text(monster.get("section"))
+    if section:
+        return monster_section_label(section)
+
+    tier = monster.get("tier")
+    if tier not in (None, ""):
+        return f"Tier {tier}"
+
+    return "-"
+
+
 def page_section_label(section: str) -> str:
     return {
         "overview": "개요",
@@ -70,7 +82,7 @@ def page_section_label(section: str) -> str:
 def count_monster_sections(monsters: list[dict]) -> dict[str, int]:
     counts: dict[str, int] = {}
     for monster in monsters:
-        label = monster_section_label(monster.get("section", "-"))
+        label = monster_category_label(monster)
         counts[label] = counts.get(label, 0) + 1
     return counts
 
@@ -92,12 +104,20 @@ def resolve_topic_entry(entries: list[dict], topic: str | None) -> dict | None:
     )
 
 
-def build_monster_guide_link(game_slug: str, monster_id: str) -> str:
-    return f"{GUIDE_BASE_URL}/{game_slug}.html#monster-{monster_id}"
+def build_game_page_name(data: dict) -> str:
+    page_path = data.get("pagePath")
+    if page_path:
+        return str(page_path)
+
+    return f"{data['slug']}.html"
 
 
-def build_category_entry_link(game_slug: str, category_id: str, entry_id: str) -> str:
-    return f"{GUIDE_BASE_URL}/{game_slug}.html#{category_id}-{entry_id}"
+def build_monster_guide_link(data: dict, monster_id: str) -> str:
+    return f"{GUIDE_BASE_URL}/{build_game_page_name(data)}#monster-{monster_id}"
+
+
+def build_category_entry_link(data: dict, category_id: str, entry_id: str) -> str:
+    return f"{GUIDE_BASE_URL}/{build_game_page_name(data)}#{category_id}-{entry_id}"
 
 
 def shorten_text(value: str | None, limit: int = 100) -> str:
@@ -208,7 +228,7 @@ def build_spawn_lines(spawns: list[dict]) -> str:
     )
 
 
-def add_record_entry_fields(embed: discord.Embed, game_slug: str, category_id: str, group: dict, item: dict):
+def add_record_entry_fields(embed: discord.Embed, data: dict, category_id: str, group: dict, item: dict):
     name = item.get("name", item.get("id", "-"))
     name_kr = item.get("nameKr")
     if name_kr:
@@ -224,6 +244,8 @@ def add_record_entry_fields(embed: discord.Embed, game_slug: str, category_id: s
         embed.add_field(name="입장료", value=str(item.get("price", "-")), inline=False)
     elif "price" in item:
         embed.add_field(name="가격", value=str(item.get("price", "-")), inline=False)
+    elif "priceRange" in item:
+        embed.add_field(name="가격대", value=str(item.get("priceRange", "-")), inline=False)
 
     if item.get("terminalCommand"):
         embed.add_field(name="터미널 명령어", value=item["terminalCommand"], inline=False)
@@ -243,7 +265,7 @@ def add_record_entry_fields(embed: discord.Embed, game_slug: str, category_id: s
 
     embed.add_field(
         name="페이지 바로가기",
-        value=build_category_entry_link(game_slug, category_id, item["id"]),
+        value=build_category_entry_link(data, category_id, item["id"]),
         inline=False,
     )
 
@@ -361,15 +383,20 @@ def build_game_browser_embed(
         )
         embed.add_field(
             name="분류",
-            value=monster_section_label(matched_monster.get("section", "-")),
+            value=monster_category_label(matched_monster),
             inline=False,
         )
         embed.add_field(name="설명", value=matched_monster["description"], inline=False)
         embed.add_field(name="공략", value=matched_monster["strategy"], inline=False)
-        embed.add_field(name="체력", value=matched_monster["health"], inline=False)
+        if matched_monster.get("health"):
+            embed.add_field(name="체력", value=str(matched_monster["health"]), inline=False)
+        if matched_monster.get("threatLevel"):
+            embed.add_field(name="위협도", value=str(matched_monster["threatLevel"]), inline=False)
+        if matched_monster.get("cashDrop"):
+            embed.add_field(name="드롭", value=str(matched_monster["cashDrop"]), inline=False)
         embed.add_field(
             name="안내 링크",
-            value=build_monster_guide_link(data["slug"], matched_monster["id"]),
+            value=build_monster_guide_link(data, matched_monster["id"]),
             inline=False,
         )
         return embed
@@ -388,7 +415,7 @@ def build_game_browser_embed(
         matched_group, matched_item = selected_record
         display_name = matched_item.get("nameKr") or matched_item.get("name") or matched_item["id"]
         embed.description = f"{data['name']} - {matched_entry['label']} - {display_name}"
-        add_record_entry_fields(embed, data["slug"], matched_entry["id"], matched_group, matched_item)
+        add_record_entry_fields(embed, data, matched_entry["id"], matched_group, matched_item)
         return embed
 
     groups = matched_entry.get("groups", [])
@@ -550,7 +577,7 @@ class GameBrowserView(discord.ui.View):
             for monster in self.topic_entry["monsters"][:25]:
                 label = monster.get("nameKr") or monster["name"]
                 description = shorten_text(
-                    f"{monster['name']} · {monster_section_label(monster.get('section', '-'))}",
+                    f"{monster['name']} · {monster_category_label(monster)}",
                     100,
                 )
                 options.append(
