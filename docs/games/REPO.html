@@ -1,0 +1,848 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R.E.P.O.</title>
+    <link rel="stylesheet" href="../assets/styles.css">
+    <script src="../assets/game-page.js" defer></script>
+</head>
+<body data-game-json="./REPO/REPO.json">
+    <script id="game-data-fallback" type="application/json">
+{
+    "slug": "REPO",
+    "pagePath": "REPO.html",
+    "name": "R.E.P.O.",
+    "description": {
+        "genre": "협동 공포 생존",
+        "summary": "세미봇(로봇)으로 폐건물을 탐사하며 귀중품을 회수해 할당량을 채우는 협동 생존형 공포 게임입니다.",
+        "details": [
+            "팀원과 협력해 귀중품을 C.A.R.T.에 싣고 추출 지점으로 운반하는 것이 핵심 목표입니다.",
+            "다양한 몬스터가 맵 곳곳을 배회하며 탐사를 방해합니다.",
+            "레벨 사이 서비스 스테이션(상점)에서 업그레이드와 아이템을 구매해 생존력을 높일 수 있습니다.",
+            "2026년 5월 기준 v0.4.0 코스메틱 업데이트가 적용된 상태입니다."
+        ]
+    },
+    "guides": [
+        {
+            "id": "monsters",
+            "label": "몬스터",
+            "title": "몬스터 공략",
+            "description": "R.E.P.O.의 몬스터는 위험 등급(Tier 1~3)으로 분류됩니다. 처치 시 Life Orb를 드롭하며 현금으로 교환할 수 있습니다.",
+            "monsters": [
+                {
+                    "id": "apex-predator",
+                    "tier": 1,
+                    "name": "Apex Predator",
+                    "nameKr": "에이펙스 프레데터 (고무오리)",
+                    "health": "150",
+                    "cashDrop": "$2,400",
+                    "description": "장난감 오리 모습으로 위장해 플레이어를 따라다니는 몬스터입니다. 집어 들면 뾰족한 이빨을 드러내며 약 10초간 추격합니다.",
+                    "strategy": "무시하면 전혀 위험하지 않습니다. 절대 집어 들지 마세요.",
+                    "image": "./REPO/entities/Apex Predator.png"
+                },
+                {
+                    "id": "animal",
+                    "tier": 1,
+                    "name": "Animal",
+                    "nameKr": "애니멀",
+                    "health": "200",
+                    "cashDrop": "$3,800",
+                    "description": "거미처럼 생긴 생명체로, 발견 시 맵 전체를 무질서하게 돌진하며 귀중품과 C.A.R.T.을 파괴합니다.",
+                    "strategy": "귀중품과 거리를 두고, 시야에 들어오지 않도록 우회하세요. 스스로 벽에 부딪혀 기절하기도 합니다.",
+                    "image": "./REPO/entities/Animal.png"
+                },
+                {
+                    "id": "banger",
+                    "tier": 1,
+                    "name": "Banger",
+                    "nameKr": "뱅어 (폭발 해골)",
+                    "health": "100",
+                    "cashDrop": "$0",
+                    "description": "다이너마이트가 들어간 해골 몬스터로 보통 3마리씩 무리지어 나타납니다. 세미봇을 발견하면 도화선에 불을 붙입니다.",
+                    "strategy": "3초 안에 집어서 던지면 무기로 활용 가능합니다. 폭발 반경에 다른 몬스터도 휘말립니다.",
+                    "image": "./REPO/entities/Bangers.png"
+                },
+                {
+                    "id": "bella",
+                    "tier": 1,
+                    "name": "Bella",
+                    "nameKr": "벨라 (세발자전거)",
+                    "health": "250",
+                    "cashDrop": "$2,700",
+                    "description": "빨간 세발자전거를 타는 유령으로, 자극하기 전까지는 보이지 않습니다. 길을 막으면 종소리를 울리고, 도발하면 자신을 드러내며 맹렬히 돌진합니다.",
+                    "strategy": "자전거가 혼자 움직이는 것을 보면 줍지 말고 비켜 주세요. 트럭으로 돌아갈 때 특히 공격적으로 변합니다.",
+                    "image": "./REPO/entities/Bella.png"
+                },
+                {
+                    "id": "birthday-boy",
+                    "tier": 1,
+                    "name": "Birthday Boy",
+                    "nameKr": "버스데이 보이",
+                    "health": "300",
+                    "cashDrop": "$3,000",
+                    "description": "빨간 풍선을 맵 곳곳에 달아두는 몬스터입니다. 풍선이 터지면 장소에 관계없이 즉시 알아채고 광폭 상태로 변합니다.",
+                    "strategy": "풍선을 건드리지 마세요. 귀중품이나 C.A.R.T.도 풍선을 터뜨릴 수 있으니 주의하세요.",
+                    "image": "./REPO/entities/Birthday Boy.png"
+                },
+                {
+                    "id": "bowtie",
+                    "tier": 2,
+                    "name": "Bowtie",
+                    "nameKr": "보타이",
+                    "health": "350",
+                    "cashDrop": "$4,000",
+                    "description": "크고 느린 몬스터로, 놀라게 하면 강력한 음파 충격을 발사합니다. 음파는 벽 쪽으로 밀어붙여 스턴을 유발하거나 맵 밖으로 날려버릴 수 있습니다.",
+                    "strategy": "갑자기 다가가거나 놀라게 하지 마세요. 충격파 이후 도망치는 본체에 치이지 않도록 피해야 합니다.",
+                    "image": "./REPO/entities/Bowtie.png"
+                },
+                {
+                    "id": "chef",
+                    "tier": 2,
+                    "name": "Chef",
+                    "nameKr": "셰프",
+                    "health": "500",
+                    "cashDrop": "$3,600",
+                    "description": "칼을 사방으로 뻗으며 굴러다니는 콧수염 개구리 몬스터입니다. 맵의 지형지물이나 사망 구덩이에 빠져 자멸하기도 합니다.",
+                    "strategy": "높은 지형이나 엄폐물 위에 올라서면 안전합니다. 다른 몬스터에게 굴리면 피해를 줄 수 있습니다.",
+                    "image": "./REPO/entities/Chef.png"
+                },
+                {
+                    "id": "cleanup-crew",
+                    "tier": 2,
+                    "name": "Cleanup Crew",
+                    "nameKr": "청소부",
+                    "health": "450",
+                    "cashDrop": "$5,600",
+                    "description": "여러 개의 두상이 합쳐진 몬스터로, 머리를 분리해 투척합니다. 머리는 고무오리처럼 튀어 다니다 폭발하며, 독성 광역 피해를 줍니다. 무한히 재생됩니다.",
+                    "strategy": "이동 속도가 느리므로 빠르게 구역을 이탈하세요. 근접 시에는 가시 형태의 근거리 공격도 있습니다.",
+                    "image": "./REPO/entities/Cleanup Crew.png"
+                },
+                {
+                    "id": "clown",
+                    "tier": 3,
+                    "name": "Clown",
+                    "nameKr": "광대",
+                    "health": "800",
+                    "cashDrop": "$6,400",
+                    "description": "기형적인 광대 얼굴을 가진 대형 몬스터입니다. 세미봇을 발견하면 코끝에서 수평으로 광범위한 레이저를 발사합니다. 발소리가 카메라를 흔들 정도로 크고, 특유의 웃음소리를 냅니다.",
+                    "strategy": "시야와 청각을 통해 위치를 미리 파악하세요. 레이저는 수평 범위가 매우 넓으므로 높은 곳이나 엄폐물 뒤로 피해야 합니다.",
+                    "image": "./REPO/entities/Clown.png"
+                },
+                {
+                    "id": "elsa",
+                    "tier": 1,
+                    "name": "Elsa",
+                    "nameKr": "엘사 (강아지)",
+                    "health": "175",
+                    "cashDrop": "$4,000",
+                    "description": "처음에는 온순한 강아지 모습이지만, 쓰다듬지 않아 눈이 빨개지면 이족보행 근육질 괴물로 변신해 무시한 플레이어를 뒤쫓습니다.",
+                    "strategy": "가까이 있을 때 클릭해 애정표현(쓰다듬기)을 해주세요. 눈이 빨개지기 시작하면 즉시 달래야 합니다.",
+                    "image": "./REPO/entities/Elsa.png"
+                },
+                {
+                    "id": "gambit",
+                    "tier": 1,
+                    "name": "Gambit",
+                    "nameKr": "갬빗 (룰렛)",
+                    "health": "400",
+                    "cashDrop": "$3,600",
+                    "description": "입이 가려진 상태에서는 무해합니다. 자극하면 플레이어를 붙잡아 룰렛을 돌리게 하며, 결과에 따라 돈을 얻거나 HP를 잃게 됩니다.",
+                    "strategy": "소리와 움직임을 최소화해 자극하지 마세요. 발각되어 잡혔다면 운에 맡기는 수밖에 없습니다.",
+                    "image": "./REPO/entities/Gambit.png"
+                },
+                {
+                    "id": "gnome",
+                    "tier": 1,
+                    "name": "Gnome",
+                    "nameKr": "노움",
+                    "health": "80",
+                    "cashDrop": "$0",
+                    "description": "낮은 피해를 지속적으로 주며, 주변 귀중품을 찾아 파괴하거나 C.A.R.T. 안으로 뛰어들어 아이템을 부수는 것을 최우선으로 합니다.",
+                    "strategy": "체력이 낮아 제거하기 쉽습니다. C.A.R.T. 주변에서 발견되면 즉시 처리하는 것이 좋습니다.",
+                    "image": "./REPO/entities/Gnomes.png"
+                },
+                {
+                    "id": "headgrab",
+                    "tier": 2,
+                    "name": "Headgrab",
+                    "nameKr": "헤드그랩 (머리 도둑)",
+                    "health": "300",
+                    "cashDrop": "$3,900",
+                    "description": "무술을 구사하는 고블린 형태의 몬스터입니다. 사망한 팀원의 세미봇 머리를 빼앗아 달아납니다. 죽은 플레이어는 헤드그랩의 시점으로 보게 됩니다.",
+                    "strategy": "자극하지 않으면 먼저 싸우려 하지 않습니다. 팀원 머리를 빼앗기면 회수해야 부활이 가능합니다.",
+                    "image": "./REPO/entities/Headgrab.png"
+                },
+                {
+                    "id": "headman",
+                    "tier": 3,
+                    "name": "Headman",
+                    "nameKr": "헤드맨 (떠다니는 거대 머리)",
+                    "health": "1000",
+                    "cashDrop": "$6,400",
+                    "description": "거대한 머리가 공중을 떠다니며 턱을 달칵거리는 몬스터입니다. 시선이 고정된 채로 움직임을 감지하며 이동합니다. 소음보다는 움직임에 더 민감합니다.",
+                    "strategy": "엄폐물을 최대한 활용해 시선을 차단하세요. 천천히 이동하면 감지 확률이 낮아집니다.",
+                    "image": "./REPO/entities/Headsman.png"
+                },
+                {
+                    "id": "heart-hugger",
+                    "tier": 2,
+                    "name": "Heart Hugger",
+                    "nameKr": "하트 허거",
+                    "health": "400",
+                    "cashDrop": "$4,300",
+                    "description": "만화풍 하트 모양으로 떠다니다 수평 빔으로 세미봇을 최면시킨 뒤 비너스 파리지옥 형태로 변신해 물어뜯습니다. 이후 바닥으로 사라져 다른 곳에 재등장합니다.",
+                    "strategy": "빔을 차단할 엄폐물 뒤로 즉시 숨어 시선을 끊으세요. 트럭 귀환 시 트럭 안에 등장하기도 합니다.",
+                    "image": "./REPO/entities/Heart Hugger.png"
+                },
+                {
+                    "id": "hidden",
+                    "tier": 2,
+                    "name": "Hidden",
+                    "nameKr": "히든 (투명 몬스터)",
+                    "health": "350",
+                    "cashDrop": "$4,000",
+                    "description": "거의 투명하며 숨을 내쉴 때 어두운 안개와 발자국으로만 존재를 알 수 있습니다. 붙잡으면 세미봇을 텀블 상태로 만들어 끌고 다닙니다.",
+                    "strategy": "안개와 발소리에 집중하세요. 이동 중 C.A.R.T. 운반을 방해하므로 C.A.R.T. 주변을 주의깊게 살펴야 합니다.",
+                    "image": "./REPO/entities/Hidden.png"
+                },
+                {
+                    "id": "huntsman",
+                    "tier": 3,
+                    "name": "Huntsman",
+                    "nameKr": "헌츠맨 (샷건 사냥꾼)",
+                    "health": "750",
+                    "cashDrop": "$5,600~$7,200",
+                    "description": "샷건을 지팡이 삼아 다니는 시각장애 몬스터입니다. 청력이 극도로 발달해 점프, 대화, 달리기, 아이템 낙하 소리에 즉시 반응해 샷건을 발사합니다. 초반에는 원샷 사망도 가능합니다.",
+                    "strategy": "소음을 최소화하세요. 다른 몬스터 방향으로 유인하면 서로 피해를 입힐 수 있습니다. 계단에서 스스로 굴러 떨어지기도 합니다.",
+                    "image": "./REPO/entities/Huntsman.png"
+                },
+                {
+                    "id": "loom",
+                    "tier": 3,
+                    "name": "Loom",
+                    "nameKr": "룸 (그림자 손)",
+                    "health": "600",
+                    "cashDrop": "$6,100",
+                    "description": "가장 무서운 몬스터 중 하나입니다. 한 번에 한 플레이어만 추적하며, 타겟의 화면에 서서히 조여드는 손 이미지를 표시합니다. 숨어도 항상 위치를 알고 있으며, 박수 공격 후 타겟을 바꿉니다.",
+                    "strategy": "숨는 것은 효과가 없습니다. 팀원과 함께 움직이며 룸의 주의를 분산시키고, 박수 공격 타이밍에 맞춰 피하세요.",
+                    "image": "./REPO/entities/Loom.png"
+                },
+                {
+                    "id": "mentalist",
+                    "tier": 3,
+                    "name": "Mentalist",
+                    "nameKr": "멘탈리스트 (거대 뇌)",
+                    "health": "1200",
+                    "cashDrop": "$4,000",
+                    "description": "거대한 뇌 형태로 맵을 떠다니는 몬스터입니다. 반중력 돔으로 세미봇을 공중에 들어올렸다가 바닥에 내리쳐 큰 피해를 줍니다. 업그레이드 없이는 단타에 즉사할 수 있습니다.",
+                    "strategy": "멘탈리스트 근처에서는 항상 탈출 경로를 확보해 두세요. 귀중품도 범위 피해를 받을 수 있습니다.",
+                    "image": "./REPO/entities/Mentalist.png"
+                },
+                {
+                    "id": "oogly",
+                    "tier": 2,
+                    "name": "Oogly",
+                    "nameKr": "우글리",
+                    "health": "550",
+                    "cashDrop": "조사 중",
+                    "description": "레벨의 보안 시스템처럼 행동하며, 천장을 빙빙 돌며 녹색 스포트라이트로 세미봇을 탐지합니다. 발각되면 공중으로 들어올려 여러 방향으로 던집니다.",
+                    "strategy": "녹색 빛이 비치면 즉시 엄폐물 뒤로 숨으세요. 특정 방에만 등장하며 오래 머물지 않습니다.",
+                    "image": "./REPO/entities/Oogly.png"
+                },
+                {
+                    "id": "peeper",
+                    "tier": 1,
+                    "name": "Peeper",
+                    "nameKr": "피퍼 (천장 눈)",
+                    "health": "120",
+                    "cashDrop": "$2,900",
+                    "description": "천장에 나타나는 거대한 눈 몬스터입니다. 시선이 맞으면 세미봇을 속박하고 지속 피해를 줍니다. 시선을 끊으면 사라졌다가 다른 방에 재등장합니다.",
+                    "strategy": "천장을 자주 확인하고, 발견 즉시 엄폐물 뒤로 숨어 시선을 끊으세요. 트럭 밖에서 기다리기도 합니다.",
+                    "image": "./REPO/entities/Peeper.png"
+                },
+                {
+                    "id": "reaper",
+                    "tier": 3,
+                    "name": "Reaper",
+                    "nameKr": "리퍼 (칼팔 허수아비)",
+                    "health": "900",
+                    "cashDrop": "$6,100",
+                    "description": "칼이 달린 팔을 가진 허수아비 모습의 몬스터입니다. 발견 시 좌우로 칼을 휘두르며 빠르게 추격합니다. 스턴락이 걸리기 쉬워 위험하지만, 쉽게 주의를 잃고 추격을 포기합니다.",
+                    "strategy": "문이나 코너 하나만으로도 추격을 뿌리칠 수 있습니다. 발각 즉시 방향을 틀어 거리를 벌리세요.",
+                    "image": "./REPO/entities/Reaper.png"
+                },
+                {
+                    "id": "robe",
+                    "tier": 3,
+                    "name": "Robe",
+                    "nameKr": "로브 (망령)",
+                    "health": "700",
+                    "cashDrop": "$6,100",
+                    "description": "유령처럼 맵을 떠다니는 몬스터입니다. 얼굴을 직접 쳐다보면 날카로운 새 울음소리를 내며 추격합니다. 추격 중에는 화면에 잡음이 생기지만, 다시 쳐다보지 않으면 공격하지 않습니다.",
+                    "strategy": "측면이나 뒤에서 관찰하세요. 얼굴을 쳐다보지 않으면서 지나가는 것이 핵심입니다.",
+                    "image": "./REPO/entities/Robe.png"
+                },
+                {
+                    "id": "rugrat",
+                    "tier": 1,
+                    "name": "Rugrat",
+                    "nameKr": "러그랫 (꼬마 괴물)",
+                    "health": "150",
+                    "cashDrop": "$4,000",
+                    "description": "아이템을 집어 플레이어에게 던지는 유아 형태의 몬스터입니다. 던진 아이템은 플레이어에게 피해를 주고 파괴됩니다. 던진 후 달아나 다음 아이템을 찾습니다.",
+                    "strategy": "귀중품 주변에 러그랫이 있으면 빠르게 제거하거나 아이템을 옮기세요.",
+                    "image": "./REPO/entities/Rugrat.png"
+                },
+                {
+                    "id": "shadow-child",
+                    "tier": 2,
+                    "name": "Shadow Child",
+                    "nameKr": "섀도우 차일드",
+                    "health": "400",
+                    "cashDrop": "$3,900",
+                    "description": "맵 곳곳을 순간이동하는 유령 형태의 아이 몬스터입니다. 아이 웃음소리가 들리면 근처에 있다는 신호입니다. 얼굴을 너무 오래 쳐다보면 공중으로 날려버립니다.",
+                    "strategy": "얼굴을 짧게만 확인하고 시선을 피하세요. 사라졌다가 다른 방에 재등장합니다.",
+                    "image": "./REPO/entities/Shadow Child.png"
+                },
+                {
+                    "id": "spewer",
+                    "tier": 1,
+                    "name": "Spewer",
+                    "nameKr": "스퓨어 (부유하는 이빨)",
+                    "health": "180",
+                    "cashDrop": "$2,800",
+                    "description": "떠다니는 이빨 뭉치 몬스터로 세미봇에게 달라붙어 약 50초간 산성 피해를 줍니다. 다른 몬스터에게 산성을 뱉게 유인할 수도 있습니다.",
+                    "strategy": "붙으면 팀원이 떼어주거나 다른 몬스터 쪽으로 몸을 던져 피해를 전가할 수 있습니다.",
+                    "image": "./REPO/entities/Spewer.png"
+                },
+                {
+                    "id": "tick",
+                    "tier": 1,
+                    "name": "Tick",
+                    "nameKr": "틱 (흡혈 기생충)",
+                    "health": "50",
+                    "cashDrop": "$2,400 (HP를 흡수한 경우)",
+                    "description": "평소에는 무해하게 돌아다니지만 건드리거나 집으면 달라붙어 HP를 빨아먹습니다. 몸이 녹색 공처럼 팽창하면 안전하게 집어 던질 수 있습니다.",
+                    "strategy": "무시하면 가장 안전합니다. 팽창 상태일 때만 안전하게 집을 수 있으며, 이 상태에서는 다시 흡혈하지 않습니다.",
+                    "image": "./REPO/entities/Tick.png"
+                },
+                {
+                    "id": "trudge",
+                    "tier": 3,
+                    "name": "Trudge",
+                    "nameKr": "트러지 (철퇴 거인)",
+                    "health": "1500",
+                    "cashDrop": "$6,400",
+                    "description": "철퇴를 든 거대한 몬스터입니다. 철퇴를 땅에 박아 세미봇을 당긴 뒤, 들어올려 폭발적인 광역 피해를 줍니다. 업그레이드 없이는 철퇴와 폭발 모두 즉사 수준입니다. 이름처럼 매우 천천히 움직입니다.",
+                    "strategy": "소리가 들리면 거리를 유지하고 우회하세요. 느리지만 당기는 공격 범위가 넓으므로 충분한 거리를 확보해야 합니다.",
+                    "image": "./REPO/entities/Trudge.png"
+                },
+                {
+                    "id": "upscream",
+                    "tier": 2,
+                    "name": "Upscream",
+                    "nameKr": "업스크림",
+                    "health": "380",
+                    "cashDrop": "$3,900",
+                    "description": "거미처럼 생긴 빠른 몬스터로, 세미봇을 발견하면 얼굴을 들이밀며 비명을 지릅니다. 이후 위로 던져버리며, 스턴락 상태로 계속 반복합니다.",
+                    "strategy": "속도가 빠르므로 미리 발견해 피하는 것이 최선입니다. 스턴락이 걸리면 팀원의 도움이 필요합니다.",
+                    "image": "./REPO/entities/Upscream.png"
+                }
+            ]
+        },
+        {
+            "id": "items",
+            "label": "아이템",
+            "title": "아이템 및 업그레이드",
+            "groups": [
+                {
+                    "id": "upgrades",
+                    "label": "능력치 업그레이드",
+                    "title": "캐릭터 능력치 업그레이드",
+                    "description": "서비스 스테이션 진열대에서 구매 가능하며, 구매한 플레이어에게만 적용됩니다. 런이 끝날 때까지 영구 유지됩니다. 유료 리롤러로 원하는 업그레이드가 나올 때까지 교체할 수 있습니다.",
+                    "entries": [
+                        {
+                            "id": "health-upgrade",
+                            "name": "Health Upgrade",
+                            "nameKr": "체력 업그레이드",
+                            "priceRange": "$4,000~$5,000",
+                            "description": "최대 HP를 20 증가시킵니다. 중첩 구매가 가능합니다.",
+                            "usage": "초반 생존율을 높이는 필수 업그레이드입니다."
+                        },
+                        {
+                            "id": "strength-upgrade",
+                            "name": "Strength Upgrade",
+                            "nameKr": "근력 업그레이드",
+                            "priceRange": "$5,000~$10,000",
+                            "description": "들 수 있는 무게 한도를 높이고 더 멀리, 더 높이 물건을 들 수 있게 합니다. 일부 몬스터를 스턴시키는 데도 필요합니다.",
+                            "usage": "귀중품 회수 효율을 높이는 핵심 업그레이드입니다. 레벨 13 달성을 목표로 하세요."
+                        },
+                        {
+                            "id": "sprint-speed-upgrade",
+                            "name": "Sprint Speed Upgrade",
+                            "nameKr": "달리기 속도 업그레이드",
+                            "priceRange": "$6,000~$8,000",
+                            "description": "달리기 속도를 높여줍니다.",
+                            "usage": "몬스터 회피 및 귀중품 운반 속도를 향상시킵니다."
+                        },
+                        {
+                            "id": "stamina-upgrade",
+                            "name": "Stamina Upgrade",
+                            "nameKr": "스태미나 업그레이드",
+                            "priceRange": "$2,000~$4,000",
+                            "description": "최대 스태미나를 10 증가시킵니다. 중첩 구매가 가능합니다.",
+                            "usage": "장거리 운반과 몬스터 회피 시 지구력을 높여줍니다."
+                        },
+                        {
+                            "id": "range-upgrade",
+                            "name": "Range Upgrade",
+                            "nameKr": "사거리 업그레이드",
+                            "priceRange": "$5,000~$8,000",
+                            "description": "아이템을 집을 수 있는 거리를 늘려줍니다.",
+                            "usage": "4인 이상 대규모 파티에서 특히 유용합니다."
+                        },
+                        {
+                            "id": "extra-jump",
+                            "name": "Extra Jump",
+                            "nameKr": "추가 점프",
+                            "priceRange": "$10,000",
+                            "description": "2단 점프를 가능하게 합니다.",
+                            "usage": "높은 지형 이동과 몬스터 회피에 유용합니다."
+                        },
+                        {
+                            "id": "tumble-launch-upgrade",
+                            "name": "Tumble Launch Upgrade",
+                            "nameKr": "텀블 발사 업그레이드",
+                            "priceRange": "$4,000~$5,000",
+                            "description": "달리고 점프 후 Q키를 눌러 더 멀리 날아갈 수 있게 합니다. 업데이트로 레드 모드에서 벽을 잡을 수 있는 기능도 추가되었습니다.",
+                            "usage": "빠른 이동과 탈출에 활용됩니다."
+                        },
+                        {
+                            "id": "map-player-count-upgrade",
+                            "name": "Map Player Count Upgrade",
+                            "nameKr": "맵 생존자 표시 업그레이드",
+                            "priceRange": "$10,000~$11,000",
+                            "description": "맵을 열었을 때 생존해 있는 팀원이 누구인지 표시됩니다. 멀티플레이어 전용입니다.",
+                            "usage": "5~6인 대파티에서 팀원 관리에 필수적입니다."
+                        }
+                    ]
+                },
+                {
+                    "id": "weapons",
+                    "label": "무기",
+                    "title": "무기 및 전투 아이템",
+                    "description": "몬스터를 처치하거나 스턴시키는 데 사용되는 장비입니다. 파괴 또는 분실 시 다음 레벨 시작 시 자동 복귀됩니다.",
+                    "entries": [
+                        {
+                            "id": "gun",
+                            "name": "Gun",
+                            "nameKr": "총",
+                            "priceRange": "$42,000",
+                            "description": "원거리 무기입니다. 에너지 크리스탈로 충전해서 사용합니다.",
+                            "usage": "원거리 공격이 필요할 때 유용합니다."
+                        },
+                        {
+                            "id": "sword",
+                            "name": "Sword",
+                            "nameKr": "검",
+                            "priceRange": "$23,000",
+                            "description": "근거리 무기입니다. 스크롤 방향에 따라 동적으로 휘두릅니다.",
+                            "usage": "근접 전투 시 효과적입니다."
+                        },
+                        {
+                            "id": "frying-pan",
+                            "name": "Frying Pan",
+                            "nameKr": "프라이팬",
+                            "priceRange": "$28,000~$30,000",
+                            "description": "근거리 무기입니다. 스크롤 방향에 따라 동적으로 휘두릅니다.",
+                            "usage": "검보다 저렴한 근접 무기 옵션입니다."
+                        },
+                        {
+                            "id": "sledge-hammer",
+                            "name": "Sledge Hammer",
+                            "nameKr": "대형 망치",
+                            "priceRange": "$30,000~$40,000",
+                            "description": "강력한 근거리 무기입니다. 스크롤 방향에 따라 동적으로 휘두릅니다.",
+                            "usage": "강력한 한 방이 필요할 때 적합합니다."
+                        },
+                        {
+                            "id": "inflatable-hammer",
+                            "name": "Inflatable Hammer",
+                            "nameKr": "풍선 망치",
+                            "priceRange": "$9,000~$10,000",
+                            "description": "매우 약한 근거리 무기입니다.",
+                            "usage": "초반 저예산 무기 옵션이나 소형 몬스터 처리용입니다."
+                        },
+                        {
+                            "id": "roll-staff",
+                            "name": "Roll Staff",
+                            "nameKr": "구르기 스태프",
+                            "priceRange": "변동",
+                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 스태프 계열 무기입니다. 몬스터나 오브젝트를 굴리는 효과를 냅니다.",
+                            "usage": "몬스터를 밀어내거나 이동시킬 때 활용됩니다."
+                        },
+                        {
+                            "id": "zero-gravity-staff",
+                            "name": "Zero Gravity Staff",
+                            "nameKr": "무중력 스태프",
+                            "priceRange": "변동",
+                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 스태프 계열 무기입니다. 대상을 무중력 상태로 만듭니다.",
+                            "usage": "몬스터나 귀중품을 공중에 띄워 이동시키는 데 활용됩니다."
+                        },
+                        {
+                            "id": "void-staff",
+                            "name": "Void Staff",
+                            "nameKr": "보이드 스태프",
+                            "priceRange": "변동",
+                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 스태프 계열 무기입니다. 효과 지속 시간이 길어졌습니다.",
+                            "usage": "강력한 효과 지속이 필요한 상황에서 활용됩니다."
+                        }
+                    ]
+                },
+                {
+                    "id": "grenades",
+                    "label": "투척물",
+                    "title": "투척 아이템",
+                    "description": "몬스터를 처치하거나 스턴시키는 데 사용되는 투척 가능한 소모성 아이템입니다.",
+                    "entries": [
+                        {
+                            "id": "grenade",
+                            "name": "Grenade",
+                            "nameKr": "수류탄",
+                            "priceRange": "$3,000",
+                            "description": "노움이나 고무오리 등 소형 몬스터를 폭발로 처치하는 투척 아이템입니다.",
+                            "usage": "무리 지어 다니는 소형 몬스터 처리에 효과적입니다."
+                        },
+                        {
+                            "id": "shockwave-grenade",
+                            "name": "Shockwave Grenade",
+                            "nameKr": "충격파 수류탄",
+                            "priceRange": "$3,000",
+                            "description": "폭발 시 주변 몬스터를 뒤로 밀어내는 투척 아이템입니다.",
+                            "usage": "몬스터를 멀리 밀어내 탈출 공간을 확보할 때 유용합니다."
+                        },
+                        {
+                            "id": "stun-grenade",
+                            "name": "Stun Grenade",
+                            "nameKr": "스턴 수류탄",
+                            "priceRange": "$3,000",
+                            "description": "몬스터를 일시적으로 스턴시키는 투척 아이템입니다.",
+                            "usage": "위험한 상황에서 시간을 벌 때 효과적입니다."
+                        },
+                        {
+                            "id": "rubber-duck",
+                            "name": "Rubber Duck",
+                            "nameKr": "고무 오리",
+                            "priceRange": "$16,000",
+                            "description": "던지면 튀어다니며 몬스터의 주의를 분산시킵니다. 충격 시 폭발할 가능성이 높으며 궤적이 불규칙합니다.",
+                            "usage": "몬스터 주의 분산과 피해를 동시에 줄 수 있는 유틸리티 아이템입니다."
+                        }
+                    ]
+                },
+                {
+                    "id": "mines",
+                    "label": "지뢰",
+                    "title": "설치형 지뢰",
+                    "description": "바닥에 설치해 몬스터가 밟을 때 효과를 발동하는 아이템입니다.",
+                    "entries": [
+                        {
+                            "id": "stun-mine",
+                            "name": "Stun Mine",
+                            "nameKr": "스턴 지뢰",
+                            "priceRange": "$3,000",
+                            "description": "지나가는 이족보행 몬스터를 일시적으로 스턴시켜 팀이 이동할 시간을 벌어줍니다.",
+                            "usage": "탈출로나 귀중품 주변에 설치해 시간을 확보하는 데 유용합니다."
+                        },
+                        {
+                            "id": "shockwave-mine",
+                            "name": "Shockwave Mine",
+                            "nameKr": "충격파 지뢰",
+                            "priceRange": "$3,000",
+                            "description": "지나가는 이족보행 몬스터를 뒤로 밀어내는 지뢰입니다.",
+                            "usage": "좁은 통로에 설치해 몬스터 접근을 차단하는 데 효과적입니다."
+                        }
+                    ]
+                },
+                {
+                    "id": "drones",
+                    "label": "드론",
+                    "title": "드론 아이템",
+                    "description": "에너지 크리스탈로 충전해 사용하는 드론 계열 아이템입니다.",
+                    "entries": [
+                        {
+                            "id": "recharge-drone",
+                            "name": "Recharge Drone",
+                            "nameKr": "충전 드론",
+                            "priceRange": "$4,000",
+                            "description": "함께 이동하며 배터리가 남아있는 동안 충전 가능한 아이템을 자동으로 재충전해주는 드론입니다.",
+                            "usage": "총이나 다른 충전 아이템을 자주 쓰는 팀에게 유용합니다."
+                        },
+                        {
+                            "id": "roll-drone",
+                            "name": "Roll Drone",
+                            "nameKr": "구르기 드론",
+                            "priceRange": "$9,000~$11,000",
+                            "description": "인터랙션하면 세미봇을 빠르게 굴러가는 공 형태로 만들어 몬스터로부터 빠르게 탈출할 수 있게 합니다.",
+                            "usage": "몬스터 추격에서 빠르게 이탈할 때 사용합니다."
+                        },
+                        {
+                            "id": "feather-drone",
+                            "name": "Feather Drone",
+                            "nameKr": "깃털 드론",
+                            "priceRange": "$15,000",
+                            "description": "낙하 속도를 줄여주는 드론입니다.",
+                            "usage": "높은 지형에서 안전하게 착지할 때 유용합니다."
+                        },
+                        {
+                            "id": "zero-gravity-drone",
+                            "name": "Zero Gravity Drone",
+                            "nameKr": "무중력 드론",
+                            "priceRange": "$28,000",
+                            "description": "주변에 소형 무중력 구역을 생성하는 드론입니다.",
+                            "usage": "귀중품이나 몬스터를 공중에 띄울 때 활용됩니다."
+                        },
+                        {
+                            "id": "scout",
+                            "name": "Scout",
+                            "nameKr": "스카우트",
+                            "priceRange": "변동",
+                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 정찰용 드론입니다.",
+                            "usage": "맵을 정찰하거나 몬스터 위치를 파악할 때 사용합니다."
+                        },
+                        {
+                            "id": "hauler",
+                            "name": "Hauler",
+                            "nameKr": "운반 드론",
+                            "priceRange": "변동",
+                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 귀중품 운반 보조 드론입니다.",
+                            "usage": "귀중품을 추출 지점까지 운반하는 것을 보조합니다."
+                        }
+                    ]
+                },
+                {
+                    "id": "utility",
+                    "label": "유틸리티",
+                    "title": "유틸리티 아이템",
+                    "description": "탐사, 귀중품 추적, 팀 소통 등 다양한 목적에 활용되는 장비입니다.",
+                    "entries": [
+                        {
+                            "id": "energy-crystal",
+                            "name": "Energy Crystal",
+                            "nameKr": "에너지 크리스탈",
+                            "priceRange": "$7,000~$11,000",
+                            "description": "트럭 내 충전 스테이션에 넣으면 충전 가능한 모든 아이템을 재충전합니다. 에너지 소진 시 파괴됩니다. 항상 기본 크리스탈 하나는 지급됩니다.",
+                            "usage": "총, 드론 등 충전형 아이템을 쓰는 팀의 필수 소모품입니다."
+                        },
+                        {
+                            "id": "extraction-tracker",
+                            "name": "Extraction Tracker",
+                            "nameKr": "추출 지점 추적기",
+                            "priceRange": "$5,000",
+                            "description": "보조 추출 지점의 위치를 알려주는 추적기입니다.",
+                            "usage": "빠르게 추출 지점을 찾아야 할 때 효율을 높여줍니다."
+                        },
+                        {
+                            "id": "valuable-tracker",
+                            "name": "Valuable Tracker",
+                            "nameKr": "귀중품 추적기",
+                            "priceRange": "$15,000",
+                            "description": "레벨 내 귀중품의 위치를 추적해주는 장비입니다.",
+                            "usage": "넓은 맵에서 귀중품을 빠짐없이 회수할 때 유용합니다."
+                        },
+                        {
+                            "id": "zero-gravity-orb",
+                            "name": "Zero Gravity Orb",
+                            "nameKr": "무중력 구슬",
+                            "priceRange": "$39,000",
+                            "description": "소형 무중력 구역을 생성합니다.",
+                            "usage": "무거운 귀중품을 이동시키거나 몬스터를 공중에 띄울 때 활용됩니다."
+                        },
+                        {
+                            "id": "leaf-blower",
+                            "name": "Leaf Blower",
+                            "nameKr": "낙엽 청소기",
+                            "priceRange": "변동",
+                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 아이템입니다. 몬스터, 세미봇, 아이템, 귀중품을 뒤로 밀어냅니다. 귀중품에 낙하 피해를 줄 수 있으니 주의가 필요합니다.",
+                            "usage": "몬스터를 밀어내 탈출 공간을 만들거나 귀중품을 이동시키는 데 사용합니다."
+                        },
+                        {
+                            "id": "semibot-walkies",
+                            "name": "Semibot Walkies",
+                            "nameKr": "세미봇 무전기",
+                            "priceRange": "변동",
+                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 통신 장비입니다. 팀원과 분리된 상황에서 소통할 수 있습니다.",
+                            "usage": "넓은 맵에서 팀원과 분리되었을 때 위치와 정보를 공유합니다."
+                        },
+                        {
+                            "id": "defibro",
+                            "name": "Defibro",
+                            "nameKr": "제세동기",
+                            "priceRange": "변동",
+                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 1회용 부활 아이템입니다. 인벤토리에 장착한 상태로 사망하면 가장 가까운 지형 가장자리에서 부활합니다. 사용 시 적을 스턴시키는 충격파도 발생합니다. 싱글플레이에서도 작동합니다.",
+                            "usage": "고위험 구역 진입 전 필수적으로 갖추는 것이 좋습니다. 팀원 근처에서 사용하면 팀원도 부활시킬 수 있습니다."
+                        }
+                    ]
+                },
+                {
+                    "id": "carts",
+                    "label": "운반 장비",
+                    "title": "C.A.R.T. 및 운반 장비",
+                    "description": "귀중품을 담아 추출 지점으로 운반하는 장비입니다.",
+                    "entries": [
+                        {
+                            "id": "cart",
+                            "name": "C.A.R.T.",
+                            "nameKr": "카트",
+                            "priceRange": "$39,000",
+                            "description": "귀중품을 담아 추출 지점으로 운반하는 추가 카트입니다.",
+                            "usage": "귀중품 양이 많을 때 두 번째 카트를 활용해 운반 효율을 높이세요."
+                        },
+                        {
+                            "id": "pocket-cart",
+                            "name": "Pocket C.A.R.T.",
+                            "nameKr": "포켓 카트",
+                            "priceRange": "$15,000~$18,000",
+                            "description": "일반 카트보다 작고 저렴한 소형 카트입니다.",
+                            "usage": "초반 자금이 부족할 때 보조 운반 수단으로 활용됩니다."
+                        }
+                    ]
+                },
+                {
+                    "id": "health-items",
+                    "label": "회복 아이템",
+                    "title": "체력 회복 아이템",
+                    "description": "어느 때나 즉시 사용 가능한 회복 아이템입니다.",
+                    "entries": [
+                        {
+                            "id": "small-health-pack",
+                            "name": "Small Health Pack",
+                            "nameKr": "소형 구급 키트",
+                            "priceRange": "$3,000",
+                            "description": "즉시 HP를 25 회복합니다.",
+                            "usage": "가볍게 다쳤을 때 사용하는 저가 회복 아이템입니다."
+                        },
+                        {
+                            "id": "medium-health-pack",
+                            "name": "Medium Health Pack",
+                            "nameKr": "중형 구급 키트",
+                            "priceRange": "$5,000~$6,000",
+                            "description": "즉시 HP를 50 회복합니다.",
+                            "usage": "중간 정도 피해를 받은 상황에서 사용합니다."
+                        },
+                        {
+                            "id": "large-health-pack",
+                            "name": "Large Health Pack",
+                            "nameKr": "대형 구급 키트",
+                            "priceRange": "$9,000~$13,000",
+                            "description": "즉시 HP를 100 회복합니다.",
+                            "usage": "큰 피해를 받은 상황이나 위급할 때 사용합니다."
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "profileImage": "./REPO/repo_profile.jpg",
+    "install": [
+        {
+            "id": "game",
+            "label": "게임",
+            "title": "게임 시작",
+            "groups": [
+                {
+                    "title": "기본 설치 절차",
+                    "items": [
+                        "Steam에서 REPO를 구매하거나 라이브러리에 추가합니다.",
+                        "설치 뒤 한 번 실행해서 기본 설정과 입력 장치가 정상인지 확인합니다.",
+                        "팀 플레이 전에는 음성 채팅과 키 바인드를 점검해 두면 초반 적응이 훨씬 편합니다."
+                    ]
+                },
+                {
+                    "title": "멀티플레이 준비",
+                    "items": [
+                        "같이 플레이할 인원과 방장을 정한 뒤 동일한 게임 버전을 맞춥니다.",
+                        "튜토리얼 구간에서 집기, 운반, 던지기 조작을 먼저 익히면 실전에서 훨씬 안정적입니다.",
+                        "초반에는 귀중품 회수 담당과 주변 경계 담당을 나누면 생존율이 크게 올라갑니다."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "flow",
+            "label": "운영",
+            "title": "기본 운영 흐름",
+            "groups": [
+                {
+                    "title": "한 판의 기본 루프",
+                    "items": [
+                        "시설 안으로 진입해 귀중품 위치와 몬스터 동선을 먼저 파악합니다.",
+                        "회수한 귀중품은 C.A.R.T.에 모아 추출 지점까지 안전하게 운반합니다.",
+                        "레벨이 끝나면 서비스 스테이션에서 장비를 보강하고 다음 탐사 준비를 진행합니다."
+                    ]
+                },
+                {
+                    "title": "초반 추천 팁",
+                    "items": [
+                        "무리하게 깊이 들어가기보다 살아서 여러 번 왕복하는 편이 총 수익이 안정적입니다.",
+                        "Tier 3 몬스터를 확인했다면 즉시 콜을 공유하고 우회 동선을 우선 확보하세요.",
+                        "비싼 장비보다 팀 전체가 같은 흐름으로 움직이는 것이 초반 성과에 더 큰 영향을 줍니다."
+                    ]
+                }
+            ]
+        }
+    ]
+}
+    </script>
+    <div class="page-shell">
+        <main class="game-page">
+            <header class="game-page-header">
+                <div>
+                    <p class="panel-label">GAME PAGE</p>
+                    <h1 class="game-page-title">R.E.P.O.</h1>
+                </div>
+                <nav class="placeholder-nav">
+                    <a href="../index.html">인덱스로 돌아가기</a>
+                </nav>
+            </header>
+
+            <section class="game-hero pixel-box">
+                <div class="game-hero-media">
+                    <img id="game-hero-image" src="./REPO/repo_profile.jpg" alt="R.E.P.O. profile">
+                </div>
+                <div class="game-hero-copy">
+                    <p class="panel-label" id="game-panel-label">REPO</p>
+                    <h2 class="game-section-title" id="game-genre">게임 정보를 불러오는 중</h2>
+                    <p class="game-meta" id="game-summary">JSON 데이터를 기반으로 REPO 공략 페이지를 구성합니다.</p>
+                    <div class="game-hero-details pixel-box">
+                        <p class="panel-label">CORE POINTS</p>
+                        <ul class="game-detail-list" id="game-detail-list">
+                            <li>핵심 정보를 불러오는 중입니다.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="game-tabs" aria-label="game sections">
+                <div class="tab-list" id="game-tab-list"></div>
+                <div class="subtab-list" id="game-subtab-list" hidden></div>
+            </section>
+
+            <section class="game-panel pixel-box" id="game-panel">
+                <p class="game-loading">게임 데이터를 불러오는 중입니다.</p>
+            </section>
+        </main>
+
+    </div>
+
+    <footer class="site-footer" aria-label="site footer">
+        <div class="site-footer__inner">
+            <div class="site-footer__copy">
+                <p class="site-footer__eyebrow">OFFICIAL SITE</p>
+                <p class="site-footer__copyright">&copy; 2026 yeonsik. All rights reserved.</p>
+            </div>
+            <a class="site-footer__link" href="https://github.com/yeon-sik" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+    </footer>
+</body>
+</html>
