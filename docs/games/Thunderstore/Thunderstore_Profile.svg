@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Thunderstore Mod Manager</title>
+  <desc id="desc">Thunderstore Mod Manager guide cover artwork.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09131f" />
+      <stop offset="55%" stop-color="#15395f" />
+      <stop offset="100%" stop-color="#f47f25" />
+    </linearGradient>
+    <linearGradient id="panel" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#09131f" stop-opacity="0.92" />
+      <stop offset="100%" stop-color="#15395f" stop-opacity="0.8" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="980" cy="120" r="130" fill="#ffffff" fill-opacity="0.08" />
+  <circle cx="1080" cy="500" r="180" fill="#ffffff" fill-opacity="0.06" />
+  <rect x="84" y="88" width="1032" height="454" rx="30" fill="url(#panel)" stroke="#f4f7fb" stroke-opacity="0.22" />
+  <path d="M218 184h216l68 72-68 72H218l68-72-68-72Z" fill="#f47f25" />
+  <path d="M352 184h184l68 72-68 72H352l68-72-68-72Z" fill="#ffd26a" />
+  <path d="M486 184h186l68 72-68 72H486l68-72-68-72Z" fill="#f4f7fb" fill-opacity="0.9" />
+  <text x="108" y="412" fill="#f4f7fb" font-family="Segoe UI, Arial, sans-serif" font-size="34" letter-spacing="6">GUIDE TOOL</text>
+  <text x="108" y="470" fill="#ffffff" font-family="Segoe UI Semibold, Arial, sans-serif" font-size="88">Thunderstore</text>
+  <text x="108" y="528" fill="#d4e3f3" font-family="Segoe UI, Arial, sans-serif" font-size="34">Install, profile, mod workflow</text>
+</svg>

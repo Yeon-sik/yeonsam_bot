@@ -648,6 +648,46 @@ code {
     padding-left: 20px;
 }
 
+.detail-card-media-wide {
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+.detail-card-media-wide .monster-card-media img {
+    width: 50%;
+    max-width: 50%;
+    max-height: none;
+    aspect-ratio: auto;
+    object-fit: contain;
+    margin: 0 auto;
+    display: block;
+}
+
+.sectioned-detail-stack {
+    display: grid;
+    gap: 24px;
+}
+
+.sectioned-detail {
+    padding: 22px;
+}
+
+.sectioned-detail-heading {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.sectioned-detail-list {
+    margin: 0 0 18px;
+    padding-left: 20px;
+}
+
+.wide-media-stack {
+    display: grid;
+    gap: 18px;
+}
+
 .monster-index {
     margin-bottom: 24px;
     padding: 20px;

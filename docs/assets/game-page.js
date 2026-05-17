@@ -17,10 +17,7 @@ async function loadGamePage() {
 
     try {
         const data = await loadGameData(jsonPath, fallbackNode);
-        const tabs = [
-            { id: "guides", label: "공략 탭" },
-            { id: "install", label: "설치 탭" }
-        ];
+        const tabs = [{ id: "guides", label: "공략 탭" }];
         const state = {
             tabId: "guides",
             subtabId: getPreferredCategoryId(data.guides)
@@ -124,6 +121,16 @@ function renderCategory(category, panel, tabId) {
         return;
     }
 
+    if (Array.isArray(category.sections) && category.sections.length > 0) {
+        renderSectionedCategory(category, panel);
+        return;
+    }
+
+    if (Array.isArray(category.content) && category.content.length > 0) {
+        renderTextCategory(category, panel);
+        return;
+    }
+
     const cards = (category.groups ?? [])
         .map((group) => (shouldRenderGuideMediaCards(category, tabId)
             ? renderGuideGroupCard(group, category)
@@ -140,7 +147,7 @@ function renderCategory(category, panel, tabId) {
 }
 
 function renderDefaultGroupCard(group) {
-    const items = (group.items ?? []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+    const items = (group.items ?? []).map((item) => `<li>${renderListItemContent(item)}</li>`).join("");
 
     return `
         <article class="detail-card pixel-box">
@@ -151,7 +158,7 @@ function renderDefaultGroupCard(group) {
 }
 
 function renderGuideGroupCard(group, category) {
-    const items = (group.items ?? []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+    const items = (group.items ?? []).map((item) => `<li>${renderListItemContent(item)}</li>`).join("");
 
     return `
         <article class="detail-card detail-card-media pixel-box">
@@ -175,7 +182,85 @@ function renderGuideGroupCard(group, category) {
 }
 
 function shouldRenderGuideMediaCards(category, tabId) {
-    return tabId === "guides" && ["maps", "items", "mods"].includes(category.id);
+    return tabId === "guides" && (category.display === "media" || ["maps", "items", "mods"].includes(category.id));
+}
+
+function renderTextCategory(category, panel) {
+    const cards = category.content
+        .map((item) => `
+            <article class="detail-card pixel-box">
+                <h3>${escapeHtml(item.title ?? category.label)}</h3>
+                <ul><li>${escapeHtml(item.body ?? item)}</li></ul>
+            </article>
+        `)
+        .join("");
+
+    panel.innerHTML = `
+        <div class="panel-heading">
+            <p class="panel-label">DETAIL</p>
+            <h2 class="game-section-title">${escapeHtml(category.title)}</h2>
+            ${category.description ? `<p class="section-lead">${escapeHtml(category.description)}</p>` : ""}
+        </div>
+        <div class="detail-grid">${cards}</div>
+    `;
+}
+
+function renderSectionedCategory(category, panel) {
+    const sections = (category.sections ?? [])
+        .map((section) => {
+            const cards = (section.cards ?? [])
+                .map((card) => renderWideMediaCard(card, category))
+                .join("");
+            const items = (section.items ?? []).map((item) => `<li>${renderListItemContent(item)}</li>`).join("");
+
+            return `
+                <section class="sectioned-detail pixel-box">
+                    <div class="sectioned-detail-heading">
+                        <div>
+                            <p class="panel-label">${escapeHtml(section.label ?? category.label)}</p>
+                            <h3 class="game-section-title">${escapeHtml(section.title)}</h3>
+                        </div>
+                        ${section.description ? `<p class="section-lead">${escapeHtml(section.description)}</p>` : ""}
+                    </div>
+                    ${items ? `<ul class="sectioned-detail-list">${items}</ul>` : ""}
+                    <div class="wide-media-stack">${cards}</div>
+                </section>
+            `;
+        })
+        .join("");
+
+    panel.innerHTML = `
+        <div class="panel-heading">
+            <p class="panel-label">DETAIL</p>
+            <h2 class="game-section-title">${escapeHtml(category.title)}</h2>
+            ${category.description ? `<p class="section-lead">${escapeHtml(category.description)}</p>` : ""}
+        </div>
+        <div class="sectioned-detail-stack">${sections}</div>
+    `;
+}
+
+function renderWideMediaCard(card, category) {
+    const items = (card.items ?? []).map((item) => `<li>${renderListItemContent(item)}</li>`).join("");
+
+    return `
+        <article class="detail-card detail-card-media detail-card-media-wide pixel-box">
+            <div class="monster-card-media">
+                ${renderCardMedia(card.image, card.imageAlt ?? card.title)}
+            </div>
+            <div class="detail-card-copy">
+                <div class="monster-card-header">
+                    <div>
+                        <p class="monster-card-kicker">${escapeHtml(category.label)} STEP</p>
+                        <h3>${escapeHtml(card.title)}</h3>
+                    </div>
+                    <div class="monster-card-tags">
+                        <span class="monster-tag">${escapeHtml(card.label ?? card.title)}</span>
+                    </div>
+                </div>
+                ${items ? `<ul>${items}</ul>` : ""}
+            </div>
+        </article>
+    `;
 }
 
 function renderRecordCategory(category, panel) {
@@ -505,6 +590,19 @@ function renderMetaBlock(label, value, wide = false, raw = false) {
     `;
 }
 
+function renderListItemContent(item) {
+    if (/^https?:\/\//.test(String(item ?? ""))) {
+        const href = escapeHtml(item);
+        return `<a href="${href}" target="_blank" rel="noreferrer">${href}</a>`;
+    }
+
+    return formatStructuredText(item);
+}
+
+function formatStructuredText(value) {
+    return escapeHtml(value).replace(/(\s)(\d+\s:)/g, "<br>$2");
+}
+
 function renderCardMedia(image, alt) {
     if (image) {
         return `<img src="${escapeHtml(image)}" alt="${escapeHtml(alt)}">`;
@@ -599,7 +697,7 @@ function resolveActiveCategory(categories, state) {
 function buildHashRoutes(data) {
     const routes = new Map();
 
-    for (const tabId of ["guides", "install"]) {
+    for (const tabId of ["guides"]) {
         const categories = data[tabId] ?? [];
 
         categories.forEach((category) => {

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thunderstore Mod Manager</title>
+    <link rel="stylesheet" href="../assets/styles.css">
+    <script src="../assets/game-page.js" defer></script>
+</head>
+<body data-game-json="./Thunderstore/Thunderstore.json">
+    <script id="game-data-fallback" type="application/json">
+{
+  "slug": "Thunderstore",
+  "pagePath": "Thunderstore.html",
+  "name": "Thunderstore Mod Manager",
+  "botRenderAllGuides": true,
+  "profileImage": "./Thunderstore/Thunderstore_Profile.svg",
+  "description": {
+    "genre": "모드 매니저 가이드",
+    "summary": "Thunderstore 설치와 실행 흐름을 이미지 중심으로 정리한 페이지입니다.",
+    "details": [
+      "설치는 download 이미지 묶음으로, 실행은 execution 이미지 묶음으로 크게 나눴습니다.",
+      "각 섹션 안에서 번호 순서대로 이미지를 길게 배치해 순서를 따라가기 쉽게 구성했습니다.",
+      "원하는 모드 다운로드와 수정 방법은 항목 선택 없이 별도 주제로 간단히 확인할 수 있습니다."
+    ]
+  },
+  "guides": [
+    {
+      "id": "install-run",
+      "label": "설치부터 실행",
+      "title": "설치부터 실행",
+      "entrySelectable": false,
+      "sections": [
+        {
+          "label": "INSTALL",
+          "title": "1. 설치",
+          "items": [
+            "설치 링크: https://www.overwolf.com/app/thunderstore-thunderstore_mod_manager"
+          ],
+          "cards": [
+            {
+              "title": "1-1. 설치 과정 이미지 1",
+              "label": "1-1",
+              "image": "./Thunderstore/download1.png",
+              "imageAlt": "Thunderstore download step 1",
+              "items": [
+                "웹 페이지 접속 및 다운로드, `DOWNLOAD ON OVERWOLF` 설치 파일 다운로드"
+              ]
+            },
+            {
+              "title": "1-2. 설치 과정 이미지 2",
+              "label": "1-2",
+              "image": "./Thunderstore/download2.png",
+              "imageAlt": "Thunderstore download step 2",
+              "items": [
+                "설치 파일 실행 후 다운 시작"
+              ]
+            },
+            {
+              "title": "1-3. 설치 과정 이미지 3",
+              "label": "1-3",
+              "image": "./Thunderstore/download3.png",
+              "imageAlt": "Thunderstore download step 3",
+              "items": [
+                "필요에 따라 바탕화면에 바로가기 생성"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "RUN",
+          "title": "2. 실행",
+          "items": [
+            "`Modded` 버튼으로 모드 적용 상태로 실행합니다.",
+            "`Vanilla` 버튼으로 기본 상태를 확인할 수 있습니다."
+          ],
+          "cards": [
+            {
+              "title": "2-1. 실행 과정 이미지 1",
+              "label": "2-1",
+              "image": "./Thunderstore/execution1.png",
+              "imageAlt": "Thunderstore execution step 1",
+              "items": [
+                "Thunderstore 실행, 게임 검색"
+              ]
+            },
+            {
+              "title": "2-2. 실행 과정 이미지 2",
+              "label": "2-2",
+              "image": "./Thunderstore/execution2.png",
+              "imageAlt": "Thunderstore execution step 2",
+              "items": [
+                "게임 선택",
+                "Select game : 게임 선택, Set as Default : 앞으로 Thunderstore 실행시 바로 실행할 게임으로 설정"
+              ]
+            },
+            {
+              "title": "2-3. 실행 과정 이미지 3",
+              "label": "2-3",
+              "image": "./Thunderstore/execution3.png",
+              "imageAlt": "Thunderstore execution step 3",
+              "items": [
+                "프로필 선택",
+                "1. Select Profile: 선택된 프로필(파란색 글씨)로 시작, 2. Create New: 새로운 프로필 생성, 3. Import / Update : 프로필 가져오기, 업데이트"
+              ]
+            },
+            {
+              "title": "2-3-2. 실행 과정 이미지 3-2",
+              "label": "2-3-2",
+              "image": "./Thunderstore/execution3-2.png",
+              "imageAlt": "Thunderstore execution step 3-2",
+              "items": [
+                "프로필 불러오기",
+                "From file : 파일로 불러오기(보통 잘 안씀), From code : 코드로 불러오기"
+              ]
+            },
+            {
+              "title": "2-3-3. 실행 과정 이미지 3-3",
+              "label": "2-3-3",
+              "image": "./Thunderstore/execution3-3.png",
+              "imageAlt": "Thunderstore execution step 3-3",
+              "items": [
+                "코드로 가져오기"
+              ]
+            },
+            {
+              "title": "2-3-4. 실행 과정 이미지 3-4",
+              "label": "2-3-4",
+              "image": "./Thunderstore/execution3-4.png",
+              "imageAlt": "Thunderstore execution step 3-4",
+              "items": [
+                "코드 붙여넣고 Continue -> Import, 이후 Import new profile (신규 프로필에 생성), Update existing profile(기존 프로필에 붙여넣기)"
+              ]
+            },
+            {
+              "title": "2-4. 실행 과정 이미지 4",
+              "label": "2-4",
+              "image": "./Thunderstore/execution4.png",
+              "imageAlt": "Thunderstore execution step 4",
+              "items": [
+                "게임 모드 선택 화면",
+                "1 : Vanilla : 모드 없이 실행, Modded : 모드 적용 후 실행, 2 : Change Profile, Change Game : 프로필, 게임 변경, 3 : My mods : 현재 프로필 모드, Get mods : 모드 검색 및 설치, Downloads : 다운로드중인 모드, Edit config : 모드 설정 변경, Settings : 설정, 4 : 현재 모드 화면, deprecated(충돌 발생 가능성 존재, 사용 비추천), 스위치로 비활성화 가능"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mods-manage",
+      "label": "원하는 모드 다운 및 수정 방법",
+      "title": "원하는 모드 다운 및 수정 방법",
+      "entrySelectable": false,
+      "content": [
+        {
+          "title": "기본 흐름",
+          "body": "`Get Mods`에서 원하는 모드를 찾고 설치한 뒤, 프로필에서 모드를 켜고 끄거나 제거해 조정합니다."
+        },
+        {
+          "title": "공유",
+          "body": "`Export profile as code`와 `Import from code`로 같은 모드 구성을 다른 사람과 맞출 수 있습니다."
+        }
+      ]
+    }
+  ]
+}
+    </script>
+    <div class="page-shell">
+        <main class="game-page">
+            <header class="game-page-header">
+                <div>
+                    <p class="panel-label">GAME PAGE</p>
+                    <h1 class="game-page-title">Thunderstore Mod Manager</h1>
+                </div>
+                <nav class="placeholder-nav">
+                    <a href="../index.html">인덱스로 돌아가기</a>
+                </nav>
+            </header>
+
+            <section class="game-hero pixel-box">
+                <div class="game-hero-media">
+                    <img id="game-hero-image" src="./Thunderstore/Thunderstore_Profile.svg" alt="Thunderstore Mod Manager profile">
+                </div>
+                <div class="game-hero-copy">
+                    <p class="panel-label" id="game-panel-label">THUNDERSTORE</p>
+                    <h2 class="game-section-title" id="game-genre">가이드를 불러오는 중</h2>
+                    <p class="game-meta" id="game-summary">JSON 데이터를 기반으로 Thunderstore 안내 페이지를 구성합니다.</p>
+                    <div class="game-hero-details pixel-box">
+                        <p class="panel-label">CORE POINTS</p>
+                        <ul class="game-detail-list" id="game-detail-list">
+                            <li>핵심 정보를 불러오는 중입니다.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="game-tabs" aria-label="game sections">
+                <div class="tab-list" id="game-tab-list"></div>
+                <div class="subtab-list" id="game-subtab-list" hidden></div>
+            </section>
+
+            <section class="game-panel pixel-box" id="game-panel">
+                <p class="game-loading">가이드 데이터를 불러오는 중입니다.</p>
+            </section>
+        </main>
+    </div>
+
+    <footer class="site-footer" aria-label="site footer">
+        <div class="site-footer__inner">
+            <div class="site-footer__copy">
+                <p class="site-footer__eyebrow">OFFICIAL SITE</p>
+                <p class="site-footer__copyright">&copy; 2026 yeonsik. All rights reserved.</p>
+            </div>
+            <a class="site-footer__link" href="https://github.com/yeon-sik" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+    </footer>
+</body>
+</html>

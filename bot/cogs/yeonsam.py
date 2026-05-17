@@ -16,7 +16,6 @@ GUIDE_BASE_URL = "https://yeon-sik.github.io/yeonsam_bot/games"
 SECTION_CHOICES = [
     ("개요", "overview"),
     ("공략", "guides"),
-    ("설치", "install"),
 ]
 
 
@@ -35,9 +34,6 @@ def resolve_section(section: str | None) -> str | None:
         "guides": "guides",
         "guide": "guides",
         "공략": "guides",
-        "install": "install",
-        "installation": "install",
-        "설치": "install",
     }
     return section_map.get(normalized)
 
@@ -46,8 +42,6 @@ def get_section_entries(data: dict, section: str | None) -> list[dict]:
     resolved_section = resolve_section(section)
     if resolved_section == "guides":
         return data.get("guides", [])
-    if resolved_section == "install":
-        return data.get("install", [])
     return []
 
 
@@ -75,7 +69,6 @@ def page_section_label(section: str) -> str:
     return {
         "overview": "개요",
         "guides": "공략",
-        "install": "설치",
     }.get(section, section)
 
 
@@ -173,6 +166,83 @@ def resolve_selected_group(groups: list[dict], entry: str | None) -> dict | None
         (group for group in groups if normalize_text(group.get("title")) == normalized_entry),
         None,
     )
+
+
+def topic_has_entries(topic_entry: dict) -> bool:
+    if topic_entry.get("entrySelectable") is False:
+        return False
+    if topic_entry.get("id") == "monsters" and topic_entry.get("monsters"):
+        return True
+    if category_has_record_entries(topic_entry):
+        return True
+    return bool(topic_entry.get("groups"))
+
+
+def build_group_display_value(group: dict) -> str:
+    lines = [f"- {item}" for item in group.get("items", [])]
+    if group.get("image"):
+        lines.append(f"- 이미지: {group['image']}")
+    return "\n".join(lines) or "-"
+
+
+def build_section_display_value(section: dict) -> str:
+    lines = [f"- {item}" for item in section.get("items", [])]
+    for card in section.get("cards", [])[:25]:
+        lines.append(f"- {format_bot_card_title(card.get('title', '항목'))}")
+        if card.get("image"):
+            lines.append(f"  이미지: {card['image']}")
+        for item in card.get("items", []):
+            if item:
+                lines.append(f"  - {item}")
+    return "\n".join(lines) or "-"
+
+
+def format_bot_card_title(title: str) -> str:
+    text = str(title or "").strip()
+    for suffix in ("설치 과정 이미지", "실행 과정 이미지"):
+        if suffix in text:
+            return text.replace(suffix, "").strip()
+    return text
+
+
+def should_render_all_guides_in_bot(data: dict, resolved_section: str | None) -> bool:
+    return bool(data.get("botRenderAllGuides")) and resolved_section == "guides"
+
+
+def clamp_field_value(value: str, limit: int = 1000) -> str:
+    collapsed = value.strip()
+    if len(collapsed) <= limit:
+        return collapsed or "-"
+    return f"{collapsed[: limit - 1]}…"
+
+
+def add_topic_fields_to_embed(embed: discord.Embed, topic_entry: dict):
+    if topic_entry.get("sections"):
+        for section in topic_entry.get("sections", [])[:25]:
+            embed.add_field(
+                name=f"{topic_entry['label']} · {section['title']}",
+                value=clamp_field_value(build_section_display_value(section)),
+                inline=False,
+            )
+        return
+
+    if topic_entry.get("content"):
+        for item in topic_entry.get("content", [])[:25]:
+            body = item.get("body") or "-"
+            embed.add_field(
+                name=f"{topic_entry['label']} · {item.get('title', topic_entry['title'])}",
+                value=clamp_field_value(body),
+                inline=False,
+            )
+        return
+
+    if topic_entry.get("groups"):
+        for group in topic_entry.get("groups", [])[:25]:
+            embed.add_field(
+                name=f"{topic_entry['label']} · {group['title']}",
+                value=clamp_field_value(build_group_display_value(group)),
+                inline=False,
+            )
 
 
 def category_has_record_entries(category: dict) -> bool:
@@ -306,7 +376,7 @@ def build_game_browser_embed(
         )
         embed.add_field(
             name="다음 단계",
-            value="`구역 선택` 메뉴에서 `개요`, `공략`, `설치` 중 하나를 고르세요.",
+            value="`구역 선택` 메뉴에서 `개요`, `공략` 중 하나를 고르세요.",
             inline=False,
         )
         return embed
@@ -325,6 +395,12 @@ def build_game_browser_embed(
     entries = get_section_entries(data, resolved_section)
     matched_entry = resolve_topic_entry(entries, topic)
     embed.description = f"{data['name']} {page_section_label(resolved_section)}"
+
+    if should_render_all_guides_in_bot(data, resolved_section):
+        embed.description = f"{data['name']} - 전체 가이드"
+        for item in entries[:25]:
+            add_topic_fields_to_embed(embed, item)
+        return embed
 
     if matched_entry is None:
         embed.add_field(
@@ -418,13 +494,39 @@ def build_game_browser_embed(
         add_record_entry_fields(embed, data, matched_entry["id"], matched_group, matched_item)
         return embed
 
+    if matched_entry.get("content"):
+        embed.add_field(
+            name=matched_entry["title"],
+            value="\n".join(f"- {item}" for item in matched_entry["content"]),
+            inline=False,
+        )
+        return embed
+
+    if matched_entry.get("sections"):
+        for section in matched_entry.get("sections", [])[:25]:
+            embed.add_field(
+                name=section["title"],
+                value=build_section_display_value(section),
+                inline=False,
+            )
+        return embed
+
     groups = matched_entry.get("groups", [])
+    if matched_entry.get("entrySelectable") is False:
+        for group in groups[:25]:
+            embed.add_field(
+                name=group["title"],
+                value=build_group_display_value(group),
+                inline=False,
+            )
+        return embed
+
     matched_group = resolve_selected_group(groups, entry)
     if matched_group is None:
         for group in groups[:25]:
             embed.add_field(
                 name=group["title"],
-                value="\n".join(f"- {item}" for item in group["items"]),
+                value=build_group_display_value(group),
                 inline=False,
             )
         return embed
@@ -432,7 +534,7 @@ def build_game_browser_embed(
     embed.description = f"{data['name']} - {matched_entry['label']} - {matched_group['title']}"
     embed.add_field(
         name=matched_group["title"],
-        value="\n".join(f"- {item}" for item in matched_group["items"]),
+        value=build_group_display_value(matched_group),
         inline=False,
     )
     return embed
@@ -489,10 +591,19 @@ class GameBrowserView(discord.ui.View):
             self.entry = None
             return
 
+        if should_render_all_guides_in_bot(self.data, self.section):
+            self.topic = None
+            self.entry = None
+            return
+
         entries = get_section_entries(self.data, self.section)
         self.topic_entry = resolve_topic_entry(entries, self.topic)
         if self.topic_entry is None:
             self.topic = None
+            self.entry = None
+            return
+
+        if not topic_has_entries(self.topic_entry):
             self.entry = None
             return
 
@@ -557,7 +668,7 @@ class GameBrowserView(discord.ui.View):
 
         options: list[discord.SelectOption] = []
         for item in get_section_entries(self.data, self.section)[:25]:
-            extra_count = len(item.get("monsters", item.get("groups", [])))
+            extra_count = len(item.get("monsters", item.get("groups", []))) or len(item.get("content", []))
             options.append(
                 discord.SelectOption(
                     label=item["label"][:100],
@@ -571,6 +682,9 @@ class GameBrowserView(discord.ui.View):
     def entry_options(self) -> list[discord.SelectOption]:
         if not self.topic_entry:
             return build_disabled_select_options("먼저 주제를 선택하세요")
+
+        if not topic_has_entries(self.topic_entry):
+            return build_disabled_select_options("?좏깮???몃? ??ぉ???놁뒿?덈떎")
 
         if self.topic_entry["id"] == "monsters" and self.topic_entry.get("monsters"):
             options: list[discord.SelectOption] = []
@@ -697,7 +811,11 @@ class SectionSelect(discord.ui.Select):
 class TopicSelect(discord.ui.Select):
     def __init__(self, game_view: GameBrowserView):
         self.game_view = game_view
-        enabled = game_view.data is not None and game_view.section not in (None, "overview")
+        enabled = (
+            game_view.data is not None
+            and game_view.section not in (None, "overview")
+            and not should_render_all_guides_in_bot(game_view.data, game_view.section)
+        )
         super().__init__(
             placeholder="주제 선택",
             min_values=1,
@@ -722,7 +840,7 @@ class EntrySelect(discord.ui.Select):
             max_values=1,
             options=game_view.entry_options(),
             row=3,
-            disabled=game_view.topic_entry is None,
+            disabled=game_view.topic_entry is None or not topic_has_entries(game_view.topic_entry),
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -898,19 +1016,19 @@ class Yeonsam(commands.Cog):
             inline=False,
         )
         embed.add_field(
-            name="/연삼게임",
+            name="/도움",
             value=(
                 "명령어 입력 후 선택 메뉴가 열립니다.\n"
-                "`게임 -> 구역 -> 주제 -> 항목` 순서로 클릭해서 탐색합니다.\n"
-                "게임 JSON만 추가하면 같은 UI에 자동으로 포함되도록 구성되어 있습니다."
+                "`게임/가이드 -> 구역 -> 주제 -> 항목` 순서로 클릭해서 탐색합니다.\n"
+                "JSON 데이터만 추가하면 같은 UI에 자동으로 포함되도록 구성되어 있습니다."
             ),
             inline=False,
         )
         embed.add_field(
             name="예시",
             value=(
-                "1. `/연삼게임` 입력\n"
-                "2. `게임 선택`에서 Lethal Company 클릭\n"
+                "1. `/도움` 입력\n"
+                "2. `게임 선택`에서 Lethal Company 또는 Thunderstore 클릭\n"
                 "3. `구역 -> 주제 -> 항목` 순서로 선택"
             ),
             inline=False,
@@ -928,7 +1046,7 @@ class Yeonsam(commands.Cog):
 
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    @app_commands.command(name="연삼게임", description="게임 JSON 데이터를 선택형 UI로 봅니다.")
+    @app_commands.command(name="도움", description="게임/가이드 JSON 데이터를 선택형 UI로 봅니다.")
     async def yeonsam_game(self, interaction: discord.Interaction):
         view = GameBrowserView(user_id=interaction.user.id)
         await interaction.response.send_message(
