@@ -5,6 +5,7 @@ async def update_member_nickname(
     interaction: discord.Interaction,
     nickname: str,
 ) -> tuple[bool, str]:
+    # 디스코드 권한/역할 제약을 먼저 확인하고, 통과한 경우에만 닉네임 변경 API를 호출합니다.
     guild = interaction.guild
     if guild is None:
         return False, "You can only change your server profile inside a server."
@@ -23,6 +24,7 @@ async def update_member_nickname(
     if member == guild.owner:
         return False, "The bot cannot change the server owner's nickname."
 
+    # 디스코드는 봇보다 높거나 같은 역할의 멤버 닉네임 변경을 허용하지 않습니다.
     if member.top_role >= bot_member.top_role:
         return False, "The bot role must be higher than your top role to change your server profile."
 
