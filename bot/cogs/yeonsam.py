@@ -19,6 +19,7 @@ SECTION_CHOICES = [
 ]
 
 
+# 게임/가이드 JSON을 디스코드 선택 메뉴와 임베드에 맞게 해석하는 공통 유틸리티입니다.
 def normalize_text(value: str | None) -> str:
     return (value or "").strip().lower()
 
@@ -121,6 +122,7 @@ def shorten_text(value: str | None, limit: int = 100) -> str:
 
 
 def list_game_catalog() -> list[dict[str, str]]:
+    # docs/games 아래 JSON을 훑어 선택 메뉴에 표시할 최소 카탈로그 정보만 뽑습니다.
     catalog: list[dict[str, str]] = []
     for slug in list_games():
         try:
@@ -217,6 +219,7 @@ def clamp_field_value(value: str, limit: int = 1000) -> str:
 
 
 def add_topic_fields_to_embed(embed: discord.Embed, topic_entry: dict):
+    # Discord 임베드의 필드 제한을 고려해 섹션/본문/그룹 데이터를 최대 25개씩만 추가합니다.
     if topic_entry.get("sections"):
         for section in topic_entry.get("sections", [])[:25]:
             embed.add_field(
@@ -250,6 +253,7 @@ def category_has_record_entries(category: dict) -> bool:
 
 
 def flatten_category_entries(category: dict) -> list[tuple[dict, dict]]:
+    # 지도/아이템/모드처럼 group.entries 구조인 카테고리를 선택 메뉴용 단일 목록으로 펼칩니다.
     flattened: list[tuple[dict, dict]] = []
     for group in category.get("groups", []):
         for item in group.get("entries", []):
@@ -299,6 +303,7 @@ def build_spawn_lines(spawns: list[dict]) -> str:
 
 
 def add_record_entry_fields(embed: discord.Embed, data: dict, category_id: str, group: dict, item: dict):
+    # 구조화된 레코드 항목을 가격, 명령어, 설명, 링크 순서로 Discord 임베드 필드에 배치합니다.
     name = item.get("name", item.get("id", "-"))
     name_kr = item.get("nameKr")
     if name_kr:
@@ -346,6 +351,7 @@ def build_game_browser_embed(
     topic: str | None = None,
     entry: str | None = None,
 ) -> discord.Embed:
+    # 현재 선택 상태(game/section/topic/entry)에 맞춰 탐색 화면 또는 상세 화면 임베드를 생성합니다.
     if not game:
         embed = discord.Embed(
             title="연삼 게임 탐색기",
@@ -566,6 +572,7 @@ class GameBrowserView(discord.ui.View):
         self._build_items()
 
     def _normalize_state(self):
+        # 선택 메뉴가 바뀐 뒤 더 이상 유효하지 않은 하위 선택값을 정리합니다.
         if not self.game:
             self.section = None
             self.topic = None
@@ -621,6 +628,7 @@ class GameBrowserView(discord.ui.View):
             self.entry = None
 
     def _build_items(self):
+        # 게임 -> 구역 -> 주제 -> 항목 순서의 Select와 조회/초기화 버튼을 한 화면에 배치합니다.
         self.add_item(GameSelect(self))
         self.add_item(SectionSelect(self))
         self.add_item(TopicSelect(self))
@@ -739,6 +747,7 @@ class GameBrowserView(discord.ui.View):
         return options or build_disabled_select_options("선택 가능한 항목이 없습니다")
 
     async def refresh_message(self, interaction: discord.Interaction):
+        # 조회 버튼은 현재 선택 상태를 반영한 새 임베드까지 함께 갱신합니다.
         view = GameBrowserView(
             user_id=self.user_id,
             game=self.game,
@@ -749,6 +758,7 @@ class GameBrowserView(discord.ui.View):
         await interaction.response.edit_message(embed=view.build_embed(), view=view)
 
     async def refresh_controls(self, interaction: discord.Interaction):
+        # Select 변경 중에는 임베드 본문을 유지하고 다음 단계 컨트롤만 갱신합니다.
         view = GameBrowserView(
             user_id=self.user_id,
             game=self.game,
@@ -759,6 +769,7 @@ class GameBrowserView(discord.ui.View):
         await interaction.response.edit_message(view=view)
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        # 다른 사용자가 남의 탐색 메뉴를 조작하지 못하게 ephemeral 경고로 막습니다.
         if interaction.user.id != self.user_id:
             await interaction.response.send_message(
                 "이 선택 메뉴는 명령을 실행한 사용자만 사용할 수 있어요.",
@@ -781,6 +792,7 @@ class GameSelect(discord.ui.Select):
         )
 
     async def callback(self, interaction: discord.Interaction):
+        # 상위 게임이 바뀌면 하위 선택은 모두 이전 게임 기준이므로 초기화합니다.
         self.game_view.game = self.values[0]
         self.game_view.section = None
         self.game_view.topic = None
@@ -899,6 +911,7 @@ class EditMessageModal(discord.ui.Modal):
         self.add_item(self.link)
 
     async def on_submit(self, interaction: discord.Interaction):
+        # 관리자 모달 입력값을 길드 설정에 저장하고 즉시 미리보기 임베드를 돌려줍니다.
         update_guild(self.guild_id, "welcome_message", self.message.value)
         update_guild(self.guild_id, "link", self.link.value)
 
@@ -963,6 +976,7 @@ class YeonsamView(discord.ui.View):
     def __init__(self, guild_id: int, is_admin: bool):
         super().__init__()
 
+        # 관리자에게만 환영 메시지 설정 버튼을 노출하고, 일반 사용자는 프로필 수정만 제공합니다.
         if is_admin:
             self.add_item(EditMessageButton(guild_id))
 
@@ -975,6 +989,7 @@ class Yeonsam(commands.Cog):
 
     @app_commands.command(name="연삼", description="연삼 봇 안내를 표시합니다.")
     async def yeonsam(self, interaction: discord.Interaction):
+        # 길드별 안내 문구와 설정 버튼을 보여주는 기본 진입 명령어입니다.
         guild = interaction.guild
         if guild is None:
             await interaction.response.send_message(
@@ -1048,6 +1063,7 @@ class Yeonsam(commands.Cog):
 
     @app_commands.command(name="도움", description="게임/가이드 JSON 데이터를 선택형 UI로 봅니다.")
     async def yeonsam_game(self, interaction: discord.Interaction):
+        # JSON 기반 가이드 탐색기를 ephemeral 메시지로 열어 개인별 선택 상태를 유지합니다.
         view = GameBrowserView(user_id=interaction.user.id)
         await interaction.response.send_message(
             embed=view.build_embed(),
@@ -1058,6 +1074,7 @@ class Yeonsam(commands.Cog):
     @app_commands.command(name="연삼환영디버그", description="환영 메시지 화면을 테스트합니다.")
     @app_commands.default_permissions(administrator=True)
     async def yeonsam_debug(self, interaction: discord.Interaction):
+        # 실제 입장 이벤트를 기다리지 않고 현재 사용자를 기준으로 환영 메시지를 미리 확인합니다.
         guild = interaction.guild
         member = interaction.user
 
@@ -1078,6 +1095,7 @@ class Yeonsam(commands.Cog):
     @app_commands.command(name="연삼코드", description="디버깅용 상태 코드를 출력합니다.")
     @app_commands.default_permissions(administrator=True)
     async def yeonsam_code(self, interaction: discord.Interaction):
+        # 운영 중인 봇의 길드/명령어/설정 상태를 JSON으로 묶어 관리자에게만 보여줍니다.
         guild = interaction.guild
         guild_config = get_guild(guild.id) if guild else {}
         guild_lines = [f"{item.name} ({item.id})" for item in self.bot.guilds] or ["없음"]

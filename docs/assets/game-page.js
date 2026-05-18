@@ -1,4 +1,5 @@
 async function loadGamePage() {
+    // HTML에 연결된 JSON 경로와 주요 DOM 노드를 모아 페이지 렌더링의 시작점을 준비합니다.
     const jsonPath = document.body.dataset.gameJson;
     const fallbackNode = document.getElementById("game-data-fallback");
     const tabList = document.getElementById("game-tab-list");
@@ -17,6 +18,7 @@ async function loadGamePage() {
 
     try {
         const data = await loadGameData(jsonPath, fallbackNode);
+        // 현재 정적 페이지는 공략 데이터만 탭으로 노출하되, 상태 객체로 이후 확장을 쉽게 둡니다.
         const tabs = [{ id: "guides", label: "공략 탭" }];
         const state = {
             tabId: "guides",
@@ -44,6 +46,7 @@ async function loadGamePage() {
 }
 
 async function loadGameData(jsonPath, fallbackNode) {
+    // 웹 서버에서는 fetch를 우선 사용하고, file:// 미리보기에서는 HTML 안의 fallback JSON을 읽습니다.
     if (window.location.protocol !== "file:") {
         try {
             const response = await fetch(jsonPath);
@@ -63,6 +66,7 @@ async function loadGameData(jsonPath, fallbackNode) {
 }
 
 function renderPage(tabs, state, data, tabList, subtabList, panel) {
+    // 상단 탭과 실제 콘텐츠를 같은 상태 객체로 다시 그려 UI와 데이터 선택을 동기화합니다.
     renderTabButtons(tabs, state, data, tabList, subtabList, panel);
     renderContent(state, data, subtabList, panel);
 }
@@ -106,6 +110,7 @@ function renderSubtabButtons(categories, activeCategory, state, subtabList, pane
 }
 
 function renderCategory(category, panel, tabId) {
+    // JSON 카테고리의 형태에 따라 몬스터, 레코드, 섹션형, 텍스트형 렌더러로 분기합니다.
     if (!category) {
         panel.innerHTML = '<p class="game-error">표시할 세부 항목이 없습니다.</p>';
         return;
@@ -182,6 +187,7 @@ function renderGuideGroupCard(group, category) {
 }
 
 function shouldRenderGuideMediaCards(category, tabId) {
+    // 이미지 중심으로 봐야 하는 공략 카테고리는 기본 카드 대신 미디어 카드를 사용합니다.
     return tabId === "guides" && (category.display === "media" || ["maps", "items", "mods"].includes(category.id));
 }
 
@@ -264,6 +270,7 @@ function renderWideMediaCard(card, category) {
 }
 
 function renderRecordCategory(category, panel) {
+    // maps/items/mods처럼 entries 배열을 가진 데이터는 그룹별 레코드 카드 목록으로 보여줍니다.
     const sections = (category.groups ?? [])
         .map((group) => {
             const cards = (group.entries ?? [])
@@ -296,6 +303,7 @@ function renderRecordCategory(category, panel) {
 }
 
 function renderMonsterCategory(category, panel) {
+    // 몬스터 데이터는 section 또는 tier 메타데이터를 기준으로 요약 칩, 인덱스, 카드 섹션을 구성합니다.
     const monsters = category.monsters ?? [];
     const hasSections = monsters.some((monster) => typeof monster.section === "string" && monster.section.length > 0);
     const hasTiers = monsters.some((monster) => monster.tier !== undefined && monster.tier !== null && monster.tier !== "");
@@ -456,6 +464,7 @@ function renderIndexLinks(monsters) {
 }
 
 function renderMonsterCard(monster) {
+    // 한 몬스터의 태그와 상세 메타데이터를 모아 이미지 카드 한 장으로 렌더링합니다.
     const sectionTag = monster.section ? getMonsterSectionLabel(monster.section) : null;
     const tags = [];
     const metaBlocks = [];
@@ -516,6 +525,7 @@ function renderMonsterCard(monster) {
 }
 
 function renderRecordCard(category, group, entry) {
+    // 지도/아이템/모드 항목의 가격, 명령어, 설명, 설치 링크를 카드 메타 블록으로 변환합니다.
     const name = entry.name ?? entry.id;
     const subtitle = entry.nameKr ? `<p class="monster-card-subtitle">${escapeHtml(entry.nameKr)}</p>` : "";
     const priceValue = entry.price ?? entry.priceRange;
@@ -591,6 +601,7 @@ function renderMetaBlock(label, value, wide = false, raw = false) {
 }
 
 function renderListItemContent(item) {
+    // 리스트 항목이 URL이면 링크로, 일반 텍스트면 줄바꿈 규칙을 적용한 설명으로 표시합니다.
     if (/^https?:\/\//.test(String(item ?? ""))) {
         const href = escapeHtml(item);
         return `<a href="${href}" target="_blank" rel="noreferrer">${href}</a>`;
@@ -695,6 +706,7 @@ function resolveActiveCategory(categories, state) {
 }
 
 function buildHashRoutes(data) {
+    // #monster-id, #category-entry-id 같은 해시를 현재 탭/카테고리 상태로 역매핑합니다.
     const routes = new Map();
 
     for (const tabId of ["guides"]) {
@@ -730,6 +742,7 @@ function applyHashState(hash, state, hashRoutes) {
 }
 
 function bindHashNavigation(tabs, state, data, hashRoutes, tabList, subtabList, panel) {
+    // 주소 해시가 바뀌면 알맞은 카테고리를 열고, 대상 카드 위치로 부드럽게 이동합니다.
     window.addEventListener("hashchange", () => {
         const routeMatched = applyHashState(window.location.hash, state, hashRoutes);
         if (routeMatched) {
@@ -779,6 +792,7 @@ function syncActiveButton(container, activeButton) {
 }
 
 function escapeHtml(value) {
+    // JSON에서 온 문자열을 innerHTML에 넣기 전에 기본 HTML 이스케이프를 적용합니다.
     return String(value ?? "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
