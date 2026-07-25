@@ -1,1 +1,2 @@
 discord.py==2.7.1
+steam-discord-patch-alerts[discord] @ git+https://github.com/Yeon-sik/steam-discord-patch-alerts.git@068c75da89d4f08f2b3e9b1d1700dfe369244a0d

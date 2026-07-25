@@ -31,6 +31,13 @@ DB_FILE = DATA_DIR / "yeonsam.sqlite3"
 FILE = DB_FILE
 
 
+def _patch_subscription_store():
+    """Return the extracted store over the same on-disk SQLite database."""
+    from steam_discord_patch_alerts import SQLitePatchSubscriptionStore
+
+    return SQLitePatchSubscriptionStore(DB_FILE)
+
+
 @contextmanager
 def _connect():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -321,81 +328,19 @@ def upsert_patch_subscription(
     channel_id,
     last_seen_id: str | None = None,
 ) -> None:
-    init_storage()
-    now = _utc_timestamp()
-    with _LOCK, _connect() as connection:
-        connection.execute(
-            """
-            INSERT INTO patch_subscriptions (
-                guild_id, game_slug, channel_id, last_seen_id, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?)
-            ON CONFLICT(guild_id, game_slug) DO UPDATE SET
-                channel_id = excluded.channel_id,
-                last_seen_id = COALESCE(excluded.last_seen_id, patch_subscriptions.last_seen_id),
-                updated_at = excluded.updated_at
-            """,
-            (
-                str(guild_id),
-                str(game_slug),
-                str(channel_id),
-                _optional_id(last_seen_id),
-                now,
-                now,
-            ),
-        )
+    _patch_subscription_store().upsert(guild_id, game_slug, channel_id, last_seen_id)
 
 
 def remove_patch_subscription(guild_id, game_slug: str) -> bool:
-    init_storage()
-    with _LOCK, _connect() as connection:
-        cursor = connection.execute(
-            "DELETE FROM patch_subscriptions WHERE guild_id = ? AND game_slug = ?",
-            (str(guild_id), str(game_slug)),
-        )
-    return cursor.rowcount > 0
+    return _patch_subscription_store().remove(guild_id, game_slug)
 
 
 def list_patch_subscriptions(guild_id=None) -> list[dict]:
-    init_storage()
-    query = """
-        SELECT guild_id, game_slug, channel_id, last_seen_id
-        FROM patch_subscriptions
-    """
-    params: tuple[str, ...] = ()
-    if guild_id is not None:
-        query += " WHERE guild_id = ?"
-        params = (str(guild_id),)
-    query += " ORDER BY guild_id, game_slug"
-
-    with _LOCK, _connect() as connection:
-        rows = connection.execute(query, params).fetchall()
-    return [
-        {
-            "guild_id": int(row["guild_id"]),
-            "game_slug": row["game_slug"],
-            "channel_id": int(row["channel_id"]),
-            "last_seen_id": row["last_seen_id"],
-        }
-        for row in rows
-    ]
+    return _patch_subscription_store().list(guild_id)
 
 
 def update_patch_last_seen(guild_id, game_slug: str, last_seen_id: str) -> None:
-    init_storage()
-    with _LOCK, _connect() as connection:
-        connection.execute(
-            """
-            UPDATE patch_subscriptions
-            SET last_seen_id = ?, updated_at = ?
-            WHERE guild_id = ? AND game_slug = ?
-            """,
-            (
-                str(last_seen_id),
-                _utc_timestamp(),
-                str(guild_id),
-                str(game_slug),
-            ),
-        )
+    _patch_subscription_store().update_last_seen(guild_id, game_slug, last_seen_id)
 
 
 def get_runtime_state(state_key: str) -> str | None:
