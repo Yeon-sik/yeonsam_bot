@@ -144,6 +144,90 @@ code {
     outline-offset: 3px;
 }
 
+.site-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.site-footer__links .site-footer__link {
+    min-width: 0;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.action-button {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--pink);
+    padding: 10px 16px;
+    background: rgba(255, 0, 255, 0.08);
+    box-shadow: var(--pixel) var(--pixel) 0 var(--pink-line);
+    color: var(--pink);
+    font-weight: 700;
+}
+
+.action-button-primary {
+    background: var(--pink);
+    color: var(--black);
+}
+
+.action-button.is-disabled {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.config-notice {
+    margin: 12px 0 0;
+    color: var(--pink-muted);
+    font-size: 0.86rem;
+}
+
+.policy-page {
+    width: min(900px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 48px 0;
+}
+
+.policy-card {
+    padding: clamp(24px, 5vw, 56px);
+}
+
+.policy-card h1 {
+    margin: 10px 0 24px;
+}
+
+.policy-card h2 {
+    margin: 30px 0 10px;
+    font-size: 1.1rem;
+}
+
+.service-status-box {
+    border: 2px solid var(--pink);
+    margin: 24px 0;
+    padding: 20px;
+}
+
+#service-status[data-state="online"] {
+    color: #57f287;
+}
+
+#service-status[data-state="offline"] {
+    color: #ed4245;
+}
+
+#service-status[data-state="unknown"] {
+    color: #fee75c;
+}
+
 .site-header {
     position: sticky;
     top: 0;

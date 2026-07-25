@@ -1,0 +1,14 @@
+{
+  "LethalCompany": {
+    "name": "Lethal Company",
+    "provider": "steam",
+    "app_id": 1966720,
+    "feed": "steam_community_announcements"
+  },
+  "REPO": {
+    "name": "R.E.P.O.",
+    "provider": "steam",
+    "app_id": 3241660,
+    "feed": "steam_community_announcements"
+  }
+}

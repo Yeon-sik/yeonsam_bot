@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 from utils.profile import update_member_nickname
+from utils.storage import get_guild, record_metric
 from utils.welcome_message import build_welcome_embed
 
 
@@ -48,13 +49,26 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
-        # 새 멤버가 들어오면 서버의 system_channel에 환영 임베드와 프로필 수정 버튼을 보냅니다.
-        channel = member.guild.system_channel
+        config = get_guild(member.guild.id)
+        channel = None
+        if config.get("welcome_channel_id"):
+            configured_channel = member.guild.get_channel(config["welcome_channel_id"])
+            if isinstance(configured_channel, discord.TextChannel):
+                channel = configured_channel
+        if channel is None and isinstance(member.guild.system_channel, discord.TextChannel):
+            channel = member.guild.system_channel
         if channel is None:
+            record_metric("welcome_failed:no_channel", member.guild.id)
             return
 
         embed = build_welcome_embed(member.guild, member)
-        await channel.send(embed=embed, view=WelcomeView())
+        try:
+            await channel.send(embed=embed, view=WelcomeView())
+            record_metric("welcome_sent", member.guild.id)
+        except discord.Forbidden:
+            record_metric("welcome_failed:forbidden", member.guild.id)
+        except discord.HTTPException:
+            record_metric("welcome_failed:http", member.guild.id)
 
 
 async def setup(bot):

@@ -3,7 +3,7 @@
   "pagePath": "Thunderstore.html",
   "name": "Thunderstore Mod Manager",
   "botRenderAllGuides": true,
-  "profileImage": "./Thunderstore/Thunderstore_Profile.svg",
+  "profileImage": "./Thunderstore/Thunderstore_Profile.png",
   "description": {
     "genre": "모드 매니저 가이드",
     "summary": "Thunderstore 설치와 실행 흐름을 이미지 중심으로 정리한 페이지입니다.",
@@ -128,7 +128,10 @@
               "imageAlt": "Thunderstore execution step 4",
               "items": [
                 "게임 모드 선택 화면",
-                "1 : Vanilla : 모드 없이 실행, Modded : 모드 적용 후 실행, 2 : Change Profile, Change Game : 프로필, 게임 변경, 3 : My mods : 현재 프로필 모드, Get mods : 모드 검색 및 설치, Downloads : 다운로드중인 모드, Edit config : 모드 설정 변경, Settings : 설정, 4 : 현재 모드 화면, deprecated(충돌 발생 가능성 존재, 사용 비추천), 스위치로 비활성화 가능"
+                "1 : Vanilla : 모드 없이 실행, Modded : 모드 적용 후 실행",
+                "2 : Change Profile, Change Game : 프로필, 게임 변경",
+                "3 : My mods : 현재 프로필 모드, Get mods : 모드 검색 및 설치, Downloads : 다운로드중인 모드, Edit config : 모드 설정 변경, Settings : 설정",
+                "4 : 현재 모드 화면, deprecated(충돌 발생 가능성 존재, 사용 비추천), 스위치로 비활성화 가능"
               ]
             }
           ]

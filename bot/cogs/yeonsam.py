@@ -1,18 +1,24 @@
 import json
 from pathlib import Path
+import random
 
 import discord
 from discord import app_commands
 from discord.ext import commands
 
 from cogs.welcome import WelcomeView
-from utils.game_content import list_games, load_game_data
+from utils.game_content import DATA_ROOT, list_games, load_game_data
 from utils.profile import update_member_nickname
 from utils.storage import FILE as GUILD_CONFIG_FILE
-from utils.storage import get_guild, load_data, update_guild
+from utils.storage import get_guild, load_data, record_metric, update_guild
+from utils.validation import is_http_url
 from utils.welcome_message import build_welcome_embed
 
 GUIDE_BASE_URL = "https://yeon-sik.github.io/yeonsam_bot/games"
+GUIDE_IMAGE_LIMIT = 10
+IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp"}
+SEARCH_ROUTE_SEPARATOR = "|"
+RANDOM_NUMBER_LIMIT = 100
 SECTION_CHOICES = [
     ("개요", "overview"),
     ("공략", "guides"),
@@ -110,6 +116,10 @@ def build_monster_guide_link(data: dict, monster_id: str) -> str:
     return f"{GUIDE_BASE_URL}/{build_game_page_name(data)}#monster-{monster_id}"
 
 
+def build_game_page_link(data: dict) -> str:
+    return f"{GUIDE_BASE_URL}/{build_game_page_name(data)}"
+
+
 def build_category_entry_link(data: dict, category_id: str, entry_id: str) -> str:
     return f"{GUIDE_BASE_URL}/{build_game_page_name(data)}#{category_id}-{entry_id}"
 
@@ -119,6 +129,393 @@ def shorten_text(value: str | None, limit: int = 100) -> str:
     if len(text) <= limit:
         return text
     return f"{text[: limit - 1]}…"
+
+
+def build_search_route(
+    game: str,
+    section: str | None = None,
+    topic: str | None = None,
+    entry: str | None = None,
+) -> str:
+    return SEARCH_ROUTE_SEPARATOR.join((game, section or "", topic or "", entry or ""))
+
+
+def parse_search_route(value: str | None) -> tuple[str, str | None, str | None, str | None] | None:
+    if not value or SEARCH_ROUTE_SEPARATOR not in value:
+        return None
+
+    parts = value.split(SEARCH_ROUTE_SEPARATOR, 3)
+    if len(parts) != 4:
+        return None
+
+    game, section, topic, entry = parts
+    if not game:
+        return None
+
+    return game, section or None, topic or None, entry or None
+
+
+def build_search_choice_name(display_name: str, game_name: str, context: str) -> str:
+    return shorten_text(f"{display_name} · {game_name} · {context}", 100)
+
+
+def create_search_candidate(
+    *,
+    game_slug: str,
+    game_name: str,
+    context: str,
+    display_name: str,
+    section: str | None = None,
+    topic: str | None = None,
+    entry: str | None = None,
+    keywords: list[str],
+) -> dict[str, object]:
+    return {
+        "route": build_search_route(game_slug, section, topic, entry),
+        "choice_name": build_search_choice_name(display_name, game_name, context),
+        "display_name": display_name,
+        "context": f"{game_name} · {context}",
+        "keywords": [normalize_text(keyword) for keyword in keywords if normalize_text(keyword)],
+    }
+
+
+def build_search_candidates() -> list[dict[str, object]]:
+    candidates: list[dict[str, object]] = []
+
+    for game_slug in list_games():
+        try:
+            data = load_game_data(game_slug)
+        except FileNotFoundError:
+            continue
+
+        game_name = data.get("name", game_slug)
+        for topic_entry in data.get("guides", []):
+            topic_context = str(topic_entry.get("label") or topic_entry.get("title") or "공략")
+            topic_keywords = [
+                game_name,
+                topic_entry.get("id"),
+                topic_entry.get("label"),
+                topic_entry.get("title"),
+            ]
+
+            candidates.append(
+                create_search_candidate(
+                    game_slug=game_slug,
+                    game_name=game_name,
+                    context=topic_context,
+                    display_name=str(topic_entry.get("label") or topic_entry.get("title") or topic_context),
+                    section="guides",
+                    topic=topic_entry.get("id"),
+                    keywords=topic_keywords,
+                )
+            )
+
+            if topic_entry.get("monsters"):
+                for monster in topic_entry["monsters"][:25]:
+                    display_name = str(monster.get("nameKr") or monster.get("name") or monster["id"])
+                    candidates.append(
+                        create_search_candidate(
+                            game_slug=game_slug,
+                            game_name=game_name,
+                            context="몬스터",
+                            display_name=display_name,
+                            section="guides",
+                            topic=topic_entry.get("id"),
+                            entry=monster.get("id"),
+                            keywords=[
+                                game_name,
+                                topic_entry.get("label"),
+                                monster.get("id"),
+                                monster.get("name"),
+                                monster.get("nameKr"),
+                            ],
+                        )
+                    )
+                continue
+
+            if category_has_record_entries(topic_entry):
+                for _, item in flatten_category_entries(topic_entry)[:25]:
+                    display_name = str(item.get("nameKr") or item.get("name") or item["id"])
+                    candidates.append(
+                        create_search_candidate(
+                            game_slug=game_slug,
+                            game_name=game_name,
+                            context=topic_context,
+                            display_name=display_name,
+                            section="guides",
+                            topic=topic_entry.get("id"),
+                            entry=item.get("id"),
+                            keywords=[
+                                game_name,
+                                topic_entry.get("label"),
+                                item.get("id"),
+                                item.get("name"),
+                                item.get("nameKr"),
+                                item.get("terminalCommand"),
+                            ],
+                        )
+                    )
+                continue
+
+            if topic_entry.get("groups") and topic_entry.get("entrySelectable") is not False:
+                for group in topic_entry.get("groups", [])[:25]:
+                    display_name = str(group.get("title") or group.get("label") or "항목")
+                    candidates.append(
+                        create_search_candidate(
+                            game_slug=game_slug,
+                            game_name=game_name,
+                            context=topic_context,
+                            display_name=display_name,
+                            section="guides",
+                            topic=topic_entry.get("id"),
+                            entry=group.get("title"),
+                            keywords=[
+                                game_name,
+                                topic_entry.get("label"),
+                                group.get("title"),
+                                group.get("label"),
+                            ],
+                        )
+                    )
+
+    return candidates
+
+
+def score_search_candidate(candidate: dict[str, object], query: str) -> tuple[int, int] | None:
+    normalized_query = normalize_text(query)
+    if not normalized_query:
+        return 3, len(str(candidate["choice_name"]))
+
+    keywords = candidate.get("keywords", [])
+    if not isinstance(keywords, list):
+        return None
+
+    best_score: int | None = None
+    for keyword in keywords:
+        if not isinstance(keyword, str) or not keyword:
+            continue
+        if keyword == normalized_query:
+            best_score = 0 if best_score is None else min(best_score, 0)
+        elif keyword.startswith(normalized_query):
+            best_score = 1 if best_score is None else min(best_score, 1)
+        elif normalized_query in keyword:
+            best_score = 2 if best_score is None else min(best_score, 2)
+
+    if best_score is None:
+        return None
+
+    return best_score, len(str(candidate["choice_name"]))
+
+
+def find_search_candidates(query: str, *, limit: int = 25) -> list[dict[str, object]]:
+    scored_matches: list[tuple[tuple[int, int], dict[str, object]]] = []
+    for candidate in build_search_candidates():
+        score = score_search_candidate(candidate, query)
+        if score is None:
+            continue
+        scored_matches.append((score, candidate))
+
+    scored_matches.sort(key=lambda item: (item[0][0], item[0][1], str(item[1]["choice_name"])))
+    return [candidate for _, candidate in scored_matches[:limit]]
+
+
+def resolve_search_selection(search_value: str | None) -> tuple[str, str | None, str | None, str | None] | None:
+    route = parse_search_route(search_value)
+    if route is not None:
+        return route
+
+    if not search_value:
+        return None
+
+    matches = find_search_candidates(search_value, limit=5)
+    if len(matches) == 1:
+        return parse_search_route(str(matches[0]["route"]))
+
+    normalized_query = normalize_text(search_value)
+    exact_matches = [
+        candidate
+        for candidate in matches
+        if normalized_query in candidate.get("keywords", [])
+    ]
+    if len(exact_matches) == 1:
+        return parse_search_route(str(exact_matches[0]["route"]))
+
+    return None
+
+
+def build_search_results_embed(search_value: str) -> discord.Embed:
+    embed = discord.Embed(
+        title="항목 검색 결과",
+        description=f"`{search_value}`와 일치하는 후보입니다. `/도움`의 `항목검색` 자동완성에서 선택하면 바로 열 수 있어요.",
+        color=0xFF00FF,
+    )
+    matches = find_search_candidates(search_value, limit=10)
+
+    if not matches:
+        embed.add_field(name="검색 결과", value="일치하는 항목이 없습니다.", inline=False)
+        return embed
+
+    lines = [
+        f"- {candidate['display_name']} ({candidate['context']})"
+        for candidate in matches
+    ]
+    embed.add_field(name="일치 후보", value="\n".join(lines), inline=False)
+    return embed
+
+
+def resolve_local_image_path(raw_path: str | None) -> Path | None:
+    if not raw_path:
+        return None
+
+    normalized = str(raw_path).strip()
+    if not normalized or normalized.startswith(("http://", "https://")):
+        return None
+
+    relative_path = Path(normalized.lstrip("./\\"))
+    candidate = (DATA_ROOT / relative_path).resolve()
+
+    try:
+        candidate.relative_to(DATA_ROOT.resolve())
+    except ValueError:
+        return None
+
+    if candidate.is_file() and candidate.suffix.lower() in IMAGE_EXTENSIONS:
+        return candidate
+
+    return None
+
+
+def append_unique_image_path(image_paths: list[Path], raw_path: str | None):
+    resolved_path = resolve_local_image_path(raw_path)
+    if resolved_path and resolved_path not in image_paths:
+        image_paths.append(resolved_path)
+
+
+def collect_group_image_paths(groups: list[dict], image_paths: list[Path]):
+    for group in groups[:25]:
+        append_unique_image_path(image_paths, group.get("image"))
+
+
+def collect_section_image_paths(sections: list[dict], image_paths: list[Path]):
+    for section in sections[:25]:
+        for card in section.get("cards", [])[:25]:
+            append_unique_image_path(image_paths, card.get("image"))
+
+
+def collect_record_entry_image_paths(topic_entry: dict, image_paths: list[Path]):
+    for group, item in flatten_category_entries(topic_entry)[:GUIDE_IMAGE_LIMIT]:
+        append_unique_image_path(image_paths, item.get("image"))
+
+
+def collect_topic_image_paths(topic_entry: dict, image_paths: list[Path], entry: str | None = None):
+    if topic_entry["id"] == "monsters" and topic_entry.get("monsters"):
+        matched_monster = resolve_selected_monster(topic_entry["monsters"], entry)
+        if matched_monster is not None:
+            append_unique_image_path(image_paths, matched_monster.get("image"))
+            return
+
+        for monster in topic_entry["monsters"][:GUIDE_IMAGE_LIMIT]:
+            append_unique_image_path(image_paths, monster.get("image"))
+        return
+
+    if category_has_record_entries(topic_entry):
+        selected_record = resolve_selected_record_entry(topic_entry, entry)
+        if selected_record is not None:
+            _, matched_item = selected_record
+            append_unique_image_path(image_paths, matched_item.get("image"))
+            return
+
+        collect_record_entry_image_paths(topic_entry, image_paths)
+        return
+
+    if topic_entry.get("sections"):
+        collect_section_image_paths(topic_entry.get("sections", []), image_paths)
+        return
+
+    groups = topic_entry.get("groups", [])
+    if topic_entry.get("entrySelectable") is False:
+        collect_group_image_paths(groups, image_paths)
+        return
+
+    matched_group = resolve_selected_group(groups, entry)
+    if matched_group is not None:
+        append_unique_image_path(image_paths, matched_group.get("image"))
+        return
+
+    collect_group_image_paths(groups, image_paths)
+
+
+def collect_game_browser_image_paths(
+    game: str | None = None,
+    section: str | None = None,
+    topic: str | None = None,
+    entry: str | None = None,
+) -> list[Path]:
+    if not game:
+        return []
+
+    data = load_game_data(game)
+    image_paths: list[Path] = []
+    resolved_section = resolve_section(section)
+    profile_image = data.get("profileImage")
+
+    if resolved_section in (None, "overview"):
+        append_unique_image_path(image_paths, profile_image)
+        return image_paths[:GUIDE_IMAGE_LIMIT]
+
+    entries = get_section_entries(data, resolved_section)
+    matched_entry = resolve_topic_entry(entries, topic)
+
+    if should_render_all_guides_in_bot(data, resolved_section):
+        for item in entries[:25]:
+            collect_topic_image_paths(item, image_paths)
+            if len(image_paths) >= GUIDE_IMAGE_LIMIT:
+                break
+        return image_paths[:GUIDE_IMAGE_LIMIT]
+
+    if matched_entry is None:
+        append_unique_image_path(image_paths, profile_image)
+        return image_paths[:GUIDE_IMAGE_LIMIT]
+
+    collect_topic_image_paths(matched_entry, image_paths, entry)
+    return image_paths[:GUIDE_IMAGE_LIMIT]
+
+
+def build_discord_image_files(image_paths: list[Path]) -> list[discord.File]:
+    files: list[discord.File] = []
+    for index, image_path in enumerate(image_paths[:GUIDE_IMAGE_LIMIT], start=1):
+        filename = f"guide-image-{index}{image_path.suffix.lower()}"
+        files.append(discord.File(str(image_path), filename=filename))
+    return files
+
+
+def build_game_browser_response(
+    game: str | None = None,
+    section: str | None = None,
+    topic: str | None = None,
+    entry: str | None = None,
+) -> tuple[discord.Embed, list[discord.File]]:
+    embed = build_game_browser_embed(game=game, section=section, topic=topic, entry=entry)
+    data = load_game_data(game) if game else None
+    resolved_section = resolve_section(section)
+
+    if data and data.get("slug") == "Thunderstore" and resolved_section == "guides":
+        embed.add_field(
+            name="이미지 포함 게시물",
+            value=build_game_page_link(data),
+            inline=False,
+        )
+        return embed, []
+
+    image_paths = collect_game_browser_image_paths(game=game, section=section, topic=topic, entry=entry)
+    files = build_discord_image_files(image_paths)
+
+    if files:
+        embed.set_image(url=f"attachment://{files[0].filename}")
+    elif game:
+        embed.set_footer(text="이미지 없음")
+
+    return embed, files
 
 
 def list_game_catalog() -> list[dict[str, str]]:
@@ -190,21 +587,21 @@ def build_group_display_value(group: dict) -> str:
 def build_section_display_value(section: dict) -> str:
     lines = [f"- {item}" for item in section.get("items", [])]
     for card in section.get("cards", [])[:25]:
-        lines.append(f"- {format_bot_card_title(card.get('title', '항목'))}")
-        if card.get("image"):
-            lines.append(f"  이미지: {card['image']}")
+        lines.append(f"- {format_bot_card_label(card)}")
         for item in card.get("items", []):
             if item:
                 lines.append(f"  - {item}")
     return "\n".join(lines) or "-"
 
 
-def format_bot_card_title(title: str) -> str:
-    text = str(title or "").strip()
-    for suffix in ("설치 과정 이미지", "실행 과정 이미지"):
-        if suffix in text:
-            return text.replace(suffix, "").strip()
-    return text
+def format_bot_card_label(card: dict) -> str:
+    label = str(card.get("label") or "").strip()
+    if label:
+        return label
+
+    title = str(card.get("title") or "항목").strip()
+    prefix = title.split(".", 1)[0].strip()
+    return prefix or title
 
 
 def should_render_all_guides_in_bot(data: dict, resolved_section: str | None) -> bool:
@@ -354,14 +751,14 @@ def build_game_browser_embed(
     # 현재 선택 상태(game/section/topic/entry)에 맞춰 탐색 화면 또는 상세 화면 임베드를 생성합니다.
     if not game:
         embed = discord.Embed(
-            title="연삼 게임 탐색기",
-            description="아래 선택 메뉴에서 게임을 고르면 `구역 -> 주제 -> 항목` 순서로 이어서 클릭할 수 있습니다.",
+            title="연삼이의 도움말",
+            description="아래 선택 메뉴에서 문서를 고르면 `구역 -> 주제 -> 항목` 순서로 이어서 클릭할 수 있습니다.",
             color=0xFF00FF,
         )
         catalog = list_game_catalog()
         if catalog:
             embed.add_field(
-                name="등록된 게임",
+                name="등록된 문서",
                 value=", ".join(item["name"] for item in catalog[:25]),
                 inline=False,
             )
@@ -550,6 +947,35 @@ def build_disabled_select_options(label: str) -> list[discord.SelectOption]:
     return [discord.SelectOption(label=label, value="__disabled__")]
 
 
+def draw_random_numbers(start: int, end: int, count: int) -> list[int]:
+    return [random.randint(start, end) for _ in range(count)]
+
+
+def build_random_numbers_embed(
+    start: int,
+    end: int,
+    count: int,
+    numbers: list[int] | None = None,
+) -> discord.Embed:
+    embed = discord.Embed(
+        title="랜덤 숫자",
+        color=0x57F287,
+    )
+    embed.add_field(name="범위", value=f"{start} ~ {end}", inline=True)
+    embed.add_field(name="개수", value=str(count), inline=True)
+
+    if numbers is None:
+        embed.description = "버튼을 눌러 숫자를 뽑아보세요."
+        return embed
+
+    if count == 1:
+        embed.description = f"**{numbers[0]}**"
+        return embed
+
+    embed.description = ", ".join(str(number) for number in numbers)
+    return embed
+
+
 class GameBrowserView(discord.ui.View):
     def __init__(
         self,
@@ -644,6 +1070,14 @@ class GameBrowserView(discord.ui.View):
             entry=self.entry,
         )
 
+    def build_response(self) -> tuple[discord.Embed, list[discord.File]]:
+        return build_game_browser_response(
+            game=self.game,
+            section=self.section,
+            topic=self.topic,
+            entry=self.entry,
+        )
+
     def game_options(self) -> list[discord.SelectOption]:
         options: list[discord.SelectOption] = []
         for item in self.catalog[:25]:
@@ -672,7 +1106,7 @@ class GameBrowserView(discord.ui.View):
 
     def topic_options(self) -> list[discord.SelectOption]:
         if not self.data or not self.section or self.section == "overview":
-            return build_disabled_select_options("먼저 게임과 구역을 선택하세요")
+            return build_disabled_select_options("먼저 문서와 구역을 선택하세요")
 
         options: list[discord.SelectOption] = []
         for item in get_section_entries(self.data, self.section)[:25]:
@@ -692,7 +1126,7 @@ class GameBrowserView(discord.ui.View):
             return build_disabled_select_options("먼저 주제를 선택하세요")
 
         if not topic_has_entries(self.topic_entry):
-            return build_disabled_select_options("?좏깮???몃? ??ぉ???놁뒿?덈떎")
+            return build_disabled_select_options("선택 가능한 항목이 없습니다")
 
         if self.topic_entry["id"] == "monsters" and self.topic_entry.get("monsters"):
             options: list[discord.SelectOption] = []
@@ -755,7 +1189,8 @@ class GameBrowserView(discord.ui.View):
             topic=self.topic,
             entry=self.entry,
         )
-        await interaction.response.edit_message(embed=view.build_embed(), view=view)
+        embed, files = view.build_response()
+        await interaction.response.edit_message(embed=embed, attachments=files, view=view)
 
     async def refresh_controls(self, interaction: discord.Interaction):
         # Select 변경 중에는 임베드 본문을 유지하고 다음 단계 컨트롤만 갱신합니다.
@@ -783,10 +1218,10 @@ class GameSelect(discord.ui.Select):
     def __init__(self, game_view: GameBrowserView):
         self.game_view = game_view
         super().__init__(
-            placeholder="게임 선택",
+            placeholder="문서 선택",
             min_values=1,
             max_values=1,
-            options=game_view.game_options() or build_disabled_select_options("등록된 게임이 없습니다"),
+            options=game_view.game_options() or build_disabled_select_options("등록된 문서가 없습니다"),
             row=0,
             disabled=not game_view.catalog,
         )
@@ -808,7 +1243,7 @@ class SectionSelect(discord.ui.Select):
             placeholder="구역 선택",
             min_values=1,
             max_values=1,
-            options=game_view.section_options() if has_game else build_disabled_select_options("먼저 게임을 선택하세요"),
+            options=game_view.section_options() if has_game else build_disabled_select_options("먼저 문서를 선택하세요"),
             row=1,
             disabled=not has_game,
         )
@@ -887,7 +1322,58 @@ class ResetGameBrowserButton(discord.ui.Button):
 
     async def callback(self, interaction: discord.Interaction):
         view = GameBrowserView(user_id=interaction.user.id)
-        await interaction.response.edit_message(embed=view.build_embed(), view=view)
+        embed, files = view.build_response()
+        await interaction.response.edit_message(embed=embed, attachments=files, view=view)
+
+
+class RandomNumberView(discord.ui.View):
+    def __init__(self, user_id: int, start: int, end: int, count: int):
+        super().__init__(timeout=300)
+        self.user_id = user_id
+        self.start = start
+        self.end = end
+        self.count = count
+        self.add_item(DrawRandomNumbersButton())
+
+    def build_embed(self, numbers: list[int] | None = None) -> discord.Embed:
+        return build_random_numbers_embed(
+            start=self.start,
+            end=self.end,
+            count=self.count,
+            numbers=numbers,
+        )
+
+    async def refresh_message(self, interaction: discord.Interaction):
+        numbers = draw_random_numbers(self.start, self.end, self.count)
+        await interaction.response.edit_message(
+            embed=self.build_embed(numbers),
+            view=self,
+        )
+
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        if interaction.user.id != self.user_id:
+            await interaction.response.send_message(
+                "이 버튼은 명령어를 실행한 사용자만 사용할 수 있어요.",
+                ephemeral=True,
+            )
+            return False
+        return True
+
+
+class DrawRandomNumbersButton(discord.ui.Button):
+    def __init__(self):
+        super().__init__(
+            label="숫자 뽑기",
+            style=discord.ButtonStyle.primary,
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        view = self.view
+        if not isinstance(view, RandomNumberView):
+            await interaction.response.defer()
+            return
+
+        await view.refresh_message(interaction)
 
 
 class EditMessageModal(discord.ui.Modal):
@@ -912,8 +1398,22 @@ class EditMessageModal(discord.ui.Modal):
 
     async def on_submit(self, interaction: discord.Interaction):
         # 관리자 모달 입력값을 길드 설정에 저장하고 즉시 미리보기 임베드를 돌려줍니다.
-        update_guild(self.guild_id, "welcome_message", self.message.value)
-        update_guild(self.guild_id, "link", self.link.value)
+        message = self.message.value.strip()
+        link = self.link.value.strip()
+        if not message:
+            await interaction.response.send_message(
+                "환영 문구는 공백으로만 저장할 수 없습니다.",
+                ephemeral=True,
+            )
+            return
+        if not is_http_url(link):
+            await interaction.response.send_message(
+                "안내 링크는 `https://` 또는 `http://` 주소만 사용할 수 있습니다.",
+                ephemeral=True,
+            )
+            return
+        update_guild(self.guild_id, "welcome_message", message)
+        update_guild(self.guild_id, "link", link)
 
         config = get_guild(self.guild_id)
         guild_name = interaction.guild.name if interaction.guild else "서버"
@@ -987,6 +1487,40 @@ class Yeonsam(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @app_commands.command(name="랜덤", description="입력한 범위와 개수로 랜덤 숫자를 출력합니다.")
+    @app_commands.describe(
+        start="시작 숫자입니다. 최소 1입니다.",
+        end="끝 숫자입니다. 최대 100입니다.",
+        count="한 번에 출력할 숫자 개수입니다.",
+    )
+    @app_commands.rename(start="시작", end="끝", count="개수")
+    async def random_numbers(
+        self,
+        interaction: discord.Interaction,
+        start: app_commands.Range[int, 1, RANDOM_NUMBER_LIMIT] = 1,
+        end: app_commands.Range[int, 1, RANDOM_NUMBER_LIMIT] = RANDOM_NUMBER_LIMIT,
+        count: app_commands.Range[int, 1, RANDOM_NUMBER_LIMIT] = 1,
+    ):
+        if start > end:
+            await interaction.response.send_message(
+                "시작 숫자는 끝 숫자보다 클 수 없어요.",
+                ephemeral=True,
+            )
+            return
+
+        view = RandomNumberView(
+            user_id=interaction.user.id,
+            start=start,
+            end=end,
+            count=count,
+        )
+        numbers = draw_random_numbers(start, end, count)
+        await interaction.response.send_message(
+            embed=view.build_embed(numbers),
+            view=view,
+            ephemeral=True,
+        )
+
     @app_commands.command(name="연삼", description="연삼 봇 안내를 표시합니다.")
     async def yeonsam(self, interaction: discord.Interaction):
         # 길드별 안내 문구와 설정 버튼을 보여주는 기본 진입 명령어입니다.
@@ -1034,7 +1568,7 @@ class Yeonsam(commands.Cog):
             name="/도움",
             value=(
                 "명령어 입력 후 선택 메뉴가 열립니다.\n"
-                "`게임/가이드 -> 구역 -> 주제 -> 항목` 순서로 클릭해서 탐색합니다.\n"
+                "`문서 -> 구역 -> 주제 -> 항목` 순서로 클릭해서 탐색합니다.\n"
                 "JSON 데이터만 추가하면 같은 UI에 자동으로 포함되도록 구성되어 있습니다."
             ),
             inline=False,
@@ -1043,7 +1577,7 @@ class Yeonsam(commands.Cog):
             name="예시",
             value=(
                 "1. `/도움` 입력\n"
-                "2. `게임 선택`에서 Lethal Company 또는 Thunderstore 클릭\n"
+                "2. `문서 선택`에서 Lethal Company 또는 Thunderstore 클릭\n"
                 "3. `구역 -> 주제 -> 항목` 순서로 선택"
             ),
             inline=False,
@@ -1061,12 +1595,46 @@ class Yeonsam(commands.Cog):
 
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    @app_commands.command(name="도움", description="게임/가이드 JSON 데이터를 선택형 UI로 봅니다.")
-    async def yeonsam_game(self, interaction: discord.Interaction):
+    async def help_search_autocomplete(
+        self, interaction: discord.Interaction, current: str
+    ) -> list[app_commands.Choice[str]]:
+        matches = find_search_candidates(current, limit=25)
+        return [
+            app_commands.Choice(name=str(candidate["choice_name"]), value=str(candidate["route"]))
+            for candidate in matches
+        ]
+
+    @app_commands.command(name="도움", description="등록된 문서를 선택형 UI로 보거나 항목검색으로 바로 엽니다.")
+    @app_commands.describe(search_query="항목 이름을 입력하면 자동완성으로 일치 후보가 표시됩니다.")
+    @app_commands.rename(search_query="항목검색")
+    @app_commands.autocomplete(search_query=help_search_autocomplete)
+    async def yeonsam_game(self, interaction: discord.Interaction, search_query: str | None = None):
         # JSON 기반 가이드 탐색기를 ephemeral 메시지로 열어 개인별 선택 상태를 유지합니다.
-        view = GameBrowserView(user_id=interaction.user.id)
+        route = resolve_search_selection(search_query)
+        if route is not None:
+            game, section, topic, entry = route
+            view = GameBrowserView(
+                user_id=interaction.user.id,
+                game=game,
+                section=section,
+                topic=topic,
+                entry=entry,
+            )
+            embed, files = view.build_response()
+        else:
+            view = GameBrowserView(user_id=interaction.user.id)
+            embed, files = view.build_response()
+            if search_query:
+                embed = build_search_results_embed(search_query)
+                files = []
+                if not find_search_candidates(search_query, limit=1):
+                    record_metric(
+                        "search_no_result",
+                        interaction.guild.id if interaction.guild else None,
+                    )
         await interaction.response.send_message(
-            embed=view.build_embed(),
+            embed=embed,
+            files=files,
             view=view,
             ephemeral=True,
         )
@@ -1110,7 +1678,7 @@ class Yeonsam(commands.Cog):
                 "name": guild.name if guild else None,
                 "id": guild.id if guild else None,
             },
-            "guild_config_file": str(Path(GUILD_CONFIG_FILE)),
+            "storage_file": str(Path(GUILD_CONFIG_FILE)),
             "current_guild_config": guild_config,
             "registered_commands": command_names,
             "saved_guild_config_count": len(load_data()),
