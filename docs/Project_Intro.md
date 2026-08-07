@@ -8,9 +8,9 @@
 | --- | --- |
 | 개발 기간 | 2026-05 ~ 진행 중 |
 | 프로젝트 형태 | Python Discord 봇 + 정적 GitHub Pages 사이트 |
-| 현재 상태 | MVP, 공개 문서 사이트 운영 확인 / Discord 실운영 상태 미검증 |
-| 문서 기준 | 제품 기능 `d000f83`, 문서 자동화 `feat/project-docs-notion`, 2026-07-27 |
-| 주요 기술 | Python, discord.py 2.7.1, SQLite, HTML/CSS/JavaScript, GitHub Actions, Docker |
+| 현재 상태 | MVP, 공개 가이드 브라우저 렌더링·Notion 미러 운영 확인 / Discord 실운영 상태 미검증 |
+| 문서 기준 | 제품·기존 문서 `298a66d`, 최신 문서 런타임 upstream `a2371f0`, 2026-08-08 |
+| 주요 기술 | Python, discord.py 2.7.1, steam-discord-patch-alerts, SQLite, HTML/CSS/JavaScript, GitHub Actions, Docker |
 | 공개 사이트 | [연삼이 GitHub Pages](https://yeon-sik.github.io/yeonsam_bot/) |
 | 저장소 | [Yeon-sik/yeonsam_bot](https://github.com/Yeon-sik/yeonsam_bot) |
 | 상세 문서 | [Project_Detail.md](./Project_Detail.md) |
@@ -23,8 +23,9 @@
   서로 다른 채널과 도구에서 반복해서 관리해야 합니다.
 - **해결**: 관리자용 설정 UI, 신규 멤버 환영 흐름, JSON 기반 게임 가이드, 서버별
   Steam 패치 알림을 하나의 Discord 봇으로 연결했습니다.
-- **핵심 결과**: 저장소 기준 단위 테스트 15개가 통과했고, 세 게임 가이드 페이지를
-  포함한 공개 GitHub Pages가 HTTP 200으로 응답했습니다.
+- **핵심 결과**: 고정된 의존성을 설치한 Python 3.12.13 환경에서 단위 테스트
+  15개가 통과했고, 공개 랜딩과 세 게임 가이드가 실제 브라우저에서 JSON 콘텐츠까지
+  렌더링됐습니다.
 - **기술적 차별점**: 같은 게임 JSON을 Discord와 정적 사이트가 함께 사용하며,
   길드별 설정·구독·운영 지표는 SQLite로 분리했습니다.
 
@@ -44,10 +45,11 @@
 | 서버 온보딩 | 관리자 채널 선택, 문구·링크 입력, 권한 진단, 테스트 발송 | [settings.py](../bot/cogs/settings.py), [welcome.py](../bot/cogs/welcome.py) |
 | 게임 가이드 | Lethal Company, R.E.P.O., Thunderstore 콘텐츠를 Discord와 웹에 제공 | [game_content.py](../bot/utils/game_content.py), [game-page.js](./assets/game-page.js) |
 | 항목 검색 | 게임·주제·몬스터·레코드를 검색하고 선택형 UI로 탐색 | [yeonsam.py](../bot/cogs/yeonsam.py) |
-| 패치 알림 | 서버별 게임·채널 구독과 Steam 새 글 cursor 처리 | [patch_alerts.py](../bot/cogs/patch_alerts.py), [patch_feed.py](../bot/utils/patch_feed.py) |
+| 패치 알림 | 고정된 재사용 패키지를 어댑터로 연결해 서버별 구독과 Steam 새 글 cursor 처리 | [patch_alerts.py](../bot/cogs/patch_alerts.py), [requirements.txt](../requirements.txt) |
 | 데이터 저장 | 길드 설정, 일별 지표, 패치 구독, runtime state를 SQLite로 관리 | [storage.py](../bot/utils/storage.py) |
 | 공개 문서 | 랜딩·정책·상태·세 게임 가이드를 GitHub Pages로 배포 | [deploy-pages.yml](../.github/workflows/deploy-pages.yml) |
 | 운영 경로 | Docker 영속 볼륨과 `/health`, 수동 임시 Actions 실행 경로 선언 | [Dockerfile](../Dockerfile), [deployment.md](./deployment.md) |
+| 문서 미러 | Git Markdown을 원본으로 검증한 `main` revision만 Intro·Detail Notion 페이지에 수동 발행 | [project-docs-notion.yml](../.github/workflows/project-docs-notion.yml), [project-docs.config.json](../project-docs.config.json) |
 
 게임 콘텐츠의 저장소 기준 규모는 Lethal Company 몬스터 33개, R.E.P.O.
 몬스터 29개, Thunderstore 단계 카드 10개입니다. 이 수치는 데이터 파일 구조를
@@ -61,8 +63,8 @@
   확인할 수 있습니다.
 - **가이드 탐색**: `docs/games` 아래 JSON을 읽어 Discord embed와 정적 웹
   카드로 변환합니다.
-- **패치 알림**: 공개 Steam News API를 읽고 길드별 마지막 글 cursor 이후의
-  새 항목만 전달하도록 구성했습니다.
+- **패치 알림**: commit으로 고정한 `steam-discord-patch-alerts` 패키지에 Steam
+  조회·Discord 발송·구독 저장을 맡기고, 연삼이 어댑터가 기존 설정과 지표를 연결합니다.
 - **저장소**: 기존 JSON 설정을 SQLite로 한 번 이관하고, 길드 제거 시 해당
   길드의 설정·구독·지표를 삭제합니다.
 - **배포 기반**: GitHub Pages, Docker/Compose, 시간 제한 수동 Actions 경로를
@@ -109,15 +111,16 @@
 
 | 검증 항목 | 상태 | 확인 시각 | 근거와 경계 |
 | --- | --- | --- | --- |
-| Python 단위 테스트 | 통과 | 2026-07-27 KST | Python 3.12.13, `python -m unittest discover -s tests -v`, 15개 |
-| JavaScript 문법 | 통과 | 2026-07-27 KST | `site.js`, `game-page.js`에 `node --check` |
-| 게임 JSON 파싱 | 통과 | 2026-07-27 KST | 게임 JSON 3개와 project-docs JSON 2개 파싱 |
+| Python 단위 테스트 | 통과 | 2026-08-08 KST | Python 3.12.13, `requirements.txt` 설치 후 `unittest discover`, 15개 |
+| JavaScript 문법 | 통과 | 2026-08-08 KST | Node.js 22.19.0, 사이트 2개와 project-docs runtime 2개에 `node --check` |
+| JSON 파싱·콘텐츠 규모 | 통과 | 2026-08-08 KST | 게임 JSON 3개와 project-docs JSON 2개 파싱, 몬스터 33·29개와 단계 카드 10개 확인 |
 | 정적 링크·미디어 | 통과 | 2026-07-26 KST | HTML 상대 링크 누락 0, JSON 참조 미디어 75개 누락 0 |
-| 공개 사이트 | 응답 확인 | 2026-07-26T15:05:35Z | 랜딩과 세 게임 페이지 HTTP 200 |
-| 프로젝트 문서 | 통과 | 2026-07-27 KST | validator 0 errors·0 warnings, Notion render-only dry-run 성공 |
-| Discord 실서버 E2E | 미검증 | 2026-07-27 KST | 실제 gateway, 명령 동기화, 메시지 발송을 실행하지 않음 |
-| Steam 실통신 | 미검증 | 2026-07-27 KST | synthetic payload 테스트만 수행 |
-| Docker 실행 | 미검증 | 2026-07-27 KST | 현재 환경에서 Docker image/Compose를 실행하지 못함 |
+| 공개 사이트 | 브라우저 확인 | 2026-08-08 KST | 랜딩과 세 게임 route 진입, 세 게임의 비동기 JSON 렌더링 완료 확인 |
+| 프로젝트 문서 런타임 | 통과 | 2026-08-08 KST | 최신 스킬 46/46, installer dry-run 8개 unchanged, validator·render-only 검증 |
+| Notion 미러 | 운영 경로 확인 | 2026-08-08 KST | 전용 Intro·Detail 페이지 접근과 기존 `298a66d` source banner·fingerprint read-back |
+| Discord 실서버 E2E | 미검증 | 2026-08-08 KST | 실제 gateway, 명령 동기화, 메시지 발송을 실행하지 않음 |
+| Steam 실통신 | 미검증 | 2026-08-08 KST | synthetic payload 테스트만 수행 |
+| Docker 실행 | 미검증 | 2026-08-08 KST | 현재 환경에서 Docker image/Compose를 실행하지 않음 |
 
 위 검증은 기능 구현과 로컬 계약을 확인한 결과입니다. 실제 Discord 운영 서버 수,
 사용자 수, 알림 발송량, 성능이나 장애율을 증명하지 않습니다.
@@ -130,6 +133,8 @@
   fallback 자동 생성 또는 동등성 테스트가 필요합니다.
 - 공유 게임 JSON에 정식 schema, 출처, 게임 버전, 갱신일 필드가 없습니다.
 - Python 단위 테스트를 자동 실행하는 CI와 Discord test guild E2E가 없습니다.
+- 새 로컬 Python 환경은 `requirements.txt`를 먼저 설치해야 하며, 그렇지 않으면
+  분리된 패치 알림 패키지 import 단계에서 테스트가 중단됩니다.
 - Docker build, persistent volume, health check를 실제 컨테이너에서 확인해야 합니다.
 - 게임 이미지의 라이선스·출처 메타데이터를 별도로 정리해야 합니다.
 - 시간 제한 GitHub Actions 실행은 상시 운영 경로가 아니며, 운영 환경에는
