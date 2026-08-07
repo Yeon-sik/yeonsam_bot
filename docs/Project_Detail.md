@@ -280,7 +280,7 @@ SQLite 쓰기, 채널 권한까지 종합적으로 확인하는 health check는 
 | 2026-08-08 KST | 공개 Pages | 실제 브라우저에서 랜딩과 세 게임 route 로드 후 비동기 렌더 대기 | 4개 route 진입, 세 게임 JSON 콘텐츠 렌더 완료 | Discord 상태 API·전체 시각 회귀 |
 | 2026-08-08 KST | upstream `a2371f0`과 대상 runtime | 최신 스킬 테스트·installer dry-run·validator·render-only | 스킬 46/46, 설치 대상 8개 unchanged, 문서 오류·경고 0 | GitHub runner 차이는 PR에서 확인 |
 | 2026-07-31 KST | `main` `298a66d` | Actions run `30558645264`, manual `PUBLISH` | validate·publish 성공, Intro·Detail 동기화 | 이후 revision은 별도 수동 발행 |
-| 2026-08-08 KST | 기존 Notion mirror | 연결된 두 페이지의 source banner·fingerprint read-back | 두 페이지 접근과 `298a66d` 출처 확인 | 현재 revision은 병합 후 발행 |
+| 2026-08-08 KST | 기존 Notion mirror | 연결된 두 페이지의 source banner·fingerprint read-back | 두 페이지 접근과 `298a66d` 출처 확인 | 후속 revision은 workflow run과 source banner로 별도 확인 |
 
 ## 11. 배포·운영·복구
 
