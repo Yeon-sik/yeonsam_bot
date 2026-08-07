@@ -7,9 +7,9 @@
 | 항목 | 내용 |
 | --- | --- |
 | 문서 상태 | Active |
-| 적용 범위 | 제품 기능 커밋 `d000f83`과 `feat/project-docs-notion` 문서 자동화 |
-| 최종 갱신 | 2026-07-27T00:07:09+09:00 |
-| 검증 환경 | Python 3.12.13, Node.js 22, Windows 로컬 환경 |
+| 적용 범위 | 제품·기존 문서 `298a66d`, 최신 문서 런타임 upstream `a2371f0` 기반 갱신 |
+| 최종 갱신 | 2026-08-08T01:38:35+09:00 |
+| 검증 환경 | Python 3.12.13, Node.js 22.19.0, Windows 로컬 환경, 공개 Pages 브라우저 |
 | 문서 진실 원천 | Git 저장소의 `docs/Project_Detail.md` |
 | 공개 경계 | 코드·테스트·공개 배포 파일만 사용, 실제 서버 식별자와 운영 데이터 제외 |
 
@@ -71,11 +71,11 @@ Discord 기반 협동 게임 서버는 신규 멤버 안내, 역할·채널 권�
 | 서버 설정 UI | 구현 완료 | 저장소 검증·일부 단위 테스트 | [settings.py](../bot/cogs/settings.py) | interaction E2E 없음 |
 | 신규 멤버 환영 | 구현 완료 | embed 단위 테스트 | [welcome.py](../bot/cogs/welcome.py) | 실제 member join 미검증 |
 | 게임 검색·탐색 | 구현 완료 | 구조·정적 검사 | [yeonsam.py](../bot/cogs/yeonsam.py) | 25개 선택 제한 |
-| 패치 알림 | 구현 완료 | parser·cursor 단위 테스트 | [patch_alerts.py](../bot/cogs/patch_alerts.py) | Steam·Discord E2E 없음 |
+| 패치 알림 | 구현 완료 | 고정 패키지 adapter·parser·cursor 단위 테스트 | [patch_alerts.py](../bot/cogs/patch_alerts.py), [requirements.txt](../requirements.txt) | Steam·Discord E2E 없음 |
 | SQLite 저장 | 구현 완료 | 단위 테스트 | [storage.py](../bot/utils/storage.py) | 다중 프로세스 검증 없음 |
 | GitHub Pages | 구현 완료 | 공개 HTTP 응답 확인 | [deploy-pages.yml](../.github/workflows/deploy-pages.yml) | Actions 최근 실행은 별도 검증 필요 |
 | Docker 운영 경로 | 구성 완료 | 저장소 검증 | [Dockerfile](../Dockerfile) | build·기동 미검증 |
-| Notion 문서 미러 | 기능 브랜치에 구성 | 로컬 검증 예정 | [project-docs-notion.yml](../.github/workflows/project-docs-notion.yml) | Secret·페이지 접근 전 미발행 |
+| Notion 문서 미러 | `main`에 구성·기존 발행 완료 | 로컬 검증·Actions 발행·페이지 read-back | [project-docs-notion.yml](../.github/workflows/project-docs-notion.yml) | 각 revision마다 수동 발행 필요 |
 
 ## 5. 시스템 아키텍처
 
@@ -111,7 +111,7 @@ GitHub main 변경
 | `bot/main.py` | bot lifecycle, command sync, `/health`, 공통 metric | Discord, storage | 명령·이벤트 전체 중단 |
 | `bot/cogs/settings.py` | 관리자 온보딩과 진단 | Discord UI, storage | 서버 설정 변경 불가 |
 | `bot/cogs/yeonsam.py` | 가이드 검색·선택·embed | 공유 JSON, 이미지 | 가이드 탐색 일부 또는 전체 실패 |
-| `bot/cogs/patch_alerts.py` | 구독 관리와 polling | Steam, Discord, storage | 새 패치 알림 지연·누락 |
+| `bot/cogs/patch_alerts.py` | 재사용 패치 알림 패키지와 연삼이 설정·지표 연결 | pinned package, Discord, storage | 패키지 누락 시 Cog·테스트 import 실패 |
 | `bot/utils/storage.py` | 설정·지표·cursor 영속화 | SQLite, `BOT_DATA_DIR` | 서버별 상태 유실 또는 갱신 실패 |
 | `game-page.js` | 게임 JSON의 웹 렌더링 | 정적 JSON, HTML fallback | 웹 가이드 축소 또는 fallback 표시 |
 | Pages workflow | 공개 설정 주입과 정적 배포 | GitHub Actions Variables | 설치 CTA·상태 정보 미설정 |
@@ -126,7 +126,8 @@ GitHub main 변경
   → welcome embed / setup UI
 
 Steam News payload
-  → article 정규화
+  → pinned steam-discord-patch-alerts package
+  → article 정규화와 Discord 발송
   → last_seen_id 비교
   → 최대 최근 항목 순차 발송
   → 성공한 항목까지 cursor 갱신
@@ -195,15 +196,19 @@ top-level `install`은 현재 주 렌더 경로에서 소비되지 않으므로,
 - **비용과 위험**: 다중 프로세스나 여러 호스트로 확장하면 SQLite 파일 경계와
   locking 전략을 다시 검토해야 합니다.
 
-### 결정 3. Steam 공식 News API와 cursor 방식 사용
+### 결정 3. Steam 공식 News API 로직을 고정된 재사용 패키지로 분리
 
 - **상황**: 관리자가 게임 공지를 반복해서 확인하고 전달합니다.
-- **선택**: 공개 `ISteamNews/GetNewsForApp/v2` 결과를 정규화하고 서버별 마지막
-  article ID 이후의 항목만 발송합니다.
-- **근거**: 비공식 scraping보다 공급원과 응답 계약이 명확합니다.
-- **결과**: Lethal Company와 R.E.P.O.의 서버별 채널 구독을 구성했습니다.
+- **선택**: 공개 `ISteamNews/GetNewsForApp/v2` 조회, cursor, Discord Cog와 SQLite
+  구독 저장을 별도 `steam-discord-patch-alerts` 패키지로 분리하고 commit
+  `068c75d`에 고정했습니다. 연삼이는 얇은 adapter와 기존 JSON·metric만 유지합니다.
+- **근거**: 비공식 scraping보다 공급원과 응답 계약이 명확하고, 반복 가능한 패치
+  알림 기능을 다른 Discord 프로젝트에서도 재사용할 수 있습니다.
+- **결과**: 기존 slash command와 DB 파일 경계를 유지하면서 Lethal Company와
+  R.E.P.O.의 서버별 채널 구독을 구성했습니다.
 - **비용과 위험**: 실제 API 장애, rate limit, payload 변화에 대한 장시간
-  운영 검증과 backoff 정책이 남아 있습니다.
+  운영 검증과 backoff 정책이 남아 있으며, 로컬 환경에 고정 패키지가 설치되지
+  않으면 import 단계에서 실패합니다.
 
 ### 결정 4. Git Markdown을 원본으로, Notion을 읽기 전용 미러로 사용
 
@@ -211,9 +216,12 @@ top-level `install`은 현재 주 렌더 경로에서 소비되지 않으므로,
 - **선택**: 이 두 Markdown을 canonical source로 두고, `main`의 승인된 revision만
   전용 Notion 페이지에 replace-only 방식으로 발행합니다.
 - **안전장치**: 기본 `manual` 모드, 정확한 `PUBLISH` 확인, protected Environment,
-  모든 페이지 preflight, source fingerprint를 사용합니다.
-- **비용과 위험**: 최초 integration, 페이지 공유, Environment Secret 설정은
-  사용자가 한 번 수행해야 합니다.
+  구성의 canonical branch를 읽는 ref guard, 모든 페이지 preflight, immutable Git
+  source와 source fingerprint를 사용합니다.
+- **운영 검증**: Actions run `30558645264`의 validate·publish가 성공했고,
+  2026-08-08에 기존 `298a66d` 기반 Intro·Detail 본문과 fingerprint를 다시 읽었습니다.
+- **비용과 위험**: 각 revision은 수동 dispatch와 정확한 확인값이 필요합니다.
+  page map이 잘못되면 다른 mirror를 덮을 수 있으므로 발행 후 read-back을 유지합니다.
 
 ## 8. 외부 연동과 실패 경계
 
@@ -222,7 +230,7 @@ top-level `install`은 현재 주 렌더 경로에서 소비되지 않으므로,
 | Discord API | command, event, message, profile UI | bot token은 환경변수 | 공통 error handler와 metric | 실서버 미검증 |
 | Steam News | 공식 패치 기사 조회 | 공개 endpoint | timeout, parse error, cursor 유지 | synthetic payload만 검증 |
 | GitHub Pages | 정적 사이트 배포 | 공개 Application ID·상태 URL | 미설정 상태 UI | HTTP 응답 확인 |
-| Notion API | Git Markdown 미러 | protected Environment Secrets | 전체 페이지 preflight 후 발행 | Secret 입력 전 |
+| Notion API | Git Markdown 미러 | protected Environment Secrets | 전체 페이지 preflight 후 replace-only 발행 | Actions 실제 발행·두 페이지 read-back 확인 |
 
 `/health`는 Discord ready flag를 반환하는 간단한 readiness 신호입니다. Steam,
 SQLite 쓰기, 채널 권한까지 종합적으로 확인하는 health check는 아닙니다.
@@ -267,10 +275,12 @@ SQLite 쓰기, 채널 권한까지 종합적으로 확인하는 health check는 
 
 | 일시 | 기준 | 명령·환경 | 결과 | 미검증 항목 |
 | --- | --- | --- | --- | --- |
-| 2026-07-27 KST | `d000f83` + 문서 자동화 브랜치 | Python 3.12.13, `python -m unittest discover -s tests -v` | 15개 통과 | Discord·Steam·Docker E2E |
-| 2026-07-26 KST | `d000f83` | Node `--check`, JSON parse, 링크·미디어 검사 | JS 2개·JSON 3개 통과, 상대 링크·미디어 누락 0 | 브라우저 상호작용 |
-| 2026-07-26T15:05:35Z | 공개 Pages | 랜딩과 세 게임 URL HTTP HEAD | 4개 모두 HTTP 200 | UI 동작·상태 API |
-| 2026-07-27 KST | 문서 자동화 브랜치 | project docs validator와 render dry-run | 0 errors·0 warnings, 두 문서 렌더 성공 | Notion 실제 쓰기 |
+| 2026-08-08 KST | `298a66d` + 문서/runtime 갱신 working tree | Python 3.12.13, `requirements.txt` 설치 후 `unittest discover` | 최초 실행은 패키지 누락으로 3개 import 오류, 설치 후 15개 통과 | Discord·Steam·Docker E2E |
+| 2026-08-08 KST | 같은 working tree | Node.js 22.19.0 `--check`, JSON parse | JS 4개·JSON 5개 통과, 몬스터 33·29개와 단계 카드 10개 확인 | 실제 Discord UI |
+| 2026-08-08 KST | 공개 Pages | 실제 브라우저에서 랜딩과 세 게임 route 로드 후 비동기 렌더 대기 | 4개 route 진입, 세 게임 JSON 콘텐츠 렌더 완료 | Discord 상태 API·전체 시각 회귀 |
+| 2026-08-08 KST | upstream `a2371f0`과 대상 runtime | 최신 스킬 테스트·installer dry-run·validator·render-only | 스킬 46/46, 설치 대상 8개 unchanged, 문서 오류·경고 0 | GitHub runner 차이는 PR에서 확인 |
+| 2026-07-31 KST | `main` `298a66d` | Actions run `30558645264`, manual `PUBLISH` | validate·publish 성공, Intro·Detail 동기화 | 이후 revision은 별도 수동 발행 |
+| 2026-08-08 KST | 기존 Notion mirror | 연결된 두 페이지의 source banner·fingerprint read-back | 두 페이지 접근과 `298a66d` 출처 확인 | 현재 revision은 병합 후 발행 |
 
 ## 11. 배포·운영·복구
 
@@ -298,8 +308,9 @@ Bot 변경
 - **Bot 배포 조건**: token과 Members intent, 필요한 채널·역할 권한, 영속
   `BOT_DATA_DIR`가 필요합니다.
 - **Pages 배포 조건**: `main`의 `docs/**` 또는 관련 workflow 변경이 필요합니다.
-- **문서 발행 조건**: `notion-production` Environment, `main` 제한, required
-  reviewer, Notion 페이지 공유와 두 Secret이 필요합니다.
+- **문서 발행 조건**: `notion-production` Environment, 구성된 canonical branch 제한,
+  정확한 `PUBLISH`, Notion 페이지 공유와 두 Secret이 필요합니다. Environment
+  reviewer는 저장소와 GitHub plan이 지원할 때 추가 승인 경계로 사용합니다.
 - **관찰 항목**: `/health`, command error metric, welcome failure, patch poll·delivery
   failure, Pages workflow summary입니다.
 - **백업**: 운영 SQLite 파일과 볼륨을 배포 호스트 정책에 따라 백업해야 합니다.
@@ -317,6 +328,7 @@ Bot 변경
 | P0 | Discord·Docker E2E 부재 | 실제 권한·gateway·volume 실패를 배포 전에 놓칠 수 있음 | test guild와 container smoke test 구성 |
 | P1 | Lethal Company fallback 불일치 | fetch 실패 환경에서 다른 가이드가 표시됨 | JSON에서 fallback 생성 또는 equality test |
 | P1 | 공유 JSON schema 부재 | bot과 web 중 한 소비자만 깨질 수 있음 | versioned schema와 양쪽 contract test 추가 |
+| P1 | 로컬 의존성 bootstrap 불명확 | clean 환경에서 패치 패키지 import로 테스트가 중단될 수 있음 | 테스트 명령 전에 `requirements.txt` 설치를 스크립트·CI로 고정 |
 | P1 | Discord 25개 제한 | 일부 몬스터·레코드가 선택 UI에서 잘림 | 검색 우선 UX와 pagination 추가 |
 | P1 | 콘텐츠 provenance 부재 | 게임 수치의 최신성·출처를 판단하기 어려움 | source, gameVersion, updatedAt 도입 |
 | P1 | 이미지 권리 메타데이터 부재 | 공개 배포의 라이선스 검토가 어려움 | 출처·라이선스 inventory 작성 |
