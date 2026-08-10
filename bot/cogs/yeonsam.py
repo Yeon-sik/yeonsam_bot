@@ -1684,6 +1684,11 @@ class Yeonsam(commands.Cog):
             inline=False,
         )
         embed.add_field(
+            name="/스팀인기게임",
+            value="Steam 공식 Most Played 기준 인기 게임 TOP 5 또는 TOP 10을 확인합니다.",
+            inline=False,
+        )
+        embed.add_field(
             name="예시",
             value=(
                 "1. `/도움` 입력\n"
