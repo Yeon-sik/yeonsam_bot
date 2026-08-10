@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="협동 게임 디스코드 서버의 멤버 환영, 서버 프로필, 게임 가이드와 패치 알림을 연결하는 연삼이 봇입니다.">
+    <meta name="description" content="협동 게임 디스코드 서버의 멤버 환영, 서버 설정, 게임 가이드와 패치 알림을 연결하는 연삼이 봇입니다.">
     <meta property="og:title" content="연삼이 디스코드 봇">
-    <meta property="og:description" content="서버 온보딩과 협동 게임 가이드를 한곳에서 관리하세요.">
+    <meta property="og:description" content="서버 운영과 협동 게임 가이드를 한곳에서 확인하세요.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="./games/Thunderstore/Thunderstore_Profile.png">
     <title>연삼이 디스코드 봇</title>
@@ -14,186 +14,124 @@
     <script src="./assets/site.js" defer></script>
 </head>
 <body>
+    <a class="skip-link" href="#main-content">본문 바로가기</a>
+
     <div class="site-shell">
         <header class="site-header">
-            <a class="brand" href="./index.html" aria-label="yeonsam bot home">
+            <a class="brand" href="./index.html" aria-label="연삼이 홈">
                 <span class="brand-mark" aria-hidden="true"></span>
                 <span>YEONSAM</span>
             </a>
 
-            <nav class="top-nav" aria-label="primary navigation">
-                <a href="#intro">INTRO</a>
-                <a href="#update">UPDATE</a>
-                <a href="#game">GAME</a>
+            <nav class="top-nav" aria-label="주요 메뉴">
+                <a href="#start">사용법</a>
+                <a href="#game">가이드</a>
+                <a href="./status.html">상태</a>
             </nav>
         </header>
 
-        <main class="guide-layout">
-            <aside class="side-panel" aria-label="page sections">
-                <p class="panel-label">MENU</p>
-                <nav class="side-nav">
-                    <a href="#intro">봇 소개</a>
-                    <a href="#add-bot">시작하기</a>
-                    <a href="#features">주요 기능</a>
-                    <a href="#update">서비스 상태</a>
-                    <a href="#game">가이드</a>
-                </nav>
-            </aside>
-
+        <main id="main-content" class="guide-layout">
             <section class="main-panel" aria-labelledby="page-title">
                 <div id="intro" class="intro-block pixel-box">
                     <p class="panel-label">YEONSAM BOT</p>
-                    <h1 id="page-title">서버 안내와 게임 가이드를 더 간편하게 만드는 디스코드 봇</h1>
-                    <p>
-                        yeonsam bot은 새 멤버 안내, 서버별 프로필 수정, 게임 가이드 탐색까지
-                        디스코드 안에서 자연스럽게 이어지도록 설계된 봇입니다.
-                    </p>
-                    <p>
-                        복잡한 설정 설명보다 바로 사용할 수 있는 흐름에 집중했습니다.
-                        멤버 온보딩은 더 부드럽게, 게임 정보 탐색은 더 빠르게 정리해줍니다.
+                    <h1 id="page-title">서버 안내와 게임 공략을 한곳에서</h1>
+                    <p class="hero-copy">
+                        연삼이는 새 멤버 안내, 서버 설정, 게임 가이드와 패치 알림을 연결하는 Discord 봇입니다.
+                        필요한 기능만 빠르게 설정하고 바로 사용할 수 있습니다.
                     </p>
                     <div class="hero-actions">
-                        <a id="install-bot-link" class="action-button action-button-primary is-disabled" href="#install-help" aria-disabled="true">
-                            봇 추가 준비 중
-                        </a>
-                        <a class="action-button" href="#add-bot">설정 흐름 보기</a>
+                        <a class="action-button action-button-primary" href="#game">게임 가이드 보기</a>
+                        <a id="install-bot-link" class="action-button" href="#start">봇 사용법 보기</a>
                     </div>
                     <p id="install-help" class="config-notice">
-                        공개 설치 링크는 Discord 애플리케이션 ID 설정 후 활성화됩니다.
+                        초대 링크는 현재 준비 중입니다. 게임 가이드와 사용법은 바로 확인할 수 있습니다.
                     </p>
                 </div>
 
-                <section id="add-bot" class="content-section">
+                <section id="start" class="content-section">
                     <div class="section-header">
-                        <p class="panel-label">FLOW</p>
-                        <h2>처음부터 바로 쓰기 쉬운 흐름</h2>
+                        <p class="panel-label">QUICK START</p>
+                        <h2>처음에는 이 명령어만 알면 됩니다</h2>
+                        <p class="section-lead">관리자 설정부터 가이드 탐색과 서버 초대까지 세 단계로 끝납니다.</p>
                     </div>
 
                     <div class="info-grid">
                         <article class="pixel-box info-card">
-                            <strong>1. 멤버 맞이</strong>
-                            <p>새로운 멤버가 들어오면 환영 메시지와 함께 필요한 첫 안내를 깔끔하게 전달합니다.</p>
+                            <code>/설정</code>
+                            <strong>서버 설정</strong>
+                            <p>환영 채널과 안내 문구를 3단계로 설정합니다.</p>
                         </article>
                         <article class="pixel-box info-card">
-                            <strong>2. 서버 프로필 정리</strong>
-                            <p>멤버는 서버에 맞는 닉네임으로 빠르게 프로필을 정리하고, 운영진은 진입 장벽을 낮출 수 있습니다.</p>
+                            <code>/도움</code>
+                            <strong>게임 가이드</strong>
+                            <p>게임과 주제를 고르고 필요한 공략을 바로 엽니다.</p>
                         </article>
                         <article class="pixel-box info-card">
-                            <strong>3. 가이드 탐색</strong>
-                            <p>자주 보는 게임 정보는 디스코드와 웹 문서에서 이어서 확인할 수 있어 필요한 순간에 바로 찾기 쉽습니다.</p>
+                            <code>/초대</code>
+                            <strong>다른 서버에 추가</strong>
+                            <p>필요한 권한이 포함된 공식 초대 링크를 확인합니다.</p>
                         </article>
-                    </div>
-
-                    <div class="pixel-box notice-box">
-                        <p class="panel-label">NOTICE</p>
-                        <p>yeonsam bot은 서버 운영 흐름을 방해하지 않으면서 필요한 안내와 정보를 자연스럽게 연결하는 데 초점을 두고 있습니다.</p>
-                    </div>
-                </section>
-
-                <section id="features" class="content-section">
-                    <div class="section-header">
-                        <p class="panel-label">FEATURES</p>
-                        <h2>서버 운영에 바로 도움이 되는 기능</h2>
-                    </div>
-
-                    <div class="guide-list">
-                        <div class="guide-row static-row">
-                            <span class="row-type">WELCOME</span>
-                            <span>
-                                <strong>입장 환영 메시지</strong>
-                                <small>새 멤버가 들어오는 순간 필요한 안내를 전달해 첫인상을 더 정돈된 경험으로 바꿔줍니다.</small>
-                            </span>
-                            <span class="row-status">LIVE</span>
-                        </div>
-
-                        <div class="guide-row static-row">
-                            <span class="row-type">PROFILE</span>
-                            <span>
-                                <strong>서버별 닉네임 수정</strong>
-                                <small>서버 분위기에 맞는 프로필 정리가 쉬워져 멤버 관리와 커뮤니티 적응이 한결 수월해집니다.</small>
-                            </span>
-                            <span class="row-status">LIVE</span>
-                        </div>
-
-                        <div class="guide-row static-row">
-                            <span class="row-type">ADMIN</span>
-                            <span>
-                                <strong>운영진용 안내 관리</strong>
-                                <small>서버 성격에 맞게 안내 문구를 손쉽게 조정해 더 일관된 운영 경험을 만들 수 있습니다.</small>
-                            </span>
-                            <span class="row-status">LIVE</span>
-                        </div>
-
-                        <div class="guide-row static-row">
-                            <span class="row-type">GUIDE</span>
-                            <span>
-                                <strong>선택형 게임 가이드</strong>
-                                <small>복잡한 검색 없이 필요한 주제를 순서대로 골라 보며 원하는 정보까지 빠르게 도달할 수 있습니다.</small>
-                            </span>
-                            <span class="row-status">LIVE</span>
-                        </div>
-
-                        <div class="guide-row static-row">
-                            <span class="row-type">WEB</span>
-                            <span>
-                                <strong>웹 문서 연동</strong>
-                                <small>디스코드에서 보던 가이드를 웹 페이지로 이어서 확인할 수 있어 정리된 정보 탐색에 잘 어울립니다.</small>
-                            </span>
-                            <span class="row-status">LIVE</span>
-                        </div>
                     </div>
                 </section>
             </section>
 
-            <aside class="right-panel" aria-label="supporting information">
-                <section id="update" class="content-section compact">
-                    <p class="panel-label">STATUS</p>
-                    <h2>서비스 안내</h2>
-                    <ol class="update-list">
-                        <li>
-                            <span>디스코드 안내 지원</span>
-                            <time datetime="2026-05-16">ACTIVE</time>
-                        </li>
-                        <li>
-                            <span>게임 가이드 제공</span>
-                            <time datetime="2026-05-16">ACTIVE</time>
-                        </li>
-                        <li>
-                            <span>웹 문서 연결</span>
-                            <time datetime="2026-05-16">ACTIVE</time>
-                        </li>
-                        <li>
-                            <span>게임 패치 자동 알림</span>
-                            <time datetime="2026-07-25">ACTIVE</time>
-                        </li>
-                    </ol>
-                    <p class="section-note">운영에 필요한 안내와 가이드를 한곳에서 이어서 사용할 수 있도록 구성되어 있습니다.</p>
-                </section>
+            <aside class="right-panel" aria-label="게임 가이드와 지원">
+                <section id="game" class="sidebar-section">
+                    <p class="panel-label">GAME GUIDES</p>
+                    <h2>바로 열어보는 가이드</h2>
+                    <p class="section-note">게임을 선택하면 세부 주제로 바로 이동할 수 있습니다.</p>
 
-                <section id="game" class="content-section compact">
-                    <p class="panel-label">GAME</p>
-                    <h2>바로 확인할 수 있는 가이드</h2>
                     <div class="game-feature-list">
                         <a class="game-feature" href="./games/LethalCompany.html">
-                            <img src="./games/LethalCompany/LethalCompany_Profile.jpg" alt="Lethal Company profile">
+                            <img src="./games/LethalCompany/LethalCompany_Profile.jpg" alt="" width="120" height="120" loading="lazy" decoding="async">
                             <span class="game-feature-copy">
+                                <small class="guide-kind">GAME GUIDE</small>
                                 <strong>Lethal Company</strong>
-                                <small>몬스터, 맵, 아이템, 모드, 설치 정보까지 한 흐름으로 정리한 공략 페이지입니다.</small>
+                                <small>몬스터·맵·아이템·모드</small>
+                                <span class="game-feature-action">가이드 열기 →</span>
                             </span>
                         </a>
                         <a class="game-feature" href="./games/REPO.html">
-                            <img src="./games/REPO/repo_profile.jpg" alt="R.E.P.O. profile">
+                            <img src="./games/REPO/repo_profile.jpg" alt="" width="120" height="120" loading="lazy" decoding="async">
                             <span class="game-feature-copy">
+                                <small class="guide-kind">GAME GUIDE</small>
                                 <strong>R.E.P.O.</strong>
-                                <small>주요 적 정보와 운영 팁, 설치 관련 내용을 빠르게 훑어볼 수 있는 가이드 페이지입니다.</small>
+                                <small>몬스터 티어·운영 팁</small>
+                                <span class="game-feature-action">가이드 열기 →</span>
                             </span>
                         </a>
                         <a class="game-feature" href="./games/Thunderstore.html">
-                            <img src="./games/Thunderstore/Thunderstore_Profile.png" alt="Thunderstore Mod Manager profile">
+                            <img src="./games/Thunderstore/Thunderstore_Profile.png" alt="" width="120" height="120" loading="lazy" decoding="async">
                             <span class="game-feature-copy">
-                                <strong>Thunderstore Mod Manager</strong>
-                                <small>설치, 게임 등록, 프로필 공유, 모드 실행 흐름을 한 번에 확인할 수 있는 별도 가이드 페이지입니다.</small>
+                                <small class="guide-kind">MOD GUIDE</small>
+                                <strong>Thunderstore</strong>
+                                <small>설치·프로필 공유·모드 실행</small>
+                                <span class="game-feature-action">가이드 열기 →</span>
                             </span>
+                        </a>
+                        <a class="game-feature" href="./games/PUBG.html">
+                            <img src="./games/PUBG/weapons/m416.webp" alt="" width="120" height="120" loading="lazy" decoding="async">
+                            <span class="game-feature-copy">
+                                <small class="guide-kind">GAME GUIDE</small>
+                                <strong>PUBG</strong>
+                                <small>무기·소모품·투척물·교전 운영</small>
+                                <span class="game-feature-action">가이드 열기 →</span>
+                            </span>
+                        </a>
+                    </div>
+                </section>
+
+                <section class="sidebar-section support-section">
+                    <p class="panel-label">SERVICE</p>
+                    <h2>상태와 문의</h2>
+                    <div class="quick-link-list">
+                        <a class="quick-link" href="./status.html">
+                            <span>서비스 상태</span>
+                            <span aria-hidden="true">→</span>
+                        </a>
+                        <a class="quick-link" data-support-link href="https://github.com/Yeon-sik/yeonsam_bot/issues" target="_blank" rel="noreferrer">
+                            <span>지원·문의</span>
+                            <span aria-hidden="true">↗</span>
                         </a>
                     </div>
                 </section>
@@ -201,16 +139,16 @@
         </main>
     </div>
 
-    <footer class="site-footer" aria-label="site footer">
+    <footer class="site-footer" aria-label="사이트 푸터">
         <div class="site-footer__inner">
             <div class="site-footer__copy">
                 <p class="site-footer__eyebrow">OFFICIAL SITE</p>
                 <p class="site-footer__copyright">&copy; 2026 yeonsik. All rights reserved.</p>
             </div>
-            <nav class="site-footer__links" aria-label="service links">
+            <nav class="site-footer__links" aria-label="서비스 링크">
                 <a class="site-footer__link" data-support-link href="https://github.com/Yeon-sik/yeonsam_bot/issues" target="_blank" rel="noreferrer">지원·문의</a>
                 <a class="site-footer__link" href="./status.html">서비스 상태</a>
-                <a class="site-footer__link" href="./privacy.html">개인정보 처리방침</a>
+                <a class="site-footer__link" href="./privacy.html">개인정보</a>
                 <a class="site-footer__link" href="./terms.html">이용약관</a>
                 <a class="site-footer__link" href="https://github.com/Yeon-sik" target="_blank" rel="noreferrer">GitHub</a>
             </nav>

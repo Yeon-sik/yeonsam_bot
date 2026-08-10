@@ -12,7 +12,9 @@
     --pink-soft: rgba(255, 0, 255, 0.12);
     --pink-line: rgba(255, 0, 255, 0.36);
     --pink-strong: rgba(255, 0, 255, 0.92);
-    --pink-muted: rgba(255, 0, 255, 0.74);
+    --pink-muted: rgba(255, 0, 255, 0.88);
+    --text: #fff8ff;
+    --text-muted: #e7cce7;
     --max-width: 1440px;
     --pixel: 4px;
 }
@@ -23,6 +25,8 @@
 
 html {
     color-scheme: dark;
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
 }
 
 body {
@@ -33,8 +37,36 @@ body {
         linear-gradient(90deg, var(--pink-soft) 1px, transparent 1px),
         linear-gradient(var(--pink-soft) 1px, transparent 1px);
     background-size: 40px 40px;
-    color: var(--pink);
+    color: var(--text);
     font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
+.skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 100;
+    padding: 10px 14px;
+    border: 2px solid var(--pink);
+    background: var(--black);
+    color: var(--text);
+    transform: translateY(-160%);
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 a {
@@ -52,6 +84,13 @@ button,
 a,
 input {
     outline-color: var(--pink);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--text);
+    outline-offset: 4px;
 }
 
 code {
@@ -173,6 +212,12 @@ code {
     box-shadow: var(--pixel) var(--pixel) 0 var(--pink-line);
     color: var(--pink);
     font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease,
+        background-color 0.12s ease,
+        color 0.12s ease;
 }
 
 .action-button-primary {
@@ -180,9 +225,10 @@ code {
     color: var(--black);
 }
 
-.action-button.is-disabled {
-    opacity: 0.55;
-    pointer-events: none;
+.action-button:hover,
+.action-button:focus-visible {
+    transform: translate(var(--pixel), var(--pixel));
+    box-shadow: 0 0 0 var(--pink);
 }
 
 .config-notice {
@@ -271,7 +317,6 @@ code {
 }
 
 .top-nav,
-.side-nav,
 .placeholder-nav,
 .tab-list {
     display: flex;
@@ -279,9 +324,7 @@ code {
 }
 
 .top-nav a,
-.side-nav a,
 .placeholder-nav a,
-.search-bar button,
 .tab-button,
 .subtab-button {
     min-height: 44px;
@@ -301,21 +344,17 @@ code {
 }
 
 .top-nav a:hover,
-.side-nav a:hover,
 .placeholder-nav a:hover,
-.search-bar button:hover,
 .tab-button:hover,
 .subtab-button:hover,
 .tab-button.is-active,
 .subtab-button.is-active,
-.search-bar button:active,
 .tab-button:active,
 .subtab-button:active {
     transform: translate(var(--pixel), var(--pixel));
     box-shadow: 0 0 0 var(--pink);
 }
 
-.search-bar button:active,
 .tab-button.is-active,
 .subtab-button.is-active,
 .tab-button:active,
@@ -327,25 +366,19 @@ code {
 
 .guide-layout {
     display: grid;
-    grid-template-columns: 240px minmax(0, 1fr) 360px;
+    grid-template-columns: minmax(0, 1fr) 390px;
     gap: 0;
     min-height: calc(100vh - 76px);
 }
 
-.side-panel,
 .main-panel,
 .right-panel {
     min-width: 0;
 }
 
-.side-panel,
 .right-panel {
     padding: 24px;
     background: rgba(0, 0, 0, 0.9);
-}
-
-.side-panel {
-    border-right: 4px solid var(--pink);
 }
 
 .right-panel {
@@ -388,18 +421,10 @@ code {
     font-weight: 400;
     font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
     text-transform: uppercase;
-}
-
-.side-nav {
-    flex-direction: column;
-}
-
-.side-nav a {
-    width: 100%;
+    color: var(--pink);
 }
 
 .intro-block {
-    max-width: 840px;
     padding: 28px;
 }
 
@@ -411,11 +436,11 @@ code {
     font-weight: 400;
     line-height: 1.34;
     font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+    color: var(--text);
 }
 
 .intro-block p,
 .placeholder-copy,
-.guide-row small,
 .info-card p,
 .section-note,
 .notice-box p,
@@ -425,7 +450,11 @@ code {
 .detail-card li {
     font-size: 16px;
     line-height: 1.9;
-    color: var(--pink-strong);
+    color: var(--text-muted);
+}
+
+.hero-copy {
+    max-width: 720px;
 }
 
 .content-section {
@@ -439,8 +468,22 @@ code {
 }
 
 .info-card {
-    min-height: 180px;
+    min-height: 168px;
     padding: 18px;
+}
+
+.info-card code {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding: 6px 10px;
+    border: 2px solid var(--pink);
+    background: var(--pink);
+    color: var(--black);
+    font-size: 1rem;
+}
+
+.info-card strong {
+    color: var(--text);
 }
 
 .info-card strong,
@@ -469,75 +512,30 @@ code {
     font-weight: 400;
     line-height: 1.45;
     font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+    color: var(--text);
 }
 
-.guide-list,
-.update-list,
 .game-feature-list {
     border-top: 4px solid var(--pink);
 }
 
-.guide-row {
-    display: grid;
-    grid-template-columns: 120px minmax(0, 1fr) 92px;
-    gap: 18px;
-    align-items: center;
-    min-height: 96px;
-    padding: 18px 0;
-    border-bottom: 4px solid var(--pink);
+.section-note {
+    margin: 16px 0 0;
 }
 
-.guide-row strong,
-.guide-row small,
-.row-type,
-.row-status {
-    display: block;
-}
-
-.guide-row strong,
-.row-type,
-.row-status {
-    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
-}
-
-.guide-row strong {
-    font-weight: 400;
-}
-
-.static-row {
-    cursor: default;
-}
-
-.row-status {
-    text-align: right;
-}
-
-.compact {
-    margin-top: 0;
-    padding-bottom: 28px;
-}
-
-.compact + .compact {
+.sidebar-section + .sidebar-section {
+    margin-top: 32px;
     padding-top: 28px;
     border-top: 4px solid var(--pink);
 }
 
-.update-list {
-    margin: 16px 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.update-list li {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px 0;
-    border-bottom: 4px solid var(--pink);
-}
-
-.section-note {
-    margin: 16px 0 0;
+.sidebar-section h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.45;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
 }
 
 .game-feature {
@@ -547,6 +545,16 @@ code {
     align-items: center;
     padding: 18px 0;
     border-bottom: 4px solid var(--pink);
+    transition:
+        background-color 0.12s ease,
+        padding 0.12s ease;
+}
+
+.game-feature:hover,
+.game-feature:focus-visible {
+    padding-right: 10px;
+    padding-left: 10px;
+    background: rgba(255, 0, 255, 0.08);
 }
 
 .game-feature img,
@@ -557,6 +565,43 @@ code {
     border: 4px solid var(--pink);
     object-fit: cover;
     image-rendering: pixelated;
+}
+
+.guide-kind {
+    color: var(--pink);
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+    letter-spacing: 0.08em;
+}
+
+.game-feature-action {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--pink);
+    font-size: 0.86rem;
+    font-weight: 700;
+}
+
+.quick-link-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.quick-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 48px;
+    padding: 10px 14px;
+    border: 2px solid var(--pink);
+    background: rgba(255, 0, 255, 0.06);
+    color: var(--text);
+}
+
+.quick-link:hover,
+.quick-link:focus-visible {
+    background: var(--pink);
+    color: var(--black);
 }
 
 .placeholder-layout {
@@ -643,6 +688,10 @@ code {
     flex-wrap: wrap;
 }
 
+.tab-list[hidden] {
+    display: none;
+}
+
 .subtab-list {
     display: flex;
     flex-wrap: wrap;
@@ -655,8 +704,10 @@ code {
 }
 
 .subtab-button {
+    flex: 0 0 auto;
     min-height: 40px;
     padding: 8px 14px;
+    white-space: nowrap;
 }
 
 .game-panel {
@@ -713,6 +764,7 @@ code {
     grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
     gap: 24px;
     padding: 20px;
+    min-width: 0;
     background:
         radial-gradient(circle at top right, rgba(255, 0, 255, 0.12), transparent 34%),
         rgba(0, 0, 0, 0.94);
@@ -720,6 +772,7 @@ code {
 
 .detail-card-copy {
     min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .detail-card-copy h3 {
@@ -749,10 +802,12 @@ code {
 
 .sectioned-detail-stack {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 24px;
 }
 
 .sectioned-detail {
+    min-width: 0;
     padding: 22px;
 }
 
@@ -767,8 +822,16 @@ code {
     padding-left: 20px;
 }
 
+.sectioned-detail-list,
+.sectioned-detail-list li,
+.sectioned-detail-list a {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .wide-media-stack {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 18px;
 }
 
@@ -778,6 +841,56 @@ code {
     background:
         linear-gradient(180deg, rgba(255, 0, 255, 0.08), rgba(255, 0, 255, 0.02)),
         rgba(0, 0, 0, 0.94);
+}
+
+.guide-search {
+    display: grid;
+    gap: 12px;
+    margin: 24px 0;
+    padding: 18px;
+    background:
+        linear-gradient(180deg, rgba(255, 0, 255, 0.08), rgba(255, 0, 255, 0.02)),
+        rgba(0, 0, 0, 0.94);
+}
+
+.guide-search label {
+    color: var(--text);
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.guide-search-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.guide-search input {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 14px;
+    border: 2px solid var(--pink);
+    background: var(--black);
+    color: var(--text);
+}
+
+.guide-search input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.78;
+}
+
+.guide-search output {
+    min-width: 88px;
+    color: var(--pink);
+    text-align: right;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.monster-search-empty {
+    margin: 24px 0;
+    padding: 18px;
+    border: 2px solid var(--pink);
+    color: var(--text-muted);
 }
 
 .monster-index-header {
@@ -1072,11 +1185,10 @@ code {
 
 @media (max-width: 1120px) {
     .guide-layout {
-        grid-template-columns: 220px minmax(0, 1fr);
+        grid-template-columns: 1fr;
     }
 
     .right-panel {
-        grid-column: 1 / -1;
         border-top: 4px solid var(--pink);
         border-left: 0;
     }
@@ -1106,15 +1218,26 @@ code {
     }
 
     .site-header,
-    .top-nav,
     .game-page-header {
         align-items: stretch;
         flex-direction: column;
     }
 
     .site-header {
-        position: static;
-        padding: 18px;
+        padding: 14px 18px 16px;
+    }
+
+    .top-nav {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: 100%;
+        gap: 8px;
+    }
+
+    .top-nav a {
+        min-height: 44px;
+        padding: 8px;
+        text-align: center;
     }
 
     .site-footer {
@@ -1132,17 +1255,23 @@ code {
         width: 100%;
     }
 
+    .site-footer__links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+    }
+
     .guide-layout {
         display: block;
     }
 
-    .side-panel,
     .right-panel {
         border: 0;
-        border-bottom: 4px solid var(--pink);
+        border-top: 4px solid var(--pink);
     }
 
     .main-panel,
+    .right-panel,
     .game-page {
         padding: 24px 18px;
         width: 100%;
@@ -1155,7 +1284,6 @@ code {
     }
 
     .info-grid,
-    .game-feature,
     .game-hero,
     .detail-grid,
     .detail-card-media,
@@ -1178,7 +1306,20 @@ code {
 
     .monster-index-link {
         min-width: 0;
-        width: 100%;
+        width: auto;
+    }
+
+    .monster-index-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .guide-search-row {
+        grid-template-columns: 1fr;
+    }
+
+    .guide-search output {
+        text-align: left;
     }
 
     .game-feature img,
@@ -1186,11 +1327,35 @@ code {
         width: min(220px, 100%);
     }
 
-    .guide-row {
-        grid-template-columns: 1fr;
+    .game-feature {
+        grid-template-columns: 88px minmax(0, 1fr);
+        gap: 14px;
     }
 
-    .row-status {
-        text-align: left;
+    .game-feature img {
+        width: 88px;
+    }
+
+    .hero-actions .action-button {
+        width: 100%;
+    }
+
+    .detail-card-media-wide .monster-card-media img {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
     }
 }
