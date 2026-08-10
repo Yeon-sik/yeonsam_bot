@@ -8,6 +8,7 @@
     <script src="../assets/game-page.js" defer></script>
 </head>
 <body data-game-json="./REPO/REPO.json">
+    <a class="skip-link" href="#game-main">가이드 본문 바로가기</a>
     <script id="game-data-fallback" type="application/json">
 {
     "slug": "REPO",
@@ -795,20 +796,21 @@
 }
     </script>
     <div class="page-shell">
-        <main class="game-page">
+        <main class="game-page" id="game-main">
             <header class="game-page-header">
                 <div>
                     <p class="panel-label">GAME PAGE</p>
                     <h1 class="game-page-title">R.E.P.O.</h1>
                 </div>
-                <nav class="placeholder-nav">
-                    <a href="../index.html">인덱스로 돌아가기</a>
+                <nav class="placeholder-nav" aria-label="가이드 이동">
+                    <a href="../index.html">홈</a>
+                    <a href="../index.html#game">가이드 목록</a>
                 </nav>
             </header>
 
             <section class="game-hero pixel-box">
                 <div class="game-hero-media">
-                    <img id="game-hero-image" src="./REPO/repo_profile.jpg" alt="R.E.P.O. profile">
+                    <img id="game-hero-image" src="./REPO/repo_profile.jpg" alt="R.E.P.O. 대표 이미지" width="220" height="220" decoding="async">
                 </div>
                 <div class="game-hero-copy">
                     <p class="panel-label" id="game-panel-label">REPO</p>
@@ -823,25 +825,30 @@
                 </div>
             </section>
 
-            <section class="game-tabs" aria-label="game sections">
-                <div class="tab-list" id="game-tab-list"></div>
-                <div class="subtab-list" id="game-subtab-list" hidden></div>
+            <p class="sr-only" id="game-view-status" aria-live="polite"></p>
+            <section class="game-tabs" aria-label="가이드 주제">
+                <div class="tab-list" id="game-tab-list" hidden></div>
+                <div class="subtab-list" id="game-subtab-list" aria-label="세부 주제" hidden></div>
             </section>
 
-            <section class="game-panel pixel-box" id="game-panel">
-                <p class="game-loading">게임 데이터를 불러오는 중입니다.</p>
+            <section class="game-panel pixel-box" id="game-panel" role="region" aria-label="가이드 내용" aria-busy="true" tabindex="-1">
+                <p class="game-loading" role="status">게임 데이터를 불러오는 중입니다.</p>
             </section>
         </main>
 
     </div>
 
-    <footer class="site-footer" aria-label="site footer">
+    <footer class="site-footer" aria-label="사이트 푸터">
         <div class="site-footer__inner">
             <div class="site-footer__copy">
                 <p class="site-footer__eyebrow">OFFICIAL SITE</p>
                 <p class="site-footer__copyright">&copy; 2026 yeonsik. All rights reserved.</p>
             </div>
-            <a class="site-footer__link" href="https://github.com/yeon-sik" target="_blank" rel="noreferrer">GitHub</a>
+            <nav class="site-footer__links" aria-label="서비스 링크">
+                <a class="site-footer__link" href="../index.html#game">가이드 목록</a>
+                <a class="site-footer__link" href="https://github.com/Yeon-sik/yeonsam_bot/issues" target="_blank" rel="noreferrer">지원·문의</a>
+                <a class="site-footer__link" href="../privacy.html">개인정보</a>
+            </nav>
         </div>
     </footer>
 </body>

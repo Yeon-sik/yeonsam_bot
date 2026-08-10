@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG: BATTLEGROUNDS</title>
+    <link rel="stylesheet" href="../assets/styles.css">
+    <script src="../assets/game-page.js" defer></script>
+</head>
+<body data-game-json="./PUBG/PUBG.json">
+    <a class="skip-link" href="#game-main">가이드 본문 바로가기</a>
+    <script id="game-data-fallback" type="application/json">
+{
+    "slug": "PUBG",
+    "pagePath": "PUBG.html",
+    "name": "PUBG: BATTLEGROUNDS",
+    "profileImage": "./PUBG/weapons/m416.webp",
+    "dataVersion": "PC/Console Update 42.2",
+    "checkedAt": "2026-08-10",
+    "disclaimer": "수치와 스폰 범위는 패치 및 모드에 따라 바뀔 수 있습니다. 공식 패치 노트를 우선하고, 공식 수치가 없는 항목은 출처와 한계를 함께 표시했습니다.",
+    "description": {
+        "genre": "배틀로얄 전투 공략",
+        "summary": "핵심 총기·회복품·투척물 수치와 가방 적재 규칙, 프로 선수·코치의 운영 조언을 한 번에 찾는 배틀그라운드 공략집입니다.",
+        "details": [
+            "2026년 8월 10일 확인, Update 42.2 기준입니다. 42.1의 총기·회복품 변경사항을 반영했습니다.",
+            "무기 피해량은 현재 Steam 빌드 추출 자료를 보조 출처로 사용하므로 방어구, 거리, 신체 부위에 따른 실제 피해와 다릅니다.",
+            "아이템 무게는 인벤토리 용량입니다. 공식 문서에서 적재율 구간별 이동속도 감속은 확인되지 않았습니다.",
+            "프로 공략은 원문 발언을 짧게 재구성한 실전 체크리스트이며, 오래된 인터뷰는 패치 수치가 아니라 의사결정 원칙만 참고합니다."
+        ]
+    },
+    "guides": [
+        {
+            "id": "weapons",
+            "label": "총기",
+            "title": "핵심 총기 수치와 운용",
+            "description": "기본 피해는 방어구·거리·신체 부위 보정 전 비교값입니다. 총기는 주무기 슬롯에 장착되므로 가방 인벤토리 용량을 직접 사용하지 않으며, 탄약과 부착물은 용량을 사용합니다.",
+            "groups": [
+                {
+                    "id": "assault-rifles",
+                    "label": "AR",
+                    "title": "돌격소총",
+                    "description": "중근거리 주력 총기입니다. 5.56mm는 탄속과 제어, 7.62mm는 한 발 피해와 반동의 균형을 비교하세요.",
+                    "entries": [
+                        {
+                            "id": "m416",
+                            "name": "M416",
+                            "nameKr": "엠포",
+                            "aliases": [
+                                "M4",
+                                "엠포",
+                                "5.56 AR"
+                            ],
+                            "image": "./PUBG/weapons/m416.webp",
+                            "description": "부착물 완성도가 높을수록 다루기 쉬운 5.56mm 범용 AR입니다.",
+                            "usage": "수직·수평 반동을 모두 줄이는 세팅으로 20~80m 스프레이를 먼저 안정화하고, 장거리에서는 짧게 끊어 쏘세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "40"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 700 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "880 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "5.56mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 맵/모드 로테이션에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 AR 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/ar",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "aug",
+                            "name": "AUG",
+                            "nameKr": "에이유지",
+                            "aliases": [
+                                "AUG A3",
+                                "어그",
+                                "5.56 AR"
+                            ],
+                            "image": "./PUBG/weapons/aug.webp",
+                            "description": "빠른 탄속과 높은 연사력을 가진 5.56mm AR입니다.",
+                            "usage": "초탄 이후 반동 누적을 의식해 10~15발 단위로 끊으면 중거리 명중률을 유지하기 쉽습니다.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "40"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 720 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "890 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "5.56mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 맵/모드 로테이션에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 Update 36.1 무기 조정",
+                                    "url": "https://pubg.com/en/news/8725",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "beryl-m762",
+                            "name": "Beryl M762",
+                            "nameKr": "베릴",
+                            "aliases": [
+                                "베릴",
+                                "M762",
+                                "7.62 AR"
+                            ],
+                            "image": "./PUBG/weapons/beryl-m762.webp",
+                            "description": "높은 연사력과 피해량 대신 강한 반동을 감수하는 7.62mm AR입니다.",
+                            "usage": "근거리 화력은 강하지만 첫 탄부터 아래로 충분히 끌어야 합니다. 중거리에서는 짧은 점사로 탄 낭비를 줄이세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "44"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 700 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "715 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "7.62mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 맵/모드 로테이션에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 AR 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/ar",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "akm",
+                            "name": "AKM",
+                            "nameKr": "에이케이엠",
+                            "aliases": [
+                                "AK",
+                                "에케",
+                                "7.62 AR"
+                            ],
+                            "image": "./PUBG/weapons/akm.webp",
+                            "description": "높은 단발 피해와 느린 연사 속도를 가진 7.62mm AR입니다.",
+                            "usage": "엄폐를 끼고 머리 높이에 초탄을 두는 교전에 강합니다. 먼 거리에서는 단발 전환으로 반동 회복 시간을 확보하세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "48"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 600 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "715 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "7.62mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 맵/모드 로테이션에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 AR 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/ar",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "g36c",
+                            "name": "G36C",
+                            "nameKr": "지삼육씨",
+                            "aliases": [
+                                "G36",
+                                "지삼육",
+                                "비켄디 AR"
+                            ],
+                            "image": "./PUBG/weapons/g36c.webp",
+                            "description": "비켄디에서 찾을 수 있는 안정적인 5.56mm AR입니다.",
+                            "usage": "근중거리 자동 사격에 맞추고, 눈밭에서 총구 화염과 실루엣 노출을 줄이도록 엄폐를 먼저 잡으세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "41"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 700 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "870 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "5.56mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "비켄디 일반 월드 스폰"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 Update 36.1 맵별 스폰",
+                                    "url": "https://pubg.com/en/news/8725",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "k2",
+                            "name": "K2",
+                            "nameKr": "케이투",
+                            "aliases": [
+                                "K-2",
+                                "태이고 AR",
+                                "5.56 AR"
+                            ],
+                            "image": "./PUBG/weapons/k2.webp",
+                            "description": "태이고 전용 5.56mm AR로 빠른 탄속과 무난한 연사력을 가집니다.",
+                            "usage": "부착물이 덜 갖춰진 초반에도 다루기 쉬운 편입니다. 중거리에서는 탄속을 살려 짧은 리드로 움직이는 적을 추적하세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "41"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 700 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "880 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "5.56mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "태이고 일반 월드 스폰"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 K2 소개",
+                                    "url": "https://pubg.com/en/news/1737",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "marksman-rifles",
+                    "label": "DMR / SR",
+                    "title": "지정사수·저격소총",
+                    "description": "탄속, 한 발 피해, 후속 사격 속도를 함께 비교하세요. 장거리 피해는 실제 거리와 방어구에 따라 달라집니다.",
+                    "entries": [
+                        {
+                            "id": "mini14",
+                            "name": "Mini14",
+                            "nameKr": "미니",
+                            "aliases": [
+                                "Mini 14",
+                                "미니14",
+                                "5.56 DMR"
+                            ],
+                            "image": "./PUBG/weapons/mini14.webp",
+                            "description": "낮은 반동과 매우 빠른 탄속으로 연속 명중에 유리한 5.56mm DMR입니다.",
+                            "usage": "정확한 한 발보다 빠른 후속탄이 강점입니다. 이동 표적은 짧게 리드하고 일정한 클릭 간격을 유지하세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "42"
+                                },
+                                {
+                                    "label": "최대 연사",
+                                    "value": "약 330 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "990 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "5.56mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 맵/모드 로테이션에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 DMR 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/dmr",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "mk12",
+                            "name": "Mk12",
+                            "nameKr": "엠케이십이",
+                            "aliases": [
+                                "MK12",
+                                "막12",
+                                "5.56 DMR"
+                            ],
+                            "image": "./PUBG/weapons/mk12.webp",
+                            "description": "복원력이 좋은 5.56mm DMR로 안정적인 연속 사격에 적합합니다.",
+                            "usage": "엎드림 의존보다 엄폐 노출 시간을 줄이는 리듬 사격을 우선하세요. 같은 지점에서 오래 피킹하지 마세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "43"
+                                },
+                                {
+                                    "label": "최대 연사",
+                                    "value": "약 330 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "900 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "5.56mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 맵/모드 로테이션에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 DMR 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/dmr",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "slr",
+                            "name": "SLR",
+                            "nameKr": "에스엘알",
+                            "aliases": [
+                                "SLR",
+                                "스르륵",
+                                "7.62 DMR"
+                            ],
+                            "image": "./PUBG/weapons/slr.webp",
+                            "description": "높은 한 발 피해를 가진 7.62mm DMR이며 Update 42.1에서 반동과 탄속이 개선됐습니다.",
+                            "usage": "빠르게 난사하기보다 반동이 돌아오는 순간에 다음 탄을 넣으세요. 42.1 이후 움직이는 표적 리드가 이전보다 짧아졌습니다.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "49"
+                                },
+                                {
+                                    "label": "최대 연사",
+                                    "value": "약 330 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "870 m/s (42.1 상향)"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "7.62mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 맵/모드 로테이션에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 Update 42.1 SLR 조정",
+                                    "url": "https://www.pubg.com/en/news/10179",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "kar98k",
+                            "name": "Kar98k",
+                            "nameKr": "카구팔",
+                            "aliases": [
+                                "Kar98",
+                                "카구팔",
+                                "볼트액션"
+                            ],
+                            "image": "./PUBG/weapons/kar98k.webp",
+                            "description": "월드 스폰으로 구하기 쉬운 7.62mm 볼트액션 저격소총입니다.",
+                            "usage": "발사 후 스코프를 오래 유지하지 말고 즉시 엄폐해 볼트 조작과 재피킹 타이밍을 분리하세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "79"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 39 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "760 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "7.62mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 맵/모드 로테이션에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 SR 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/sr",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "m24",
+                            "name": "M24",
+                            "nameKr": "엠이십사",
+                            "aliases": [
+                                "M24",
+                                "엠이사",
+                                "볼트액션"
+                            ],
+                            "image": "./PUBG/weapons/m24.webp",
+                            "description": "Kar98k보다 빠른 탄속과 탄창식 장전을 가진 7.62mm 볼트액션 소총입니다.",
+                            "usage": "탄속 우위를 살려 중장거리 이동 표적을 노리되, 한 발을 쏜 뒤에는 위치 노출을 전제로 엄폐를 바꾸세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "75"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 42 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "790 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "7.62mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 맵/모드 로테이션에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 SR 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/sr",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "awm",
+                            "name": "AWM",
+                            "nameKr": "에땁",
+                            "aliases": [
+                                "에땁",
+                                "AWM",
+                                "보급 저격"
+                            ],
+                            "image": "./PUBG/weapons/awm.webp",
+                            "description": "전용 .300 매그넘 탄을 사용하는 보급 전용 고위력 저격소총입니다.",
+                            "usage": "탄이 제한되므로 다운 확률이 높은 정지·직선 이동 표적에 우선 사용하고, 보급 위치 노출 뒤에는 바로 이탈하세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "105"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 32 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "945 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": ".300 Magnum"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "보급 상자 · 맵/모드에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 SR 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/sr",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "submachine-guns",
+                    "label": "SMG",
+                    "title": "기관단총",
+                    "description": "근거리 이동 사격과 높은 연사력이 강점입니다. 전용 맵·보급 무기는 출현 조건을 먼저 확인하세요.",
+                    "entries": [
+                        {
+                            "id": "ump45",
+                            "name": "UMP45",
+                            "nameKr": "움프",
+                            "aliases": [
+                                "UMP",
+                                "움프",
+                                ".45 SMG"
+                            ],
+                            "image": "./PUBG/weapons/ump45.webp",
+                            "description": "피해량이 높고 제어가 쉬운 .45 ACP 범용 SMG입니다.",
+                            "usage": "차량 하차나 건물 진입처럼 짧은 반응 시간이 필요한 교전에서 어깨 조준과 ADS를 거리별로 구분하세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "42"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 670 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "400 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": ".45 ACP"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 맵/모드 로테이션에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 SMG 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/smg",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "mp9",
+                            "name": "MP9",
+                            "nameKr": "엠피나인",
+                            "aliases": [
+                                "MP-9",
+                                "Deston SMG",
+                                "데스턴 총"
+                            ],
+                            "image": "./PUBG/weapons/mp9.webp",
+                            "description": "데스턴 전용 9mm SMG로 내장형 소음기와 매우 높은 연사력이 특징입니다.",
+                            "usage": "탄 소모가 빠르므로 한 명당 필요한 탄 수를 정해 짧게 끊고, 중거리에서는 연사보다 위치 은폐를 활용하세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "31"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 1,000 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "400 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "9mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "데스턴 일반 월드 스폰"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 MP9 소개",
+                                    "url": "https://www.pubg.com/en/news/1738",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "js9",
+                            "name": "JS9",
+                            "nameKr": "제이에스나인",
+                            "aliases": [
+                                "JS-9",
+                                "Rondo SMG",
+                                "론도 총"
+                            ],
+                            "image": "./PUBG/weapons/js9.webp",
+                            "description": "론도 전용 9mm SMG로 빠른 연사력과 근거리 추적 성능이 강점입니다.",
+                            "usage": "움직이는 적을 따라가는 연속 조준에 적합합니다. 탄속이 느리므로 거리가 벌어지면 리드를 늘리거나 교전을 피하세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "32"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 900 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "400 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "9mm"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "론도 일반 월드 스폰"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 JS9·론도 소개",
+                                    "url": "https://pubg.com/en/news/6939",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "p90",
+                            "name": "P90",
+                            "nameKr": "피구공",
+                            "aliases": [
+                                "P-90",
+                                "피구공",
+                                "보급 SMG"
+                            ],
+                            "image": "./PUBG/weapons/p90.webp",
+                            "description": "전용 5.7mm 탄과 50발 탄창을 사용하는 보급 전용 SMG입니다.",
+                            "usage": "높은 연사력과 탄창을 이용해 첫 교전을 빠르게 끝내되 전용 탄 보충이 어렵다는 점을 감안해 불필요한 견제를 줄이세요.",
+                            "stats": [
+                                {
+                                    "label": "기본 피해",
+                                    "value": "35"
+                                },
+                                {
+                                    "label": "연사 속도",
+                                    "value": "약 1,000 RPM"
+                                },
+                                {
+                                    "label": "탄속",
+                                    "value": "716 m/s"
+                                },
+                                {
+                                    "label": "탄약",
+                                    "value": "5.7mm 전용탄"
+                                },
+                                {
+                                    "label": "휴대 무게",
+                                    "value": "주무기 슬롯 · 가방 용량 미사용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "보급 상자 · 맵/모드에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 P90 소개",
+                                    "url": "https://pubg.com/en/news/1720",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBGPlanet 현재 빌드 추출 수치",
+                                    "url": "https://pubgplanet.com/wiki/weapons",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "consumables",
+            "label": "회복·부스트",
+            "title": "회복 아이템",
+            "description": "Update 42.1의 회복품 재조정을 반영했습니다. 부스트 회복 간격은 짧아졌지만 총 회복량은 유지됩니다.",
+            "groups": [
+                {
+                    "id": "healing-items",
+                    "label": "HEAL",
+                    "title": "직접 회복",
+                    "description": "안전한 엄폐와 취소 가능한 이동 경로를 먼저 확보한 뒤 사용하세요.",
+                    "entries": [
+                        {
+                            "id": "bandage",
+                            "name": "Bandage",
+                            "nameKr": "붕대",
+                            "aliases": [
+                                "붕대",
+                                "밴디지",
+                                "힐템"
+                            ],
+                            "image": "./PUBG/consumables/bandage.png",
+                            "description": "작은 피해를 빠르게 복구하는 가벼운 회복품입니다. Update 42.1에서 회복량과 속도가 상향됐습니다.",
+                            "usage": "전투 사이 짧은 공백에 연속 사용하되, 큰 피해는 구급상자로 먼저 75까지 복구하는 편이 빠릅니다.",
+                            "stats": [
+                                {
+                                    "label": "무게",
+                                    "value": "2 / 개 (커뮤니티 수치)"
+                                },
+                                {
+                                    "label": "회복량",
+                                    "value": "12 HP"
+                                },
+                                {
+                                    "label": "사용 시간",
+                                    "value": "3초"
+                                },
+                                {
+                                    "label": "회복 적용",
+                                    "value": "3초 동안 적용"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 대부분의 맵/모드"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 Update 42.1 회복품 조정",
+                                    "url": "https://www.pubg.com/en/news/10179",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG Wiki 아이콘·보조 무게",
+                                    "url": "https://pubg.wiki.gg/wiki/Bandage",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "first-aid-kit",
+                            "name": "First Aid Kit",
+                            "nameKr": "구급상자",
+                            "aliases": [
+                                "구상",
+                                "구급",
+                                "퍼스트에이드"
+                            ],
+                            "image": "./PUBG/consumables/first-aid-kit.png",
+                            "description": "현재 체력을 최대 75까지 즉시 회복하는 표준 전투 회복품입니다.",
+                            "usage": "엄폐 후 가장 먼저 큰 피해를 복구할 때 사용합니다. 75 이상 체력에서는 사용할 수 없으므로 이후 부스트를 연결하세요.",
+                            "stats": [
+                                {
+                                    "label": "무게",
+                                    "value": "10"
+                                },
+                                {
+                                    "label": "회복량",
+                                    "value": "체력을 최대 75까지 회복"
+                                },
+                                {
+                                    "label": "사용 시간",
+                                    "value": "6초"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 대부분의 맵/모드"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG Wiki 구급상자 수치·아이콘",
+                                    "url": "https://pubg.wiki.gg/wiki/First_Aid_Kit",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG 공식 Update 42.2 기준 패치",
+                                    "url": "https://pubg.com/en-asia/news/10459",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "med-kit",
+                            "name": "Med Kit",
+                            "nameKr": "의료용 키트",
+                            "aliases": [
+                                "메드킷",
+                                "의료키트",
+                                "풀힐"
+                            ],
+                            "image": "./PUBG/consumables/med-kit.png",
+                            "description": "체력을 100까지 회복하는 희귀 회복품입니다. Update 42.1에서 더 가벼워지고 빨라졌습니다.",
+                            "usage": "긴 교전 직전 완전 회복이 필요할 때 사용합니다. 보유량보다 6초 동안 끊기지 않는 안전한 위치가 더 중요합니다.",
+                            "stats": [
+                                {
+                                    "label": "무게",
+                                    "value": "15 (42.1에서 20 → 15)"
+                                },
+                                {
+                                    "label": "회복량",
+                                    "value": "체력을 100까지 회복"
+                                },
+                                {
+                                    "label": "사용 시간",
+                                    "value": "6초 (42.1에서 8초 → 6초)"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "희귀 월드 스폰·보급 상자 · 맵/모드별 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 Update 42.1 회복품 조정",
+                                    "url": "https://www.pubg.com/en/news/10179",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG Wiki 의료용 키트 아이콘",
+                                    "url": "https://pubg.wiki.gg/wiki/Med_Kit",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "boost-items",
+                    "label": "BOOST",
+                    "title": "부스트 회복",
+                    "description": "부스트는 시간에 따라 체력을 회복하며 높은 게이지 구간에서는 이동속도도 증가합니다.",
+                    "entries": [
+                        {
+                            "id": "energy-drink",
+                            "name": "Energy Drink",
+                            "nameKr": "에너지 드링크",
+                            "aliases": [
+                                "드링크",
+                                "에드",
+                                "부스트"
+                            ],
+                            "image": "./PUBG/consumables/energy-drink.png",
+                            "description": "40 부스트를 채우는 가벼운 소모품입니다.",
+                            "usage": "교전 전 한 캔으로 회복을 시작하고, 이동속도 보너스가 필요한 로테이션에서는 게이지 구간을 확인해 추가 사용하세요.",
+                            "stats": [
+                                {
+                                    "label": "무게",
+                                    "value": "4"
+                                },
+                                {
+                                    "label": "회복량",
+                                    "value": "부스트 +40 · 총 체력 회복 약 23"
+                                },
+                                {
+                                    "label": "사용 시간",
+                                    "value": "4초"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 대부분의 맵/모드"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG Wiki 에너지 드링크 수치·아이콘",
+                                    "url": "https://pubg.wiki.gg/wiki/Energy_Drink",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG 공식 Update 42.1 부스트 간격 조정",
+                                    "url": "https://www.pubg.com/en/news/10179",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "painkiller",
+                            "name": "Painkiller",
+                            "nameKr": "진통제",
+                            "aliases": [
+                                "진통",
+                                "페인킬러",
+                                "부스트"
+                            ],
+                            "image": "./PUBG/consumables/painkiller.png",
+                            "description": "60 부스트를 채우는 중간 단계 부스트 아이템입니다. Update 42.1에서 무게가 줄었습니다.",
+                            "usage": "한 개로 부스트 게이지의 이동속도 보너스 구간에 진입할 수 있어 장거리 로테이션 직전에 효율적입니다.",
+                            "stats": [
+                                {
+                                    "label": "무게",
+                                    "value": "6 (42.1에서 10 → 6)"
+                                },
+                                {
+                                    "label": "회복량",
+                                    "value": "부스트 +60 · 총 체력 회복 약 40"
+                                },
+                                {
+                                    "label": "사용 시간",
+                                    "value": "6초"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 대부분의 맵/모드"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 Update 42.1 무게 조정",
+                                    "url": "https://www.pubg.com/en/news/10179",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG Wiki 진통제 수치·아이콘",
+                                    "url": "https://pubg.wiki.gg/wiki/Painkiller",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "adrenaline-syringe",
+                            "name": "Adrenaline Syringe",
+                            "nameKr": "아드레날린 주사기",
+                            "aliases": [
+                                "아드레날린",
+                                "주사기",
+                                "풀부스트"
+                            ],
+                            "image": "./PUBG/consumables/adrenaline-syringe.png",
+                            "description": "부스트 게이지를 한 번에 100 채우는 희귀 아이템입니다. Update 42.1에서 무게가 절반으로 줄었습니다.",
+                            "usage": "전투가 연속될 최종 서클이나 긴 개활지 이동 직전에 사용하세요. 사용 시간이 길어 차량·엄폐 확보가 우선입니다.",
+                            "stats": [
+                                {
+                                    "label": "무게",
+                                    "value": "10 (42.1에서 20 → 10)"
+                                },
+                                {
+                                    "label": "회복량",
+                                    "value": "부스트 +100 · 총 체력 회복 약 86"
+                                },
+                                {
+                                    "label": "사용 시간",
+                                    "value": "6초"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "희귀 월드 스폰·보급 상자 · 맵/모드별 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 Update 42.1 무게 조정",
+                                    "url": "https://www.pubg.com/en/news/10179",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG Wiki 주사기 수치·아이콘",
+                                    "url": "https://pubg.wiki.gg/wiki/Adrenaline_Syringe",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "throwables",
+            "label": "투척물",
+            "title": "투척물 수치와 공간 통제",
+            "description": "투척물은 피해뿐 아니라 시야 차단, 퇴로 차단, 엄폐 강제 이동에 사용합니다. 일부 무게·피해 수치는 공식 최신 표가 없어 커뮤니티 자료임을 표시했습니다.",
+            "groups": [
+                {
+                    "id": "combat-throwables",
+                    "label": "UTILITY",
+                    "title": "전투 투척물",
+                    "description": "핀을 뽑은 뒤의 시간과 자신의 엄폐를 함께 계산하세요.",
+                    "entries": [
+                        {
+                            "id": "frag-grenade",
+                            "name": "Frag Grenade",
+                            "nameKr": "수류탄",
+                            "aliases": [
+                                "프래그",
+                                "수류탄",
+                                "폭탄"
+                            ],
+                            "image": "./PUBG/throwables/frag-grenade.webp",
+                            "description": "거리, 방탄복, 자세에 따라 피해가 달라지는 폭발 투척물입니다.",
+                            "usage": "적이 엄폐를 떠날 순간에 맞춰 쿠킹하고, 투척 궤적이 막힐 수 있는 창틀과 난간을 먼저 확인하세요.",
+                            "stats": [
+                                {
+                                    "label": "무게",
+                                    "value": "27 (Update 6.2 이후 커뮤니티 기록)"
+                                },
+                                {
+                                    "label": "피해",
+                                    "value": "거리·방탄복·자세에 따라 변동 · 단일 고정값 없음"
+                                },
+                                {
+                                    "label": "폭발 타이머",
+                                    "value": "핀 제거 후 약 5초"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 대부분의 맵/모드"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 투척물 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/throwable",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG Wiki 수류탄 무게·효과",
+                                    "url": "https://pubg.wiki.gg/wiki/Frag_Grenade",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "smoke-grenade",
+                            "name": "Smoke Grenade",
+                            "nameKr": "연막탄",
+                            "aliases": [
+                                "연막",
+                                "스모크",
+                                "연막벽"
+                            ],
+                            "image": "./PUBG/throwables/smoke-grenade.webp",
+                            "description": "시야를 차단해 소생, 이동, 가짜 동선 생성에 쓰는 핵심 유틸리티입니다. 42.1부터 폭발과 차량 충돌이 연막을 일시적으로 갈라놓을 수 있습니다.",
+                            "usage": "한 점에 겹치기보다 이동 방향을 따라 간격을 두고 던져 연막 벽을 만드세요. 폭발로 연막이 잠시 열릴 가능성을 고려하세요.",
+                            "stats": [
+                                {
+                                    "label": "무게",
+                                    "value": "14 (커뮤니티 수치)"
+                                },
+                                {
+                                    "label": "피해",
+                                    "value": "없음"
+                                },
+                                {
+                                    "label": "점화",
+                                    "value": "충돌 후 약 1초"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 대부분의 맵/모드"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 Update 42.1 인터랙티브 연막",
+                                    "url": "https://www.pubg.com/en/news/10179",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG Wiki 연막탄 무게·효과",
+                                    "url": "https://pubg.wiki.gg/wiki/Smoke_Grenade",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "stun-grenade",
+                            "name": "Stun Grenade",
+                            "nameKr": "섬광탄",
+                            "aliases": [
+                                "스턴",
+                                "섬광",
+                                "플래시뱅"
+                            ],
+                            "image": "./PUBG/throwables/stun-grenade.webp",
+                            "description": "직접 피해 대신 시야·청각·조준을 방해해 진입 타이밍을 만드는 투척물입니다.",
+                            "usage": "섬광이 터진 뒤 진입할 팀원과 순서를 먼저 맞추고, 자신과 아군이 바라보는 방향도 함께 관리하세요.",
+                            "stats": [
+                                {
+                                    "label": "무게",
+                                    "value": "12 (커뮤니티 수치)"
+                                },
+                                {
+                                    "label": "피해",
+                                    "value": "직접 피해 없음 · 시야/청각 방해"
+                                },
+                                {
+                                    "label": "최대 실명",
+                                    "value": "거리·시야 방향에 따라 최대 약 5.5초"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 대부분의 맵/모드"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 투척물 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/throwable",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG Wiki 섬광탄 무게·효과",
+                                    "url": "https://pubg.wiki.gg/wiki/Stun_Grenade",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "molotov",
+                            "name": "Molotov Cocktail",
+                            "nameKr": "화염병",
+                            "aliases": [
+                                "몰로토프",
+                                "화염병",
+                                "불"
+                            ],
+                            "image": "./PUBG/throwables/molotov.webp",
+                            "description": "불길을 남겨 문, 계단, 엄폐 뒤 공간을 차단하는 지속 피해 투척물입니다.",
+                            "usage": "적을 바로 맞히기보다 빠져나올 문과 계단에 불길을 깔아 이동 선택지를 줄이세요.",
+                            "stats": [
+                                {
+                                    "label": "무게",
+                                    "value": "16 (커뮤니티 수치)"
+                                },
+                                {
+                                    "label": "피해",
+                                    "value": "불길 내 약 12.5/초 + 점화 후 약 10/초(최대 4초)"
+                                },
+                                {
+                                    "label": "효과",
+                                    "value": "착탄 지점에 지속 화염 · 목재 표면 확산"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 대부분의 맵/모드"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 투척물 카탈로그·이미지",
+                                    "url": "https://www.pubg.com/en-asia/game-info/weapons/throwable",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG Wiki 화염병 무게·피해",
+                                    "url": "https://pubg.wiki.gg/wiki/Molotov_Cocktail",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "blue-zone-grenade",
+                            "name": "Blue Zone Grenade",
+                            "nameKr": "블루존 수류탄",
+                            "aliases": [
+                                "BZ Grenade",
+                                "블루존 grenade",
+                                "자기장 수류탄"
+                            ],
+                            "image": "./PUBG/throwables/bz-grenade.webp",
+                            "description": "원형 블루존을 생성해 건물과 좁은 엄폐에서 적을 밀어내는 지역 거부 투척물입니다.",
+                            "usage": "계단·방 입구처럼 도주 방향이 제한된 곳에 던지고, 적이 빠져나올 각을 미리 잡으세요. 효과는 서로 중첩됩니다.",
+                            "stats": [
+                                {
+                                    "label": "무게",
+                                    "value": "공식 최신 수치 미확인"
+                                },
+                                {
+                                    "label": "피해",
+                                    "value": "10/초 · 기존 블루존 및 다른 BZ 수류탄과 중첩"
+                                },
+                                {
+                                    "label": "범위·시간",
+                                    "value": "최대 반경 10m · 5초 유지 후 5초간 축소"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "8×8 맵 월드 스폰 · 맵/모드 로테이션에 따라 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 Update 13.2 BZ 수류탄",
+                                    "url": "https://pubg.com/en/news/1720",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG 공식 Update 24.1 스폰 확대",
+                                    "url": "https://pubg.com/en/news/6359",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG Wiki BZ 수류탄 효과",
+                                    "url": "https://pubg.wiki.gg/wiki/Blue_Zone_Grenade",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "inventory",
+            "label": "가방·이동",
+            "title": "아이템 무게와 이동속도",
+            "description": "핵심 결론: 가방 적재량은 이동속도 단계가 아니라 아이템을 더 담을 수 있는지 결정하는 용량 규칙입니다. 적재율별 감속 수치는 공식 문서에서 확인되지 않았습니다.",
+            "groups": [
+                {
+                    "id": "load-rules",
+                    "label": "LOAD",
+                    "title": "적재율과 이동속도",
+                    "description": "무게 때문에 느려진다고 가정해 회복품이나 연막을 버리기보다, 용량 한도와 실제 이동 변수인 자세·부스트·무기 상태를 구분하세요.",
+                    "entries": [
+                        {
+                            "id": "weight-speed-rule",
+                            "name": "Inventory Weight vs Movement",
+                            "nameKr": "적재 무게와 이동속도",
+                            "aliases": [
+                                "무게 이동속도",
+                                "가방 속도",
+                                "적재율",
+                                "인벤토리 무게"
+                            ],
+                            "image": "./PUBG/backpack-level-2.png",
+                            "description": "공식 패치 문서에서 아이템 무게는 인벤토리 수납 용량으로 설명됩니다. 0~100% 적재 구간에 따른 단계별 이동속도 페널티는 문서화되어 있지 않습니다.",
+                            "usage": "용량이 가득 차면 더 줍지 못할 뿐, 적재율 감속표를 적용하지 마세요. 이동속도는 자세, 부스트 게이지, 현재 행동과 장비 상태를 별도로 확인하세요.",
+                            "stats": [
+                                {
+                                    "label": "0~99% 적재",
+                                    "value": "문서화된 적재율 감속 없음"
+                                },
+                                {
+                                    "label": "100% 적재",
+                                    "value": "추가 아이템 획득 제한 · 문서화된 속도 감속 없음"
+                                },
+                                {
+                                    "label": "실제 의미",
+                                    "value": "무게 1 = 인벤토리 용량 1 소모"
+                                },
+                                {
+                                    "label": "혼동 주의",
+                                    "value": "높은 부스트 구간은 이동속도를 올리지만 가방 무게와 별개"
+                                },
+                                {
+                                    "label": "근거 수준",
+                                    "value": "공식 문서의 용량 규칙 기반 · '감속 없음' 직접 문구는 없어 중간 신뢰도"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 Update 13.2 아이템 무게·용량",
+                                    "url": "https://pubg.com/en/news/1720",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG 공식 Update 30.2 인벤토리 초과 규칙",
+                                    "url": "https://pubg.com/en/news/7494",
+                                    "checkedAt": "2026-08-10"
+                                },
+                                {
+                                    "label": "PUBG Wiki 용량 용어 정의",
+                                    "url": "https://pubg.wiki.gg/wiki/Data_Key",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "backpack-capacity",
+                    "label": "BACKPACK",
+                    "title": "가방별 수납 용량",
+                    "description": "가방 자체 수치와 유틸리티 벨트 50을 포함한 총 수납량을 구분했습니다. 오래된 커뮤니티 표이므로 패치 시 다시 확인해야 합니다.",
+                    "entries": [
+                        {
+                            "id": "backpack-level-1",
+                            "name": "Backpack Level 1",
+                            "nameKr": "1레벨 가방",
+                            "aliases": [
+                                "1렙 가방",
+                                "1가방",
+                                "백팩 1"
+                            ],
+                            "image": "./PUBG/backpack-level-1.png",
+                            "description": "초반 필수품을 담는 기본 가방입니다.",
+                            "usage": "탄약 두 종류를 과하게 쌓지 말고 구급·연막·투척물의 최소 세트를 먼저 확보하세요.",
+                            "stats": [
+                                {
+                                    "label": "가방 용량",
+                                    "value": "170"
+                                },
+                                {
+                                    "label": "벨트 포함 총량",
+                                    "value": "220"
+                                },
+                                {
+                                    "label": "적재 속도 변화",
+                                    "value": "공식 문서에 구간별 감속 없음"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 대부분의 맵/모드"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG Wiki 1레벨 가방 수치·이미지",
+                                    "url": "https://pubg.wiki.gg/wiki/Backpack_%28Level_1%29",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "backpack-level-2",
+                            "name": "Backpack Level 2",
+                            "nameKr": "2레벨 가방",
+                            "aliases": [
+                                "2렙 가방",
+                                "2가방",
+                                "백팩 2"
+                            ],
+                            "image": "./PUBG/backpack-level-2.png",
+                            "description": "전투용 회복품과 투척물을 균형 있게 담기 좋은 표준 가방입니다.",
+                            "usage": "탄약을 무조건 최대치로 채우기보다 팀 역할에 맞춰 연막과 회복품을 위한 여유 용량을 남기세요.",
+                            "stats": [
+                                {
+                                    "label": "가방 용량",
+                                    "value": "220"
+                                },
+                                {
+                                    "label": "벨트 포함 총량",
+                                    "value": "270"
+                                },
+                                {
+                                    "label": "적재 속도 변화",
+                                    "value": "공식 문서에 구간별 감속 없음"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "일반 월드 스폰 · 대부분의 맵/모드"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG Wiki 2레벨 가방 수치·이미지",
+                                    "url": "https://pubg.wiki.gg/wiki/Backpack_%28Level_2%29",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "backpack-level-3",
+                            "name": "Backpack Level 3",
+                            "nameKr": "3레벨 가방",
+                            "aliases": [
+                                "3렙 가방",
+                                "3가방",
+                                "백팩 3"
+                            ],
+                            "image": "./PUBG/backpack-level-3.png",
+                            "description": "가장 큰 수납량을 제공하지만 큰 실루엣은 엎드린 상태에서 위치를 드러낼 수 있습니다.",
+                            "usage": "추가 용량을 투척물과 팀 회복품에 배분하고, 능선에서 엎드릴 때 가방 실루엣이 엄폐 밖으로 보이는지 확인하세요.",
+                            "stats": [
+                                {
+                                    "label": "가방 용량",
+                                    "value": "270"
+                                },
+                                {
+                                    "label": "벨트 포함 총량",
+                                    "value": "320"
+                                },
+                                {
+                                    "label": "적재 속도 변화",
+                                    "value": "공식 문서에 구간별 감속 없음"
+                                },
+                                {
+                                    "label": "출현 지역",
+                                    "value": "희귀 월드 스폰·보급 상자 · 맵/모드별 변동"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG Wiki 3레벨 가방 수치·이미지",
+                                    "url": "https://pubg.wiki.gg/wiki/Backpack_%28Level_3%29",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "pro-playbook",
+            "label": "프로 공략",
+            "title": "프로·코치 증언 기반 구두 공략집",
+            "description": "선수와 코치 인터뷰의 핵심을 직접 인용 없이 실전 행동으로 재구성했습니다. 인터뷰 날짜가 오래된 항목은 패치 수치가 아니라 에임·판단·자리 운영 원칙만 적용하세요.",
+            "groups": [
+                {
+                    "id": "mechanics",
+                    "label": "MECHANICS",
+                    "title": "조준과 호흡",
+                    "description": "사격 기술은 짧은 반복 훈련과 정확한 입력 습관으로 분리합니다.",
+                    "entries": [
+                        {
+                            "id": "aim-recoil",
+                            "name": "Aim & Recoil Routine",
+                            "nameKr": "총기 조준·반동 루틴",
+                            "aliases": [
+                                "에임",
+                                "조준법",
+                                "반동",
+                                "리코일",
+                                "스프레이"
+                            ],
+                            "image": "./PUBG/weapons/m416.webp",
+                            "description": "Dignitas 선수 Uncivil의 조언을 바탕으로, 감각에 의존하지 않고 같은 조건의 반복으로 반동 제어를 학습합니다.",
+                            "usage": "1) 같은 감도와 주력 총으로 매일 짧게 반복 2) 자동 사격은 마우스를 아래로 당겨 수직 반동 상쇄 3) 부착물별 패턴 확인 4) 장거리는 단발 또는 짧은 점사로 전환.",
+                            "stats": [
+                                {
+                                    "label": "증언 주체",
+                                    "value": "Timothy 'Uncivil' Ebarb"
+                                },
+                                {
+                                    "label": "원문 날짜",
+                                    "value": "2018-05-25"
+                                },
+                                {
+                                    "label": "훈련 단위",
+                                    "value": "한 번에 한 거리·한 총·한 부착물"
+                                },
+                                {
+                                    "label": "성공 기준",
+                                    "value": "첫 탄 높이 유지 + 탄착군 폭 감소"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Dignitas 인터뷰: Uncivil의 에임·무기 선택",
+                                    "url": "https://dignitas.gg/articles/news/pubg/12481/improving-your-aim-and-weapon-choice-with-dig-uncivil",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "breath-control",
+                            "name": "Hold Breath Timing",
+                            "nameKr": "호흡 관리",
+                            "aliases": [
+                                "숨참기",
+                                "호흡",
+                                "스코프 흔들림",
+                                "Shift"
+                            ],
+                            "image": "./PUBG/weapons/slr.webp",
+                            "description": "호흡 입력은 스코프 흔들림을 잠시 줄이는 공식 조준 기능입니다. 프로 증언이 아니라 PUBG 공식 조작 설명을 기준으로 정리했습니다.",
+                            "usage": "ADS 후 PC 기준 Shift를 짧게 눌러 흔들림을 줄이고, 폐 게이지가 붉어지기 전에 놓아 회복하세요. 적을 찾는 동안 계속 누르지 말고 실제 발사 직전에만 사용하세요.",
+                            "stats": [
+                                {
+                                    "label": "PC 기본 입력",
+                                    "value": "ADS 중 Shift"
+                                },
+                                {
+                                    "label": "효과",
+                                    "value": "조준 흔들림 감소·일부 조준경 확대"
+                                },
+                                {
+                                    "label": "해제 시점",
+                                    "value": "폐 게이지가 붉어지기 전"
+                                },
+                                {
+                                    "label": "주의",
+                                    "value": "숨 게이지가 모두 빨갛게 변하면 체력이 감소"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG 공식 지원: 숨참기가 뭔가요?",
+                                    "url": "https://support.pubg.com/hc/ko/articles/115004170793-%EC%88%A8%EC%B0%B8%EA%B8%B0%EA%B0%80-%EB%AD%94%EA%B0%80%EC%9A%94",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "macro-play",
+                    "label": "MACRO",
+                    "title": "자리 선점과 로테이션",
+                    "description": "좋은 자리는 늦게 도착해 빼앗는 대상이 아니라, 다음 서클을 예측해 먼저 확보하는 자원입니다.",
+                    "entries": [
+                        {
+                            "id": "compound-control",
+                            "name": "Compound Priority",
+                            "nameKr": "컴파운드 자리 선점",
+                            "aliases": [
+                                "자리 선점",
+                                "컴파운드",
+                                "포지셔닝",
+                                "집 선점"
+                            ],
+                            "image": "./PUBG/backpack-level-3.png",
+                            "description": "프로 선수 Wookiebookie의 포지셔닝 조언을 바탕으로, 후반에는 사방 엄폐와 차량 퇴로를 가진 컴파운드를 먼저 확보합니다.",
+                            "usage": "1) 다음 원 중심·능선·도로를 함께 보는 컴파운드 선택 2) 차량을 퇴로 방향으로 주차 3) 한 명은 접근 정보 수집 4) 전원 같은 창에 몰리지 않기.",
+                            "stats": [
+                                {
+                                    "label": "증언 주체",
+                                    "value": "Peter 'Wookiebookie' Lassen"
+                                },
+                                {
+                                    "label": "원문 날짜",
+                                    "value": "2018-10-27"
+                                },
+                                {
+                                    "label": "선점 기준",
+                                    "value": "엄폐·정보·차량 퇴로"
+                                },
+                                {
+                                    "label": "포기 기준",
+                                    "value": "사방 크로스와 차량 이탈이 모두 막힐 때"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Dignitas 인터뷰: Wookiebookie 포지셔닝",
+                                    "url": "https://dignitas.gg/articles/news/pubg/13052/improving-your-positioning-and-movement-with-wookiebookie",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "rotation-planning",
+                            "name": "First-Minute Rotation",
+                            "nameKr": "서클 1분 로테이션",
+                            "aliases": [
+                                "로테이션",
+                                "자기장 이동",
+                                "동선",
+                                "차량 이동"
+                            ],
+                            "image": "./PUBG/throwables/smoke-grenade.webp",
+                            "description": "프로 선수 Ziphon의 조언을 바탕으로, 서클이 정해진 뒤 첫 1분 안에 다음 이동 후보를 계획합니다.",
+                            "usage": "1) 서클 확인 즉시 2~3개 후보 지정 2) 킬로그·총성·차량으로 점유 여부 추정 3) 가장 안전한 진입 각 선택 4) 막히면 되돌아갈 보조 동선 유지.",
+                            "stats": [
+                                {
+                                    "label": "증언 주체",
+                                    "value": "Ziphon"
+                                },
+                                {
+                                    "label": "원문 날짜",
+                                    "value": "2018-03-18"
+                                },
+                                {
+                                    "label": "결정 시간",
+                                    "value": "서클 확인 후 약 1분 안"
+                                },
+                                {
+                                    "label": "확인 정보",
+                                    "value": "총성·킬로그·차량·후보 컴파운드"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Dignitas 인터뷰: Ziphon 로테이션",
+                                    "url": "https://dignitas.gg/articles/professional-pubg-movement-positioning-and-rotations-with-ziphon",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "fight-selection",
+                            "name": "Fight Selection",
+                            "nameKr": "교전 선택과 트리거 절제",
+                            "aliases": [
+                                "교전 선택",
+                                "트리거",
+                                "싸움 판단",
+                                "존버"
+                            ],
+                            "image": "./PUBG/weapons/beryl-m762.webp",
+                            "description": "Uncivil의 생존 조언을 바탕으로, 보이는 적을 즉시 쏘기보다 이 교전이 위치와 생존 확률을 개선하는지 먼저 판단합니다.",
+                            "usage": "쏘기 전 3초 체크: 다운시킬 수 있는가, 사격 후 이동할 엄폐가 있는가, 제3팀에 위치를 내줘도 되는가. 하나라도 아니면 추적만 유지하세요.",
+                            "stats": [
+                                {
+                                    "label": "증언 주체",
+                                    "value": "Timothy 'Uncivil' Ebarb"
+                                },
+                                {
+                                    "label": "원문 날짜",
+                                    "value": "2018-09-17"
+                                },
+                                {
+                                    "label": "교전 조건",
+                                    "value": "다운 가능성·엄폐·제3팀 위험"
+                                },
+                                {
+                                    "label": "핵심 원칙",
+                                    "value": "유리하지 않은 싸움은 미루거나 피하기"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Dignitas 인터뷰: Uncivil 생존 팁",
+                                    "url": "https://dignitas.gg/articles/news/pubg/12962/5-tips-tricks-on-how-to-survive-longer-in-pubg-w-uncivil",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "team-composure",
+                            "name": "Team Composure",
+                            "nameKr": "팀 멘탈·피드백 관리",
+                            "aliases": [
+                                "멘탈",
+                                "침착",
+                                "팀 피드백",
+                                "틸트"
+                            ],
+                            "image": "./PUBG/consumables/first-aid-kit.png",
+                            "description": "PUBG Esports의 유럽 코치 인터뷰를 바탕으로, 실수 직후 감정 소모보다 다음 판단에 필요한 정보만 복구합니다.",
+                            "usage": "교전 종료 후 사실 한 줄, 다음 행동 한 줄만 공유하세요. 책임 공방은 경기 뒤 리뷰로 미루고 현재 차량·탄·회복·적 위치를 먼저 갱신하세요.",
+                            "stats": [
+                                {
+                                    "label": "증언 주체",
+                                    "value": "Didz·Fuzzface·ball1n"
+                                },
+                                {
+                                    "label": "원문 날짜",
+                                    "value": "2022-05-05"
+                                },
+                                {
+                                    "label": "즉시 콜",
+                                    "value": "사실 1줄 + 다음 행동 1줄"
+                                },
+                                {
+                                    "label": "리뷰 시점",
+                                    "value": "세부 책임 분석은 경기 종료 후"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "PUBG Esports: PCS6 유럽 코치 인터뷰",
+                                    "url": "https://pubgesports.com/en/news/5457",
+                                    "checkedAt": "2026-08-10"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+    </script>
+    <div class="page-shell">
+        <main class="game-page" id="game-main">
+            <header class="game-page-header">
+                <div>
+                    <p class="panel-label">GAME PAGE</p>
+                    <h1 class="game-page-title">PUBG: BATTLEGROUNDS</h1>
+                </div>
+                <nav class="placeholder-nav" aria-label="가이드 이동">
+                    <a href="../index.html">홈</a>
+                    <a href="../index.html#game">가이드 목록</a>
+                </nav>
+            </header>
+
+            <section class="game-hero pixel-box">
+                <div class="game-hero-media">
+                    <img id="game-hero-image" src="./PUBG/weapons/m416.webp" alt="PUBG M416 무기 대표 이미지" width="220" height="220" decoding="async">
+                </div>
+                <div class="game-hero-copy">
+                    <p class="panel-label" id="game-panel-label">PUBG</p>
+                    <h2 class="game-section-title" id="game-genre">가이드를 불러오는 중</h2>
+                    <p class="game-meta" id="game-summary">JSON 데이터를 기반으로 PUBG 공략 페이지를 구성합니다.</p>
+                    <div class="game-hero-details pixel-box">
+                        <p class="panel-label">CORE POINTS</p>
+                        <ul class="game-detail-list" id="game-detail-list">
+                            <li>무기, 회복 아이템, 투척물, 운영 팁을 불러오는 중입니다.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <p class="sr-only" id="game-view-status" aria-live="polite"></p>
+            <section class="game-tabs" aria-label="가이드 주제">
+                <div class="tab-list" id="game-tab-list" hidden></div>
+                <div class="subtab-list" id="game-subtab-list" aria-label="세부 주제" hidden></div>
+            </section>
+
+            <section class="game-panel pixel-box" id="game-panel" role="region" aria-label="가이드 내용" aria-busy="true" tabindex="-1">
+                <p class="game-loading" role="status">가이드 데이터를 불러오는 중입니다.</p>
+            </section>
+        </main>
+    </div>
+
+    <footer class="site-footer" aria-label="사이트 푸터">
+        <div class="site-footer__inner">
+            <div class="site-footer__copy">
+                <p class="site-footer__eyebrow">OFFICIAL SITE</p>
+                <p class="site-footer__copyright">&copy; 2026 yeonsik. All rights reserved.</p>
+            </div>
+            <nav class="site-footer__links" aria-label="서비스 링크">
+                <a class="site-footer__link" href="../index.html#game">가이드 목록</a>
+                <a class="site-footer__link" href="https://github.com/Yeon-sik/yeonsam_bot/issues" target="_blank" rel="noreferrer">지원·문의</a>
+                <a class="site-footer__link" href="../privacy.html">개인정보</a>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>
