@@ -459,6 +459,7 @@ code {
 
 .content-section {
     margin-top: 40px;
+    scroll-margin-top: 96px;
 }
 
 .info-grid {
@@ -1340,6 +1341,11 @@ code {
 
     .site-header {
         padding: 14px 18px 16px;
+    }
+
+    .content-section,
+    .sidebar-section {
+        scroll-margin-top: 184px;
     }
 
     .top-nav {
