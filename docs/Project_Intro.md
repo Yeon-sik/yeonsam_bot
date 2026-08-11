@@ -9,7 +9,7 @@
 | 개발 기간 | 2026-05 ~ 진행 중 |
 | 프로젝트 형태 | Python Discord 봇 + 정적 GitHub Pages 사이트 |
 | 현재 상태 | MVP, 로컬·정적 계약 검증 완료 / 원격 `main` 동기화 완료 / Discord 실운영·외부 API 장기운영 미검증 |
-| 문서 기준 | `main` 기준선 `45383fe`, 2026-08-11 저장소·브라우저 검증 |
+| 문서 기준 | 2026-08-11 저장소·브라우저·Notion 발행 검증 |
 | 주요 기술 | Python, discord.py 2.7.1, steam-discord-patch-alerts, SQLite, HTML/CSS/JavaScript, GitHub Actions, Docker |
 | 공개 사이트 | [연삼이 GitHub Pages](https://yeon-sik.github.io/yeonsam_bot/) |
 | 저장소 | [Yeon-sik/yeonsam_bot](https://github.com/Yeon-sik/yeonsam_bot) |
@@ -128,7 +128,7 @@ PUBG BATTLE GROUND 가이드 탭 다수입니다. 이 수치는 데이터 구조
 | 공개/로컬 페이지 렌더링 | 브라우저 확인 | 2026-08-11 KST | localhost에서 랜딩·Lethal Company·R.E.P.O.·PUBG BATTLE GROUND 렌더링, 콘솔 오류 0 |
 | 항목 이미지·모드 링크 | 통과 | 2026-08-11 KST | Discord 레코드용 로컬 이미지 경로와 Thunderstore 설치 링크 테스트 |
 | 프로젝트 문서 런타임 | 통과 | 2026-08-11 KST | `validate-project-docs --require-tracked`와 render-only `sync-project-docs-to-notion` 경로 검증 |
-| Notion 미러 | 수동 발행 경로 구성 | 2026-08-11 KST | `project-docs.config.json`, Actions workflow, 운영 문서 기준 |
+| Notion 미러 | 발행·read-back 완료 | 2026-08-11 KST | [Actions run 31466462990](https://github.com/Yeon-sik/yeonsam_bot/actions/runs/31466462990), source commit `4199016`, `Yeonsam Intro`·`연삼이 봇 Detail` source banner 확인 |
 | Discord 실서버 E2E | 미검증 | 2026-08-11 KST | 실제 gateway, 길드 권한, slash command 응답, 채널 발송을 실행하지 않음 |
 | Steam/GamerPower 실통신 | 미검증 | 2026-08-11 KST | parser·embed·cursor 테스트는 통과했지만 외부 API 실호출은 이번 문서 갱신에서 수행하지 않음 |
 | Docker 실행 | 미검증 | 2026-08-11 KST | 현재 환경에서 Docker image/Compose를 실행하지 않음 |

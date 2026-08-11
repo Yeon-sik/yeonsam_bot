@@ -7,8 +7,8 @@
 | 항목 | 내용 |
 | --- | --- |
 | 문서 상태 | Active |
-| 적용 범위 | `main` 기준선 `45383fe`에서 2026-08-11에 검증한 저장소와 문서 자동화 경로 |
-| 최종 갱신 | 2026-08-11T00:00:00+09:00 |
+| 적용 범위 | 2026-08-11에 검증한 저장소, 브라우저, 문서 자동화와 Notion 발행 경로 |
+| 최종 갱신 | 2026-08-11T15:49:11+09:00 |
 | 검증 환경 | Python 3.12.13, Node.js 22.19.0, Windows 로컬 환경, localhost 정적 서버, GitHub Pages |
 | 문서 진실 원천 | Git 저장소의 `docs/Project_Detail.md` |
 | 공개 경계 | 코드·테스트·공개 배포 파일만 사용, 실제 서버 식별자와 운영 데이터 제외 |
@@ -82,7 +82,7 @@ Discord 기반 협동 게임 서버는 신규 멤버 안내, 역할·채널 권�
 | SQLite 저장 | 구현 완료 | 단위 테스트 | [storage.py](../bot/utils/storage.py) | 다중 프로세스 검증 없음 |
 | GitHub Pages | 구현 완료 | 공개 HTTP 응답 확인 | [deploy-pages.yml](../.github/workflows/deploy-pages.yml) | Actions 최근 실행은 별도 검증 필요 |
 | Docker 운영 경로 | 구성 완료 | 저장소 검증 | [Dockerfile](../Dockerfile) | build·기동 미검증 |
-| Notion 문서 미러 | `main`에 구성·기존 발행 완료 | 로컬 검증·Actions 발행·페이지 read-back | [project-docs-notion.yml](../.github/workflows/project-docs-notion.yml) | 각 revision마다 수동 발행 필요 |
+| Notion 문서 미러 | `4199016` 발행·read-back 완료 | 로컬 검증·Actions 발행·페이지 read-back | [project-docs-notion.yml](../.github/workflows/project-docs-notion.yml) | 각 revision마다 수동 발행 필요 |
 
 ## 5. 시스템 아키텍처
 
@@ -233,8 +233,9 @@ top-level `install`은 현재 주 렌더 경로에서 소비되지 않으므로,
 - **안전장치**: 기본 `manual` 모드, 정확한 `PUBLISH` 확인, protected Environment,
   구성의 canonical branch를 읽는 ref guard, 모든 페이지 preflight, immutable Git
   source와 source fingerprint를 사용합니다.
-- **운영 검증**: Actions run `30558645264`의 validate·publish가 성공했고,
-  2026-08-08에 기존 `298a66d` 기반 Intro·Detail 본문과 fingerprint를 다시 읽었습니다.
+- **운영 검증**: [Actions run `31466462990`](https://github.com/Yeon-sik/yeonsam_bot/actions/runs/31466462990)에서
+  source commit `4199016`의 validate·publish가 성공했고, `Yeonsam Intro`와
+  `연삼이 봇 Detail` 두 페이지의 source banner를 Notion API로 다시 읽었습니다.
 - **비용과 위험**: 각 revision은 수동 dispatch와 정확한 확인값이 필요합니다.
   page map이 잘못되면 다른 mirror를 덮을 수 있으므로 발행 후 read-back을 유지합니다.
 
@@ -298,6 +299,7 @@ SQLite 쓰기, 채널 권한까지 종합적으로 확인하는 health check는 
 | 2026-08-11 KST | `main` 기준선 `45383fe` | Python 3.12.13, `PYTHONPATH=bot`, `unittest discover -s tests -v` | 64개 통과 | Discord·외부 API·Docker E2E |
 | 2026-08-11 KST | 같은 기준선 | fallback sync + static/game guide/search contract tests | PUBG `배그`, Lethal/REPO 아이템·모드 이미지, Thunderstore 설치 링크 계약 통과 | 실제 Discord UI |
 | 2026-08-11 KST | localhost 정적 서버의 새 origin | 랜딩, Lethal Company, R.E.P.O., PUBG BATTLE GROUND 브라우저 점검 | 제목·핵심 본문·주요 이미지·모바일 기능 앵커·콘솔 오류 0 확인 | Discord 상태 API·전체 시각 회귀 |
+| 2026-08-11 KST | `main` source commit `4199016` | Actions run `31466462990`, manual `PUBLISH`, Notion API read-back | validate·publish 성공, Intro·Detail source banner 일치 | 다음 revision은 다시 수동 발행 필요 |
 | 2026-08-08 KST | upstream `a2371f0`과 대상 runtime | 최신 스킬 테스트·installer dry-run·validator·render-only | 스킬 46/46, 설치 대상 8개 unchanged, 문서 오류·경고 0 | GitHub runner 차이는 PR에서 확인 |
 | 2026-07-31 KST | `main` `298a66d` | Actions run `30558645264`, manual `PUBLISH` | validate·publish 성공, Intro·Detail 동기화 | 이후 revision은 별도 수동 발행 |
 | 2026-08-08 KST | 기존 Notion mirror | 연결된 두 페이지의 source banner·fingerprint read-back | 두 페이지 접근과 `298a66d` 출처 확인 | 후속 revision은 workflow run과 source banner로 별도 확인 |
