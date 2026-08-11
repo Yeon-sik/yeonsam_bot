@@ -8,8 +8,8 @@
 | --- | --- |
 | 개발 기간 | 2026-05 ~ 진행 중 |
 | 프로젝트 형태 | Python Discord 봇 + 정적 GitHub Pages 사이트 |
-| 현재 상태 | MVP, 공개 가이드 브라우저 렌더링·Notion 미러 운영 확인 / Discord 실운영 상태 미검증 |
-| 문서 기준 | 제품·기존 문서 `298a66d`, 최신 문서 런타임 upstream `a2371f0`, 2026-08-08 |
+| 현재 상태 | MVP, 로컬·정적 계약 검증 완료 / 원격 `main` 동기화 완료 / Discord 실운영·외부 API 장기운영 미검증 |
+| 문서 기준 | `main` 기준선 `45383fe`, 2026-08-11 저장소·브라우저 검증 |
 | 주요 기술 | Python, discord.py 2.7.1, steam-discord-patch-alerts, SQLite, HTML/CSS/JavaScript, GitHub Actions, Docker |
 | 공개 사이트 | [연삼이 GitHub Pages](https://yeon-sik.github.io/yeonsam_bot/) |
 | 저장소 | [Yeon-sik/yeonsam_bot](https://github.com/Yeon-sik/yeonsam_bot) |
@@ -22,12 +22,13 @@
 - **문제**: Discord 서버 관리자는 신규 멤버 안내, 게임 정보 공유, 업데이트 공지를
   서로 다른 채널과 도구에서 반복해서 관리해야 합니다.
 - **해결**: 관리자용 설정 UI, 신규 멤버 환영 흐름, JSON 기반 게임 가이드, 서버별
-  Steam 패치 알림을 하나의 Discord 봇으로 연결했습니다.
+  Steam 패치 알림, Steam 무료 배포 알림, Steam 인기 게임 조회를 하나의 Discord 봇으로 연결했습니다.
 - **핵심 결과**: 고정된 의존성을 설치한 Python 3.12.13 환경에서 단위 테스트
-  15개가 통과했고, 공개 랜딩과 세 게임 가이드가 실제 브라우저에서 JSON 콘텐츠까지
-  렌더링됐습니다.
+  64개가 통과했고, 랜딩과 Lethal Company / R.E.P.O. / PUBG BATTLE GROUND /
+  Thunderstore 경로가 로컬 브라우저에서 렌더링됐습니다.
 - **기술적 차별점**: 같은 게임 JSON을 Discord와 정적 사이트가 함께 사용하며,
-  길드별 설정·구독·운영 지표는 SQLite로 분리했습니다.
+  길드별 설정·구독·운영 지표는 SQLite로 분리했습니다. 게임 가이드의 이미지·모드
+  설치 링크도 같은 공유 JSON 계약으로 묶었습니다.
 
 ## 2. 문제와 해결
 
@@ -35,7 +36,10 @@
 | --- | --- | --- |
 | 신규 멤버 안내가 서버 기본 채널과 수작업에 의존함 | `/설정`에서 환영 채널·문구·링크를 저장하고 권한 진단과 테스트 발송 제공 | 서버마다 필요한 온보딩 흐름을 관리자가 직접 구성 |
 | 긴 게임 정보를 Discord 메시지로 반복 작성해야 함 | 공용 JSON을 검색·선택형 Discord UI와 웹 페이지로 렌더링 | 채팅 안에서 빠르게 찾고, 상세 내용은 링크로 공유 |
+| 아이템·모드 추천이 텍스트만 있어 복붙과 설치 실수가 잦음 | Lethal Company / R.E.P.O. 아이템 이미지, 인기 모드, Thunderstore 설치 링크를 같은 가이드에 결합 | 보는 즉시 식별하고, 설치 링크까지 한 번에 접근 |
 | 공식 업데이트를 관리자가 직접 확인해 전달해야 함 | Lethal Company와 R.E.P.O.의 Steam 공식 뉴스 cursor를 서버별로 추적 | 이미 본 글을 반복 발송하지 않고 지정 채널에 새 글 전달 |
+| 기간 한정 Steam 무료 배포를 놓치기 쉬움 | `/무료게임` 조회와 서버별 자동 알림 채널 저장 | 공짜 배포만 별도 추려 빠르게 확인 |
+| 서버 안에서 지금 많이 하는 게임을 빠르게 공유하기 어려움 | `/스팀인기게임`으로 Steam Most Played 순위를 즉시 조회 | 공용 대화 주제를 빠르게 맞춤 |
 | 운영 설정과 상태가 단일 JSON에 섞이기 쉬움 | SQLite에 설정·구독·runtime state·일별 지표를 분리 | 서버별 데이터 수명주기와 원자적 지표 집계를 명시적으로 관리 |
 
 ## 3. 핵심 기능과 결과
@@ -43,17 +47,20 @@
 | 영역 | 구현 결과 | 근거 |
 | --- | --- | --- |
 | 서버 온보딩 | 관리자 채널 선택, 문구·링크 입력, 권한 진단, 테스트 발송 | [settings.py](../bot/cogs/settings.py), [welcome.py](../bot/cogs/welcome.py) |
-| 게임 가이드 | Lethal Company, R.E.P.O., Thunderstore 콘텐츠를 Discord와 웹에 제공 | [game_content.py](../bot/utils/game_content.py), [game-page.js](./assets/game-page.js) |
-| 항목 검색 | 게임·주제·몬스터·레코드를 검색하고 선택형 UI로 탐색 | [yeonsam.py](../bot/cogs/yeonsam.py) |
+| 게임 가이드 | Lethal Company, R.E.P.O., Thunderstore, PUBG BATTLE GROUND 콘텐츠를 Discord와 웹에 제공 | [game_content.py](../bot/utils/game_content.py), [game-page.js](./assets/game-page.js) |
+| 항목 검색 | 게임·주제·몬스터·레코드를 검색하고 `배그` 같은 별칭으로 바로 진입 | [yeonsam.py](../bot/cogs/yeonsam.py) |
+| 무료 배포 알림 | GamerPower의 Steam 무료 배포를 조회하고 서버별 채널로 주기 발송 | [free_game_alerts.py](../bot/cogs/free_game_alerts.py), [free_game_feed.py](../bot/utils/free_game_feed.py) |
+| Steam 인기 게임 | Steam Most Played 순위를 TOP 5 / 10으로 요약 | [steam_popular.py](../bot/cogs/steam_popular.py), [steam_popular.py](../bot/utils/steam_popular.py) |
 | 패치 알림 | 고정된 재사용 패키지를 어댑터로 연결해 서버별 구독과 Steam 새 글 cursor 처리 | [patch_alerts.py](../bot/cogs/patch_alerts.py), [requirements.txt](../requirements.txt) |
 | 데이터 저장 | 길드 설정, 일별 지표, 패치 구독, runtime state를 SQLite로 관리 | [storage.py](../bot/utils/storage.py) |
-| 공개 문서 | 랜딩·정책·상태·세 게임 가이드를 GitHub Pages로 배포 | [deploy-pages.yml](../.github/workflows/deploy-pages.yml) |
+| 공개 문서 | 랜딩·정책·상태·네 게임 가이드를 GitHub Pages로 배포 | [deploy-pages.yml](../.github/workflows/deploy-pages.yml) |
 | 운영 경로 | Docker 영속 볼륨과 `/health`, 수동 임시 Actions 실행 경로 선언 | [Dockerfile](../Dockerfile), [deployment.md](./deployment.md) |
 | 문서 미러 | Git Markdown을 원본으로 검증한 `main` revision만 Intro·Detail Notion 페이지에 수동 발행 | [project-docs-notion.yml](../.github/workflows/project-docs-notion.yml), [project-docs.config.json](../project-docs.config.json) |
 
-게임 콘텐츠의 저장소 기준 규모는 Lethal Company 몬스터 33개, R.E.P.O.
-몬스터 29개, Thunderstore 단계 카드 10개입니다. 이 수치는 데이터 파일 구조를
-센 결과이며 실제 사용자 이용량이나 콘텐츠 정확성 지표가 아닙니다.
+게임 콘텐츠의 저장소 기준 규모는 Lethal Company 몬스터 34개·아이템 14개·모드
+13개, R.E.P.O. 몬스터 29개·아이템 40개·모드 12개, Thunderstore 단계 카드 10개,
+PUBG BATTLE GROUND 가이드 탭 다수입니다. 이 수치는 데이터 구조를 센 결과이며
+실사용량·공식성·최신성의 절대 지표는 아닙니다.
 
 ## 4. 구현 범위
 
@@ -84,7 +91,7 @@
   → 신규 멤버 환영 흐름 사용
 
 서버 사용자
-  → /도움 또는 항목검색
+  → /도움 또는 항목검색: 배그
   → 게임·주제·항목 선택
   → Discord 요약 확인
   → 공개 웹 가이드로 상세 내용 확인
@@ -93,6 +100,11 @@
   → 패치 알림 게임·채널 설정
   → Steam 공식 뉴스 확인
   → 새 글만 지정 채널로 전달
+
+관리자 또는 일반 사용자
+  → /무료게임 또는 /스팀인기게임
+  → 현재 무료 배포 / Steam 인기 순위 확인
+  → 필요 시 서버 알림 채널 설정
 ```
 
 ## 6. 핵심 기술 판단
@@ -111,16 +123,15 @@
 
 | 검증 항목 | 상태 | 확인 시각 | 근거와 경계 |
 | --- | --- | --- | --- |
-| Python 단위 테스트 | 통과 | 2026-08-08 KST | Python 3.12.13, `requirements.txt` 설치 후 `unittest discover`, 15개 |
-| JavaScript 문법 | 통과 | 2026-08-08 KST | Node.js 22.19.0, 사이트 2개와 project-docs runtime 2개에 `node --check` |
-| JSON 파싱·콘텐츠 규모 | 통과 | 2026-08-08 KST | 게임 JSON 3개와 project-docs JSON 2개 파싱, 몬스터 33·29개와 단계 카드 10개 확인 |
-| 정적 링크·미디어 | 통과 | 2026-07-26 KST | HTML 상대 링크 누락 0, JSON 참조 미디어 75개 누락 0 |
-| 공개 사이트 | 브라우저 확인 | 2026-08-08 KST | 랜딩과 세 게임 route 진입, 세 게임의 비동기 JSON 렌더링 완료 확인 |
-| 프로젝트 문서 런타임 | 통과 | 2026-08-08 KST | 최신 스킬 46/46, installer dry-run 8개 unchanged, validator·render-only 검증 |
-| Notion 미러 | 운영 경로 확인 | 2026-08-08 KST | 전용 Intro·Detail 페이지 접근과 기존 `298a66d` source banner·fingerprint read-back |
-| Discord 실서버 E2E | 미검증 | 2026-08-08 KST | 실제 gateway, 명령 동기화, 메시지 발송을 실행하지 않음 |
-| Steam 실통신 | 미검증 | 2026-08-08 KST | synthetic payload 테스트만 수행 |
-| Docker 실행 | 미검증 | 2026-08-08 KST | 현재 환경에서 Docker image/Compose를 실행하지 않음 |
+| Python 단위 테스트 | 통과 | 2026-08-11 KST | Python 3.12.13, `PYTHONPATH=bot`에서 `unittest discover -s tests -v`, 64개 |
+| 공유 JSON·정적 계약 | 통과 | 2026-08-11 KST | fallback 동등성, 이미지 존재·서명, 검색 계약, 랜딩/별칭 계약 테스트 |
+| 공개/로컬 페이지 렌더링 | 브라우저 확인 | 2026-08-11 KST | localhost에서 랜딩·Lethal Company·R.E.P.O.·PUBG BATTLE GROUND 렌더링, 콘솔 오류 0 |
+| 항목 이미지·모드 링크 | 통과 | 2026-08-11 KST | Discord 레코드용 로컬 이미지 경로와 Thunderstore 설치 링크 테스트 |
+| 프로젝트 문서 런타임 | 통과 | 2026-08-11 KST | `validate-project-docs --require-tracked`와 render-only `sync-project-docs-to-notion` 경로 검증 |
+| Notion 미러 | 수동 발행 경로 구성 | 2026-08-11 KST | `project-docs.config.json`, Actions workflow, 운영 문서 기준 |
+| Discord 실서버 E2E | 미검증 | 2026-08-11 KST | 실제 gateway, 길드 권한, slash command 응답, 채널 발송을 실행하지 않음 |
+| Steam/GamerPower 실통신 | 미검증 | 2026-08-11 KST | parser·embed·cursor 테스트는 통과했지만 외부 API 실호출은 이번 문서 갱신에서 수행하지 않음 |
+| Docker 실행 | 미검증 | 2026-08-11 KST | 현재 환경에서 Docker image/Compose를 실행하지 않음 |
 
 위 검증은 기능 구현과 로컬 계약을 확인한 결과입니다. 실제 Discord 운영 서버 수,
 사용자 수, 알림 발송량, 성능이나 장애율을 증명하지 않습니다.
@@ -129,12 +140,11 @@
 
 - Discord select 제한 때문에 25개를 넘는 몬스터·레코드는 선택 UI 한 화면에
   모두 노출되지 않습니다. 검색과 pagination 경계를 보강해야 합니다.
-- Lethal Company HTML의 inline fallback과 외부 JSON 일부가 일치하지 않습니다.
-  fallback 자동 생성 또는 동등성 테스트가 필요합니다.
-- 공유 게임 JSON에 정식 schema, 출처, 게임 버전, 갱신일 필드가 없습니다.
+- 공유 게임 JSON에 정식 schema 버전과 콘텐츠 provenance 규칙이 충분히 엄격하지
+  않습니다. 출처·버전·검증일은 들어갔지만 자동 schema 검증은 아직 약합니다.
 - Python 단위 테스트를 자동 실행하는 CI와 Discord test guild E2E가 없습니다.
-- 새 로컬 Python 환경은 `requirements.txt`를 먼저 설치해야 하며, 그렇지 않으면
-  분리된 패치 알림 패키지 import 단계에서 테스트가 중단됩니다.
+- 외부 API(GamerPower, Steam News)와 Discord 채널 발송은 synthetic test 중심이라
+  장기 polling 안정성과 실운영 rate limit은 확인하지 않았습니다.
 - Docker build, persistent volume, health check를 실제 컨테이너에서 확인해야 합니다.
 - 게임 이미지의 라이선스·출처 메타데이터를 별도로 정리해야 합니다.
 - 시간 제한 GitHub Actions 실행은 상시 운영 경로가 아니며, 운영 환경에는
