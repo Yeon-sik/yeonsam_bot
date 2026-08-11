@@ -7,9 +7,9 @@
 | 항목 | 내용 |
 | --- | --- |
 | 문서 상태 | Active |
-| 적용 범위 | 제품·기존 문서 `298a66d`, 최신 문서 런타임 upstream `a2371f0` 기반 갱신 |
-| 최종 갱신 | 2026-08-08T01:38:35+09:00 |
-| 검증 환경 | Python 3.12.13, Node.js 22.19.0, Windows 로컬 환경, 공개 Pages 브라우저 |
+| 적용 범위 | `main` 기준선 `45383fe`에서 2026-08-11에 검증한 저장소와 문서 자동화 경로 |
+| 최종 갱신 | 2026-08-11T00:00:00+09:00 |
+| 검증 환경 | Python 3.12.13, Node.js 22.19.0, Windows 로컬 환경, localhost 정적 서버, GitHub Pages |
 | 문서 진실 원천 | Git 저장소의 `docs/Project_Detail.md` |
 | 공개 경계 | 코드·테스트·공개 배포 파일만 사용, 실제 서버 식별자와 운영 데이터 제외 |
 
@@ -21,7 +21,9 @@
 
 - Discord bot 프로세스의 시작·종료와 command 등록
 - 신규 서버 설정과 멤버 환영 흐름
-- JSON 기반 게임 가이드 검색·선택형 UI
+- JSON 기반 게임 가이드 검색·선택형 UI와 로컬 이미지 첨부
+- Steam 무료 배포 조회·서버별 무료 알림
+- Steam 인기 게임 순위 조회
 - Steam 공식 뉴스 기반 서버별 패치 알림
 - SQLite 설정·구독·지표·runtime state
 - 정적 GitHub Pages와 Docker/임시 Actions 실행 경로
@@ -59,8 +61,10 @@ Discord 기반 협동 게임 서버는 신규 멤버 안내, 역할·채널 권�
 | --- | --- | --- |
 | Discord 서버 관리자 | 환영 기능을 서버에 맞게 구성 | `/설정` → 채널 → 문구·링크 → 권한 진단 → 테스트 |
 | 신규 멤버 | 서버 안내를 받고 닉네임을 설정 | member join → 환영 embed → profile modal |
-| 게임 사용자 | 필요한 공략 항목을 빠르게 탐색 | `/도움` 또는 항목검색 → 게임 → 주제 → 항목 |
+| 게임 사용자 | 필요한 공략 항목을 빠르게 탐색 | `/도움` 또는 `항목검색: 배그` → 게임 → 주제 → 항목 |
 | 서버 관리자 | 새 패치 소식을 지정 채널에 전달 | 게임·채널 구독 → cursor 시드 → 새 Steam 글 발송 |
+| 서버 관리자 | Steam 무료 배포를 서버 채널에 전달 | `/무료알림설정` → 6시간 주기 poll → 변경분만 발송 |
+| 일반 사용자 | 현재 화제 게임과 무료 배포를 즉시 확인 | `/스팀인기게임` 또는 `/무료게임` |
 | 웹 방문자 | 전체 가이드를 링크로 열람 | 랜딩 → 게임 페이지 → JSON 기반 카드·레코드 |
 
 ## 4. 범위와 구현 현황
@@ -70,7 +74,10 @@ Discord 기반 협동 게임 서버는 신규 멤버 안내, 역할·채널 권�
 | 프로세스 시작·Cog 로드 | 구현 완료 | 저장소 검증 | [main.py](../bot/main.py) | 실제 Discord 연결 미검증 |
 | 서버 설정 UI | 구현 완료 | 저장소 검증·일부 단위 테스트 | [settings.py](../bot/cogs/settings.py) | interaction E2E 없음 |
 | 신규 멤버 환영 | 구현 완료 | embed 단위 테스트 | [welcome.py](../bot/cogs/welcome.py) | 실제 member join 미검증 |
-| 게임 검색·탐색 | 구현 완료 | 구조·정적 검사 | [yeonsam.py](../bot/cogs/yeonsam.py) | 25개 선택 제한 |
+| 게임 검색·탐색 | 구현 완료 | 구조·정적 검사·브라우저 확인 | [yeonsam.py](../bot/cogs/yeonsam.py), [game-page.js](./assets/game-page.js) | 25개 선택 제한 |
+| 게임 아이템·모드 카탈로그 | 구현 완료 | 저장소 검증·이미지/링크 계약 테스트 | [LethalCompany.json](./games/LethalCompany/LethalCompany.json), [REPO.json](./games/REPO/REPO.json) | 커뮤니티 출처 수치의 장기 최신성 |
+| 무료 게임 알림 | 구현 완료 | parser·embed·polling 단위 테스트 | [free_game_alerts.py](../bot/cogs/free_game_alerts.py), [free_game_feed.py](../bot/utils/free_game_feed.py) | 외부 API 실통신 미검증 |
+| Steam 인기 게임 | 구현 완료 | parser·embed·cache 단위 테스트 | [steam_popular.py](../bot/cogs/steam_popular.py), [steam_popular.py](../bot/utils/steam_popular.py) | Steam 원본 지연 시 UX 품질 |
 | 패치 알림 | 구현 완료 | 고정 패키지 adapter·parser·cursor 단위 테스트 | [patch_alerts.py](../bot/cogs/patch_alerts.py), [requirements.txt](../requirements.txt) | Steam·Discord E2E 없음 |
 | SQLite 저장 | 구현 완료 | 단위 테스트 | [storage.py](../bot/utils/storage.py) | 다중 프로세스 검증 없음 |
 | GitHub Pages | 구현 완료 | 공개 HTTP 응답 확인 | [deploy-pages.yml](../.github/workflows/deploy-pages.yml) | Actions 최근 실행은 별도 검증 필요 |
@@ -85,10 +92,14 @@ Discord 사용자
   → bot/cogs
        ├─ settings / welcome
        ├─ yeonsam guide browser
+       ├─ free game alerts
+       ├─ steam popular
        └─ patch alerts
   → bot/utils
        ├─ SQLite storage
        ├─ shared game JSON loader
+       ├─ GamerPower free-game feed parser
+       ├─ Steam popular snapshot parser/cache
        ├─ Steam News client
        └─ validation / invite / embed builders
   → Discord response
@@ -111,9 +122,11 @@ GitHub main 변경
 | `bot/main.py` | bot lifecycle, command sync, `/health`, 공통 metric | Discord, storage | 명령·이벤트 전체 중단 |
 | `bot/cogs/settings.py` | 관리자 온보딩과 진단 | Discord UI, storage | 서버 설정 변경 불가 |
 | `bot/cogs/yeonsam.py` | 가이드 검색·선택·embed | 공유 JSON, 이미지 | 가이드 탐색 일부 또는 전체 실패 |
+| `bot/cogs/free_game_alerts.py` | 무료 배포 조회·정기 poll·채널 발송 | GamerPower payload, storage, Discord | 무료 배포 명령·알림 실패 |
+| `bot/cogs/steam_popular.py` | Steam 인기 순위 요약과 캐시 | Steam 차트/메타데이터, Discord | 인기 게임 조회 실패 |
 | `bot/cogs/patch_alerts.py` | 재사용 패치 알림 패키지와 연삼이 설정·지표 연결 | pinned package, Discord, storage | 패키지 누락 시 Cog·테스트 import 실패 |
 | `bot/utils/storage.py` | 설정·지표·cursor 영속화 | SQLite, `BOT_DATA_DIR` | 서버별 상태 유실 또는 갱신 실패 |
-| `game-page.js` | 게임 JSON의 웹 렌더링 | 정적 JSON, HTML fallback | 웹 가이드 축소 또는 fallback 표시 |
+| `game-page.js` | 게임 JSON의 웹 렌더링, research summary, record search | 정적 JSON, HTML fallback | 웹 가이드 축소 또는 검색 실패 |
 | Pages workflow | 공개 설정 주입과 정적 배포 | GitHub Actions Variables | 설치 CTA·상태 정보 미설정 |
 | project docs workflow | 문서 검증과 Notion replace-only 미러 | GitHub Environment Secrets | 검증 실패 또는 발행 중단 |
 
@@ -131,6 +144,12 @@ Steam News payload
   → last_seen_id 비교
   → 최대 최근 항목 순차 발송
   → 성공한 항목까지 cursor 갱신
+
+GamerPower payload
+  → Steam 무료·활성·만료 전 항목 필터링
+  → digest 계산
+  → guild free-game subscription 비교
+  → 변경분만 Discord embed 발송
 
 게임 JSON
   ├─ Python catalog / search / Discord embed
@@ -196,19 +215,15 @@ top-level `install`은 현재 주 렌더 경로에서 소비되지 않으므로,
 - **비용과 위험**: 다중 프로세스나 여러 호스트로 확장하면 SQLite 파일 경계와
   locking 전략을 다시 검토해야 합니다.
 
-### 결정 3. Steam 공식 News API 로직을 고정된 재사용 패키지로 분리
+### 결정 3. 외부 게임 피드를 기능별 어댑터로 분리
 
-- **상황**: 관리자가 게임 공지를 반복해서 확인하고 전달합니다.
-- **선택**: 공개 `ISteamNews/GetNewsForApp/v2` 조회, cursor, Discord Cog와 SQLite
-  구독 저장을 별도 `steam-discord-patch-alerts` 패키지로 분리하고 commit
-  `068c75d`에 고정했습니다. 연삼이는 얇은 adapter와 기존 JSON·metric만 유지합니다.
-- **근거**: 비공식 scraping보다 공급원과 응답 계약이 명확하고, 반복 가능한 패치
-  알림 기능을 다른 Discord 프로젝트에서도 재사용할 수 있습니다.
-- **결과**: 기존 slash command와 DB 파일 경계를 유지하면서 Lethal Company와
-  R.E.P.O.의 서버별 채널 구독을 구성했습니다.
-- **비용과 위험**: 실제 API 장애, rate limit, payload 변화에 대한 장시간
-  운영 검증과 backoff 정책이 남아 있으며, 로컬 환경에 고정 패키지가 설치되지
-  않으면 import 단계에서 실패합니다.
+- **상황**: 패치 공지, 무료 배포, Steam 인기 게임은 공급원과 갱신 규칙이 다릅니다.
+- **선택**: Steam 공식 뉴스는 고정된 `steam-discord-patch-alerts` 패키지에 맡기고,
+  무료 배포는 `free_game_feed.py`, 인기 게임은 `steam_popular.py`로 별도 파서를 둡니다.
+- **근거**: 서로 다른 외부 응답 형식을 하나의 서비스에 몰아넣지 않아 장애 경계와
+  테스트 경계를 분리할 수 있습니다.
+- **결과**: 패치 알림, 무료 배포 알림, 인기 게임 조회가 각자 독립 테스트와 캐시·cursor·digest 규칙을 갖습니다.
+- **비용과 위험**: GamerPower와 Steam의 실응답 변화, rate limit, 장기 polling 안정성은 아직 실운영 증거가 없습니다.
 
 ### 결정 4. Git Markdown을 원본으로, Notion을 읽기 전용 미러로 사용
 
@@ -229,6 +244,8 @@ top-level `install`은 현재 주 렌더 경로에서 소비되지 않으므로,
 | --- | --- | --- | --- | --- |
 | Discord API | command, event, message, profile UI | bot token은 환경변수 | 공통 error handler와 metric | 실서버 미검증 |
 | Steam News | 공식 패치 기사 조회 | 공개 endpoint | timeout, parse error, cursor 유지 | synthetic payload만 검증 |
+| GamerPower | Steam 무료 배포 목록 조회 | 공개 endpoint | 비정상 payload 예외와 digest 재사용 | synthetic payload만 검증 |
+| Steam Charts / Store | 인기 게임 차트·앱 메타데이터 조회 | 공개 endpoint | stale snapshot 경고, retry cooldown | synthetic payload만 검증 |
 | GitHub Pages | 정적 사이트 배포 | 공개 Application ID·상태 URL | 미설정 상태 UI | HTTP 응답 확인 |
 | Notion API | Git Markdown 미러 | protected Environment Secrets | 전체 페이지 preflight 후 replace-only 발행 | Actions 실제 발행·두 페이지 read-back 확인 |
 
@@ -255,12 +272,15 @@ SQLite 쓰기, 채널 권한까지 종합적으로 확인하는 health check는 
 ### 현재 테스트 범위
 
 - 최소 권한 Discord OAuth 초대 URL
+- 무료 배포 payload 정규화, digest, poll interval, embed 분할, 중복 발송 억제
+- Steam 인기 차트 파싱, 메타데이터 보강, stale snapshot 경고, refresh cache
 - Steam payload 정규화, cursor 순서, 오래된 글 필터링, summary 제한
 - legacy JSON 이관, 길드 설정·구독·runtime state round-trip
 - 네 스레드의 총 100회 metric 원자 증가
 - 길드 제거 시 저장 데이터 삭제
 - HTTP/HTTPS 링크 검증
 - 설정값을 반영한 환영 embed
+- 게임 JSON fallback 동등성, 로컬 이미지 서명, PUBG `배그` 별칭, 아이템·모드 링크 계약
 
 ### 현재 미검증 범위
 
@@ -275,9 +295,9 @@ SQLite 쓰기, 채널 권한까지 종합적으로 확인하는 health check는 
 
 | 일시 | 기준 | 명령·환경 | 결과 | 미검증 항목 |
 | --- | --- | --- | --- | --- |
-| 2026-08-08 KST | `298a66d` + 문서/runtime 갱신 working tree | Python 3.12.13, `requirements.txt` 설치 후 `unittest discover` | 최초 실행은 패키지 누락으로 3개 import 오류, 설치 후 15개 통과 | Discord·Steam·Docker E2E |
-| 2026-08-08 KST | 같은 working tree | Node.js 22.19.0 `--check`, JSON parse | JS 4개·JSON 5개 통과, 몬스터 33·29개와 단계 카드 10개 확인 | 실제 Discord UI |
-| 2026-08-08 KST | 공개 Pages | 실제 브라우저에서 랜딩과 세 게임 route 로드 후 비동기 렌더 대기 | 4개 route 진입, 세 게임 JSON 콘텐츠 렌더 완료 | Discord 상태 API·전체 시각 회귀 |
+| 2026-08-11 KST | `main` 기준선 `45383fe` | Python 3.12.13, `PYTHONPATH=bot`, `unittest discover -s tests -v` | 64개 통과 | Discord·외부 API·Docker E2E |
+| 2026-08-11 KST | 같은 기준선 | fallback sync + static/game guide/search contract tests | PUBG `배그`, Lethal/REPO 아이템·모드 이미지, Thunderstore 설치 링크 계약 통과 | 실제 Discord UI |
+| 2026-08-11 KST | localhost 정적 서버의 새 origin | 랜딩, Lethal Company, R.E.P.O., PUBG BATTLE GROUND 브라우저 점검 | 제목·핵심 본문·주요 이미지·모바일 기능 앵커·콘솔 오류 0 확인 | Discord 상태 API·전체 시각 회귀 |
 | 2026-08-08 KST | upstream `a2371f0`과 대상 runtime | 최신 스킬 테스트·installer dry-run·validator·render-only | 스킬 46/46, 설치 대상 8개 unchanged, 문서 오류·경고 0 | GitHub runner 차이는 PR에서 확인 |
 | 2026-07-31 KST | `main` `298a66d` | Actions run `30558645264`, manual `PUBLISH` | validate·publish 성공, Intro·Detail 동기화 | 이후 revision은 별도 수동 발행 |
 | 2026-08-08 KST | 기존 Notion mirror | 연결된 두 페이지의 source banner·fingerprint read-back | 두 페이지 접근과 `298a66d` 출처 확인 | 후속 revision은 workflow run과 source banner로 별도 확인 |
@@ -324,13 +344,12 @@ Bot 변경
 | 우선순위 | 항목 | 사용자·운영 영향 | 다음 행동 |
 | --- | --- | --- | --- |
 | P0 | 저장소 전체 privacy·artifact gate | 문서 검사 밖의 운영 데이터·로컬 산출물 노출 가능성 | 공개 전 추적 파일과 Git 이력 별도 감사 |
-| P0 | Python 테스트 CI 부재 | 변경이 main에 들어가도 bot regression을 자동 차단하지 못함 | 현재 15개 테스트를 PR workflow에 연결 |
+| P0 | Python 테스트 CI 부재 | 변경이 main에 들어가도 bot regression을 자동 차단하지 못함 | 현재 64개 테스트를 PR workflow에 연결 |
 | P0 | Discord·Docker E2E 부재 | 실제 권한·gateway·volume 실패를 배포 전에 놓칠 수 있음 | test guild와 container smoke test 구성 |
-| P1 | Lethal Company fallback 불일치 | fetch 실패 환경에서 다른 가이드가 표시됨 | JSON에서 fallback 생성 또는 equality test |
 | P1 | 공유 JSON schema 부재 | bot과 web 중 한 소비자만 깨질 수 있음 | versioned schema와 양쪽 contract test 추가 |
 | P1 | 로컬 의존성 bootstrap 불명확 | clean 환경에서 패치 패키지 import로 테스트가 중단될 수 있음 | 테스트 명령 전에 `requirements.txt` 설치를 스크립트·CI로 고정 |
 | P1 | Discord 25개 제한 | 일부 몬스터·레코드가 선택 UI에서 잘림 | 검색 우선 UX와 pagination 추가 |
-| P1 | 콘텐츠 provenance 부재 | 게임 수치의 최신성·출처를 판단하기 어려움 | source, gameVersion, updatedAt 도입 |
+| P1 | 콘텐츠 provenance 자동검증 부재 | 게임 수치의 최신성·출처를 판단하기 어려움 | source, gameVersion, updatedAt 필수 schema와 갱신 규칙 추가 |
 | P1 | 이미지 권리 메타데이터 부재 | 공개 배포의 라이선스 검토가 어려움 | 출처·라이선스 inventory 작성 |
 | P2 | health 범위 제한 | 외부 연동과 DB 장애를 ready 신호가 놓침 | dependency health와 운영 지표 분리 |
 
