@@ -12,8 +12,6 @@
         });
         installLink.href = `https://discord.com/oauth2/authorize?${query.toString()}`;
         installLink.textContent = "Discord에 연삼이 추가";
-        installLink.classList.remove("is-disabled");
-        installLink.removeAttribute("aria-disabled");
         if (installHelp) {
             installHelp.textContent = "채널 보기·메시지·임베드·파일 첨부·닉네임 관리 권한만 요청합니다.";
         }

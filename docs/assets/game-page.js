@@ -16,6 +16,8 @@ async function loadGamePage() {
         return;
     }
 
+    panel.setAttribute("aria-busy", "true");
+
     try {
         const data = await loadGameData(jsonPath, fallbackNode);
         // 현재 정적 페이지는 공략 데이터만 탭으로 노출하되, 상태 객체로 이후 확장을 쉽게 둡니다.
@@ -34,14 +36,25 @@ async function loadGamePage() {
             .map((item) => `<li>${escapeHtml(item)}</li>`)
             .join("");
         heroImage.src = data.profileImage ?? "";
-        heroImage.alt = `${data.name ?? "game"} profile`;
+        heroImage.alt = `${data.name ?? "게임"} 대표 이미지`;
 
         applyHashState(window.location.hash, state, hashRoutes);
         renderPage(tabs, state, data, tabList, subtabList, panel);
+        panel.setAttribute("aria-busy", "false");
         scrollToHashTarget(window.location.hash);
         bindHashNavigation(tabs, state, data, hashRoutes, tabList, subtabList, panel);
     } catch (error) {
-        panel.innerHTML = '<p class="game-error">게임 데이터를 불러오지 못했습니다.</p>';
+        panel.setAttribute("aria-busy", "false");
+        panel.innerHTML = `
+            <div class="game-error" role="alert">
+                <p>게임 데이터를 불러오지 못했습니다.</p>
+                <div class="hero-actions">
+                    <button class="action-button" id="game-retry-button" type="button">다시 시도</button>
+                    <a class="action-button" href="../index.html#game">가이드 목록</a>
+                </div>
+            </div>
+        `;
+        panel.querySelector("#game-retry-button")?.addEventListener("click", () => window.location.reload());
     }
 }
 
@@ -73,9 +86,11 @@ function renderPage(tabs, state, data, tabList, subtabList, panel) {
 
 function renderTabButtons(tabs, state, data, tabList, subtabList, panel) {
     tabList.innerHTML = "";
+    tabList.hidden = tabs.length <= 1;
 
     tabs.forEach((tab) => {
         const button = createSectionButton(tab.label, "tab-button", tab.id === state.tabId);
+        button.setAttribute("aria-controls", "game-panel");
         button.addEventListener("click", () => {
             state.tabId = tab.id;
             state.subtabId = null;
@@ -100,10 +115,16 @@ function renderSubtabButtons(categories, activeCategory, state, subtabList, pane
 
     categories.forEach((category) => {
         const button = createSectionButton(category.label, "subtab-button", category.id === activeCategory?.id);
+        button.dataset.categoryId = category.id;
+        button.setAttribute("aria-controls", "game-panel");
         button.addEventListener("click", () => {
-            state.subtabId = category.id;
-            syncActiveButton(subtabList, button);
-            renderCategory(category, panel, state.tabId);
+            if (normalizeHash(window.location.hash) === category.id) {
+                state.subtabId = category.id;
+                syncActiveButton(subtabList, button);
+                renderCategory(category, panel, state.tabId);
+                return;
+            }
+            window.location.hash = category.id;
         });
         subtabList.appendChild(button);
     });
@@ -112,27 +133,32 @@ function renderSubtabButtons(categories, activeCategory, state, subtabList, pane
 function renderCategory(category, panel, tabId) {
     // JSON 카테고리의 형태에 따라 몬스터, 레코드, 섹션형, 텍스트형 렌더러로 분기합니다.
     if (!category) {
-        panel.innerHTML = '<p class="game-error">표시할 세부 항목이 없습니다.</p>';
+        panel.innerHTML = '<p class="game-error" role="status">표시할 세부 항목이 없습니다.</p>';
+        announceCategory(null, panel);
         return;
     }
 
     if (Array.isArray(category.monsters) && category.monsters.length > 0) {
         renderMonsterCategory(category, panel);
+        announceCategory(category, panel);
         return;
     }
 
     if (category.groups?.some((group) => Array.isArray(group.entries) && group.entries.length > 0)) {
         renderRecordCategory(category, panel);
+        announceCategory(category, panel);
         return;
     }
 
     if (Array.isArray(category.sections) && category.sections.length > 0) {
         renderSectionedCategory(category, panel);
+        announceCategory(category, panel);
         return;
     }
 
     if (Array.isArray(category.content) && category.content.length > 0) {
         renderTextCategory(category, panel);
+        announceCategory(category, panel);
         return;
     }
 
@@ -149,6 +175,7 @@ function renderCategory(category, panel, tabId) {
         </div>
         <div class="detail-grid">${cards}</div>
     `;
+    announceCategory(category, panel);
 }
 
 function renderDefaultGroupCard(group) {
@@ -196,7 +223,7 @@ function renderTextCategory(category, panel) {
         .map((item) => `
             <article class="detail-card pixel-box">
                 <h3>${escapeHtml(item.title ?? category.label)}</h3>
-                <ul><li>${escapeHtml(item.body ?? item)}</li></ul>
+                <ul><li>${renderListItemContent(item.body ?? item)}</li></ul>
             </article>
         `)
         .join("");
@@ -271,6 +298,8 @@ function renderWideMediaCard(card, category) {
 
 function renderRecordCategory(category, panel) {
     // maps/items/mods처럼 entries 배열을 가진 데이터는 그룹별 레코드 카드 목록으로 보여줍니다.
+    const totalCount = (category.groups ?? [])
+        .reduce((count, group) => count + (group.entries ?? []).length, 0);
     const sections = (category.groups ?? [])
         .map((group) => {
             const cards = (group.entries ?? [])
@@ -278,7 +307,7 @@ function renderRecordCategory(category, panel) {
                 .join("");
 
             return `
-                <section class="record-section">
+                <section class="record-section" data-record-section>
                     <div class="record-section-heading">
                         <div>
                             <p class="panel-label">${escapeHtml((group.label ?? group.title ?? "").toUpperCase())}</p>
@@ -298,8 +327,17 @@ function renderRecordCategory(category, panel) {
             <h2 class="game-section-title">${escapeHtml(category.title)}</h2>
             ${category.description ? `<p class="section-lead">${escapeHtml(category.description)}</p>` : ""}
         </div>
+        <div class="guide-search pixel-box">
+            <label for="record-search">${escapeHtml(category.label)} 항목 검색</label>
+            <div class="guide-search-row">
+                <input id="record-search" type="search" placeholder="이름, 별칭, 수치 또는 출현 지역" autocomplete="off" aria-describedby="record-search-count">
+                <output id="record-search-count" for="record-search" aria-live="polite">전체 ${escapeHtml(totalCount)}개</output>
+            </div>
+        </div>
+        <p class="monster-search-empty" id="record-search-empty" role="status" hidden>검색 결과가 없습니다. 다른 이름이나 조건으로 다시 검색해 보세요.</p>
         ${sections}
     `;
+    bindRecordSearch(panel, totalCount);
 }
 
 function renderMonsterCategory(category, panel) {
@@ -445,19 +483,30 @@ function renderMonsterCategory(category, panel) {
             </div>
         </div>
         ${renderResearchSummary(category.research)}
-        ${renderMonsterIndex(indexGroups)}
-        ${sections
-            .filter((section) => section.monsters.length > 0)
-            .map((section) => renderMonsterSection(section.label, section.title, section.copy, section.monsters))
-            .join("")}
+        <div class="guide-search pixel-box">
+            <label for="monster-search">몬스터 이름 검색</label>
+            <div class="guide-search-row">
+                <input id="monster-search" type="search" placeholder="영문 또는 한글 이름" autocomplete="off" aria-describedby="monster-search-count">
+                <output id="monster-search-count" for="monster-search" aria-live="polite">전체 ${escapeHtml(monsters.length)}개</output>
+            </div>
+        </div>
+        <p class="monster-search-empty" id="monster-search-empty" role="status" hidden>검색 결과가 없습니다. 다른 이름으로 다시 검색해 보세요.</p>
+        <div id="monster-search-results">
+            ${renderMonsterIndex(indexGroups)}
+            ${sections
+                .filter((section) => section.monsters.length > 0)
+                .map((section) => renderMonsterSection(section.label, section.title, section.copy, section.monsters))
+                .join("")}
+        </div>
     `;
+    bindMonsterSearch(panel, monsters.length);
 }
 
 function renderMonsterSection(label, title, copy, monsters) {
     const cards = monsters.map((monster) => renderMonsterCard(monster)).join("");
 
     return `
-        <section class="monster-section">
+        <section class="monster-section" data-monster-section>
             <div class="monster-section-heading">
                 <div>
                     <p class="panel-label">${escapeHtml(label)}</p>
@@ -473,7 +522,7 @@ function renderMonsterSection(label, title, copy, monsters) {
 function renderIndexLinks(monsters) {
     return monsters
         .map((monster) => `
-            <a class="tab-button monster-index-link" href="#monster-${escapeHtml(monster.id)}">
+            <a class="tab-button monster-index-link" href="#monster-${escapeHtml(monster.id)}" data-monster-link data-monster-search="${escapeHtml(getMonsterSearchText(monster))}">
                 <span class="monster-index-name">${escapeHtml(monster.name)}</span>
                 <span class="monster-index-subname">${escapeHtml(monster.nameKr ?? "-")}</span>
                 ${renderMonsterIndexFlag(monster)}
@@ -543,7 +592,7 @@ function renderMonsterCard(monster) {
             : "MONSTER";
 
     return `
-        <article class="monster-card pixel-box" id="monster-${escapeHtml(monster.id)}">
+        <article class="monster-card pixel-box" id="monster-${escapeHtml(monster.id)}" data-monster-card data-monster-search="${escapeHtml(getMonsterSearchText(monster))}">
             <div class="monster-card-media">
                 ${renderCardMedia(monster.image, monster.name)}
             </div>
@@ -622,6 +671,8 @@ function renderRecordCard(category, group, entry) {
     const name = entry.name ?? entry.id;
     const subtitle = entry.nameKr ? `<p class="monster-card-subtitle">${escapeHtml(entry.nameKr)}</p>` : "";
     const priceValue = entry.price ?? entry.priceRange;
+    const stats = Array.isArray(entry.stats) ? entry.stats : [];
+    const sources = Array.isArray(entry.sources) ? entry.sources : [];
     const priceLabel = category.id === "maps" ? "입장료" : (entry.priceRange !== undefined ? "가격대" : "가격");
     const tags = [];
     const metaBlocks = [];
@@ -642,6 +693,12 @@ function renderRecordCard(category, group, entry) {
     if (entry.usage) {
         metaBlocks.push(renderMetaBlock("활용", entry.usage, true));
     }
+    stats.forEach((stat) => {
+        if (!stat?.label || stat.value === undefined || stat.value === null || stat.value === "") {
+            return;
+        }
+        metaBlocks.push(renderMetaBlock(stat.label, stat.value));
+    });
     if (entry.spawnMonsters?.length) {
         const spawnMarkup = entry.spawnMonsters
             .map((monster) => `<li>${escapeHtml(monster.nameKr ?? monster.name ?? "-")}: ${escapeHtml(monster.chance ?? "-")}</li>`)
@@ -654,6 +711,9 @@ function renderRecordCard(category, group, entry) {
             : escapeHtml(entry.installLink);
         metaBlocks.push(renderMetaBlock("설치 링크", installMarkup, false, true));
     }
+    if (sources.length > 0) {
+        metaBlocks.push(renderMetaBlock("출처", renderSourceList(sources), true, true));
+    }
 
     metaBlocks.push(
         renderMetaBlock(
@@ -665,7 +725,7 @@ function renderRecordCard(category, group, entry) {
     );
 
     return `
-        <article class="monster-card record-card pixel-box" id="${escapeHtml(category.id)}-${escapeHtml(entry.id)}">
+        <article class="monster-card record-card pixel-box" id="${escapeHtml(category.id)}-${escapeHtml(entry.id)}" data-record-card data-record-search="${escapeHtml(getRecordSearchText(entry))}">
             <div class="monster-card-media">
                 ${renderCardMedia(entry.image, name)}
             </div>
@@ -693,23 +753,47 @@ function renderMetaBlock(label, value, wide = false, raw = false) {
     `;
 }
 
-function renderListItemContent(item) {
-    // 리스트 항목이 URL이면 링크로, 일반 텍스트면 줄바꿈 규칙을 적용한 설명으로 표시합니다.
-    if (/^https?:\/\//.test(String(item ?? ""))) {
-        const href = escapeHtml(item);
-        return `<a href="${href}" target="_blank" rel="noreferrer">${href}</a>`;
-    }
+function renderSourceList(sources) {
+    const items = sources
+        .map((source) => {
+            if (!source?.url || !isHttpUrl(source.url)) {
+                return "";
+            }
 
+            const label = source.label || source.url;
+            const checkedAt = source.checkedAt ? ` <span>(확인 ${escapeHtml(source.checkedAt)})</span>` : "";
+            return `<li><a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">${escapeHtml(label)}</a>${checkedAt}</li>`;
+        })
+        .filter(Boolean)
+        .join("");
+
+    return items ? `<ul>${items}</ul>` : "<span>-</span>";
+}
+
+function renderListItemContent(item) {
     return formatStructuredText(item);
 }
 
 function formatStructuredText(value) {
-    return escapeHtml(value).replace(/(\s)(\d+\s:)/g, "<br>$2");
+    const text = String(value ?? "");
+    const urlPattern = /https?:\/\/[^\s<>"']+/g;
+    let cursor = 0;
+    let rendered = "";
+
+    for (const match of text.matchAll(urlPattern)) {
+        rendered += escapeHtml(text.slice(cursor, match.index));
+        const href = escapeHtml(match[0]);
+        rendered += `<a href="${href}" target="_blank" rel="noreferrer">${href}</a>`;
+        cursor = match.index + match[0].length;
+    }
+
+    rendered += escapeHtml(text.slice(cursor));
+    return rendered.replace(/(\s)(\d+\s:)/g, "<br>$2");
 }
 
 function renderCardMedia(image, alt) {
     if (image) {
-        return `<img src="${escapeHtml(image)}" alt="${escapeHtml(alt)}">`;
+        return `<img src="${escapeHtml(image)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`;
     }
 
     return `<div class="monster-image-placeholder" aria-label="${escapeHtml(alt)} image unavailable">NO IMAGE</div>`;
@@ -740,7 +824,7 @@ function renderMonsterIndex(groups) {
             </div>
             ${visibleGroups
                 .map((group) => `
-                    <div class="monster-index-group">
+                    <div class="monster-index-group" data-monster-index-group>
                         <p class="panel-label">${escapeHtml(group.label)}</p>
                         <div class="monster-index-list">${renderIndexLinks(group.monsters)}</div>
                     </div>
@@ -842,13 +926,25 @@ function applyHashState(hash, state, hashRoutes) {
 
 function bindHashNavigation(tabs, state, data, hashRoutes, tabList, subtabList, panel) {
     // 주소 해시가 바뀌면 알맞은 카테고리를 열고, 대상 카드 위치로 부드럽게 이동합니다.
-    window.addEventListener("hashchange", () => {
+    const restoreLocation = () => {
+        const targetId = normalizeHash(window.location.hash);
         const routeMatched = applyHashState(window.location.hash, state, hashRoutes);
         if (routeMatched) {
             renderPage(tabs, state, data, tabList, subtabList, panel);
+        } else if (!targetId) {
+            state.tabId = "guides";
+            state.subtabId = getPreferredCategoryId(data.guides);
+            renderPage(tabs, state, data, tabList, subtabList, panel);
         }
         scrollToHashTarget(window.location.hash);
-    });
+        if (routeMatched && targetId === state.subtabId) {
+            requestAnimationFrame(() => {
+                subtabList.querySelector(`[data-category-id="${escapeSelector(state.subtabId)}"]`)?.focus();
+            });
+        }
+    };
+
+    window.addEventListener("hashchange", restoreLocation);
 }
 
 function scrollToHashTarget(hash) {
@@ -864,7 +960,7 @@ function scrollToHashTarget(hash) {
         }
 
         target.scrollIntoView({
-            behavior: "smooth",
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
             block: "start"
         });
     });
@@ -879,6 +975,7 @@ function createSectionButton(label, className, isActive) {
     button.type = "button";
     button.className = className;
     button.textContent = label;
+    button.setAttribute("aria-pressed", String(isActive));
     if (isActive) {
         button.classList.add("is-active");
     }
@@ -886,8 +983,120 @@ function createSectionButton(label, className, isActive) {
 }
 
 function syncActiveButton(container, activeButton) {
-    container.querySelectorAll("button").forEach((node) => node.classList.remove("is-active"));
+    container.querySelectorAll("button").forEach((node) => {
+        const isActive = node === activeButton;
+        node.classList.toggle("is-active", isActive);
+        node.setAttribute("aria-pressed", String(isActive));
+    });
     activeButton.classList.add("is-active");
+}
+
+function announceCategory(category, panel) {
+    const status = document.getElementById("game-view-status");
+    const label = category?.label ?? category?.title ?? "가이드";
+    panel.setAttribute("aria-label", `${label} 가이드 내용`);
+    if (status) {
+        status.textContent = category ? `${label} 가이드를 열었습니다.` : "표시할 가이드가 없습니다.";
+    }
+}
+
+function bindMonsterSearch(panel, totalCount) {
+    const input = panel.querySelector("#monster-search");
+    const output = panel.querySelector("#monster-search-count");
+    const empty = panel.querySelector("#monster-search-empty");
+    const cards = Array.from(panel.querySelectorAll("[data-monster-card]"));
+    const links = Array.from(panel.querySelectorAll("[data-monster-link]"));
+
+    if (!input || !output || !empty) {
+        return;
+    }
+
+    input.addEventListener("input", () => {
+        const query = normalizeSearchText(input.value);
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+            const matches = !query || card.dataset.monsterSearch.includes(query);
+            card.hidden = !matches;
+            visibleCount += matches ? 1 : 0;
+        });
+        links.forEach((link) => {
+            link.hidden = Boolean(query) && !link.dataset.monsterSearch.includes(query);
+        });
+        panel.querySelectorAll("[data-monster-index-group]").forEach((group) => {
+            group.hidden = !group.querySelector("[data-monster-link]:not([hidden])");
+        });
+        panel.querySelectorAll("[data-monster-section]").forEach((section) => {
+            section.hidden = !section.querySelector("[data-monster-card]:not([hidden])");
+        });
+
+        output.textContent = query ? `${visibleCount}개 결과` : `전체 ${totalCount}개`;
+        empty.hidden = visibleCount !== 0;
+    });
+}
+
+function getMonsterSearchText(monster) {
+    return normalizeSearchText([
+        monster.name,
+        monster.nameKr,
+        monster.section,
+        monster.tier !== undefined ? `tier ${monster.tier}` : ""
+    ].filter(Boolean).join(" "));
+}
+
+function normalizeSearchText(value) {
+    return String(value ?? "").trim().toLocaleLowerCase("ko");
+}
+
+function getRecordSearchText(entry) {
+    return normalizeSearchText([
+        entry.id,
+        entry.name,
+        entry.nameKr,
+        ...(Array.isArray(entry.aliases) ? entry.aliases : []),
+        ...(Array.isArray(entry.stats)
+            ? entry.stats.flatMap((stat) => [stat?.label, stat?.value])
+            : []),
+    ].filter(Boolean).join(" "));
+}
+
+function bindRecordSearch(panel, totalCount) {
+    const input = panel.querySelector("#record-search");
+    const output = panel.querySelector("#record-search-count");
+    const empty = panel.querySelector("#record-search-empty");
+    const cards = Array.from(panel.querySelectorAll("[data-record-card]"));
+
+    if (!input || !output || !empty) {
+        return;
+    }
+
+    input.addEventListener("input", () => {
+        const query = normalizeSearchText(input.value);
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+            const matches = !query || card.dataset.recordSearch.includes(query);
+            card.hidden = !matches;
+            visibleCount += matches ? 1 : 0;
+        });
+        panel.querySelectorAll("[data-record-section]").forEach((section) => {
+            section.hidden = !section.querySelector("[data-record-card]:not([hidden])");
+        });
+
+        output.textContent = query ? `${visibleCount}개 결과` : `전체 ${totalCount}개`;
+        empty.hidden = visibleCount !== 0;
+    });
+}
+
+function isHttpUrl(value) {
+    return /^https?:\/\//.test(String(value ?? ""));
+}
+
+function escapeSelector(value) {
+    if (window.CSS?.escape) {
+        return window.CSS.escape(String(value ?? ""));
+    }
+    return String(value ?? "").replaceAll('"', '\\"');
 }
 
 function escapeHtml(value) {

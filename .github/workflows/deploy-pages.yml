@@ -7,6 +7,7 @@ on:
     paths:
       - "docs/**"
       - "scripts/build-site-config.py"
+      - "scripts/sync_game_fallbacks.py"
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
@@ -28,6 +29,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Verify shared game fallback data
+        run: python scripts/sync_game_fallbacks.py --check
 
       - name: Build public configuration
         env:

@@ -19,6 +19,7 @@ GUIDE_IMAGE_LIMIT = 10
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp"}
 SEARCH_ROUTE_SEPARATOR = "|"
 RANDOM_NUMBER_LIMIT = 100
+EMBED_FIELD_LIMIT = 25
 SECTION_CHOICES = [
     ("개요", "overview"),
     ("공략", "guides"),
@@ -196,6 +197,22 @@ def shorten_text(value: str | None, limit: int = 100) -> str:
     return f"{text[: limit - 1]}…"
 
 
+def flatten_entry_aliases(entry: dict) -> list[str]:
+    aliases = entry.get("aliases", [])
+    if not isinstance(aliases, list):
+        return []
+    return [str(alias).strip() for alias in aliases if str(alias).strip()]
+
+
+def build_search_keywords(*values: object) -> list[str]:
+    keywords: list[str] = []
+    for value in values:
+        normalized = normalize_text(str(value) if value is not None else None)
+        if normalized:
+            keywords.append(normalized)
+    return keywords
+
+
 def build_search_route(
     game: str,
     section: str | None = None,
@@ -240,7 +257,7 @@ def create_search_candidate(
         "choice_name": build_search_choice_name(display_name, game_name, context),
         "display_name": display_name,
         "context": f"{game_name} · {context}",
-        "keywords": [normalize_text(keyword) for keyword in keywords if normalize_text(keyword)],
+        "keywords": build_search_keywords(*keywords),
     }
 
 
@@ -301,7 +318,7 @@ def build_search_candidates() -> list[dict[str, object]]:
                 continue
 
             if category_has_record_entries(topic_entry):
-                for _, item in flatten_category_entries(topic_entry)[:25]:
+                for _, item in flatten_category_entries(topic_entry):
                     display_name = str(item.get("nameKr") or item.get("name") or item["id"])
                     candidates.append(
                         create_search_candidate(
@@ -319,13 +336,14 @@ def build_search_candidates() -> list[dict[str, object]]:
                                 item.get("name"),
                                 item.get("nameKr"),
                                 item.get("terminalCommand"),
+                                *flatten_entry_aliases(item),
                             ],
                         )
                     )
                 continue
 
             if topic_entry.get("groups") and topic_entry.get("entrySelectable") is not False:
-                for group in topic_entry.get("groups", [])[:25]:
+                for group in topic_entry.get("groups", []):
                     display_name = str(group.get("title") or group.get("label") or "항목")
                     candidates.append(
                         create_search_candidate(
@@ -406,8 +424,31 @@ def resolve_search_selection(search_value: str | None) -> tuple[str, str | None,
     ]
     if len(exact_matches) == 1:
         return parse_search_route(str(exact_matches[0]["route"]))
+    if exact_matches:
+        ranked_matches = sorted(
+            exact_matches,
+            key=lambda candidate: (search_candidate_resolution_rank(candidate), str(candidate.get("choice_name", ""))),
+        )
+        if len(ranked_matches) == 1 or search_candidate_resolution_rank(ranked_matches[0]) < search_candidate_resolution_rank(
+            ranked_matches[1]
+        ):
+            return parse_search_route(str(ranked_matches[0]["route"]))
 
     return None
+
+
+def search_candidate_resolution_rank(candidate: dict[str, object]) -> tuple[int, int, int]:
+    route = parse_search_route(str(candidate.get("route")))
+    if route is None:
+        return (3, 3, 3)
+
+    _, section, topic, entry = route
+    # Exact record selections should win over broader topic matches when the query is identical.
+    return (
+        0 if entry else 1,
+        0 if topic else 1,
+        0 if section else 1,
+    )
 
 
 def build_search_results_embed(search_value: str) -> discord.Embed:
@@ -682,34 +723,93 @@ def clamp_field_value(value: str, limit: int = 1000) -> str:
     return f"{collapsed[: limit - 1]}…"
 
 
+def safe_add_embed_field(embed: discord.Embed, *, name: str, value: str, inline: bool = False) -> bool:
+    if len(embed.fields) >= EMBED_FIELD_LIMIT:
+        return False
+    embed.add_field(name=name[:256], value=clamp_field_value(value), inline=inline)
+    return True
+
+
+def build_entry_stats_field_value(entry: dict) -> str | None:
+    stats = entry.get("stats", [])
+    if not isinstance(stats, list):
+        return None
+
+    lines: list[str] = []
+    for stat in stats:
+        if not isinstance(stat, dict):
+            continue
+        label = " ".join(str(stat.get("label") or "").split())
+        value = " ".join(str(stat.get("value") or "").split())
+        if not label or not value:
+            continue
+        lines.append(f"- {label}: {value}")
+
+    return "\n".join(lines) or None
+
+
+def sanitize_discord_link_label(value: str | None) -> str:
+    label = " ".join((value or "").split())
+    return label.replace("[", "(").replace("]", ")") or "출처"
+
+
+def build_entry_sources_field_value(entry: dict) -> str | None:
+    sources = entry.get("sources", [])
+    if not isinstance(sources, list):
+        return None
+
+    lines: list[str] = []
+    for source in sources:
+        if not isinstance(source, dict):
+            continue
+        url = str(source.get("url") or "").strip()
+        if not is_http_url(url):
+            continue
+
+        label = sanitize_discord_link_label(source.get("label"))
+        checked_at = " ".join(str(source.get("checkedAt") or "").split())
+        line = f"- [{label}]({url})"
+        if checked_at:
+            line = f"{line} ({checked_at})"
+        lines.append(line)
+
+    return "\n".join(lines) or None
+
+
 def add_topic_fields_to_embed(embed: discord.Embed, topic_entry: dict):
     # Discord 임베드의 필드 제한을 고려해 섹션/본문/그룹 데이터를 최대 25개씩만 추가합니다.
     if topic_entry.get("sections"):
         for section in topic_entry.get("sections", [])[:25]:
-            embed.add_field(
+            if not safe_add_embed_field(
+                embed,
                 name=f"{topic_entry['label']} · {section['title']}",
                 value=clamp_field_value(build_section_display_value(section)),
                 inline=False,
-            )
+            ):
+                return
         return
 
     if topic_entry.get("content"):
         for item in topic_entry.get("content", [])[:25]:
             body = item.get("body") or "-"
-            embed.add_field(
+            if not safe_add_embed_field(
+                embed,
                 name=f"{topic_entry['label']} · {item.get('title', topic_entry['title'])}",
                 value=clamp_field_value(body),
                 inline=False,
-            )
+            ):
+                return
         return
 
     if topic_entry.get("groups"):
         for group in topic_entry.get("groups", [])[:25]:
-            embed.add_field(
+            if not safe_add_embed_field(
+                embed,
                 name=f"{topic_entry['label']} · {group['title']}",
                 value=clamp_field_value(build_group_display_value(group)),
                 inline=False,
-            )
+            ):
+                return
 
 
 def category_has_record_entries(category: dict) -> bool:
@@ -736,6 +836,7 @@ def resolve_selected_record_entry(category: dict, entry: str | None) -> tuple[di
             item.get("name"),
             item.get("nameKr"),
             item.get("terminalCommand"),
+            *flatten_entry_aliases(item),
         ]
         if any(normalize_text(value) == normalized_entry for value in haystacks if value):
             return group, item
@@ -771,38 +872,47 @@ def add_record_entry_fields(embed: discord.Embed, data: dict, category_id: str, 
     name = item.get("name", item.get("id", "-"))
     name_kr = item.get("nameKr")
     if name_kr:
-        embed.add_field(name="한글 이름", value=name_kr, inline=False)
-        embed.add_field(name="영문 이름", value=name, inline=False)
+        safe_add_embed_field(embed, name="한글 이름", value=name_kr, inline=False)
+        safe_add_embed_field(embed, name="영문 이름", value=name, inline=False)
     else:
-        embed.add_field(name="이름", value=name, inline=False)
+        safe_add_embed_field(embed, name="이름", value=name, inline=False)
 
     if group.get("title"):
-        embed.add_field(name="구분", value=group["title"], inline=False)
+        safe_add_embed_field(embed, name="구분", value=group["title"], inline=False)
+
+    stats_value = build_entry_stats_field_value(item)
+    if stats_value:
+        safe_add_embed_field(embed, name="핵심 정보", value=stats_value, inline=False)
 
     if category_id == "maps":
-        embed.add_field(name="입장료", value=str(item.get("price", "-")), inline=False)
+        safe_add_embed_field(embed, name="입장료", value=str(item.get("price", "-")), inline=False)
     elif "price" in item:
-        embed.add_field(name="가격", value=str(item.get("price", "-")), inline=False)
+        safe_add_embed_field(embed, name="가격", value=str(item.get("price", "-")), inline=False)
     elif "priceRange" in item:
-        embed.add_field(name="가격대", value=str(item.get("priceRange", "-")), inline=False)
+        safe_add_embed_field(embed, name="가격대", value=str(item.get("priceRange", "-")), inline=False)
 
     if item.get("terminalCommand"):
-        embed.add_field(name="터미널 명령어", value=item["terminalCommand"], inline=False)
+        safe_add_embed_field(embed, name="터미널 명령어", value=item["terminalCommand"], inline=False)
 
     if item.get("description"):
-        embed.add_field(name="설명", value=item["description"], inline=False)
+        safe_add_embed_field(embed, name="설명", value=item["description"], inline=False)
 
     if item.get("usage"):
-        embed.add_field(name="사용법", value=item["usage"], inline=False)
+        safe_add_embed_field(embed, name="사용법", value=item["usage"], inline=False)
 
     if item.get("spawnMonsters"):
-        embed.add_field(name="출현 몬스터 및 확률", value=build_spawn_lines(item["spawnMonsters"]), inline=False)
+        safe_add_embed_field(embed, name="출현 몬스터 및 확률", value=build_spawn_lines(item["spawnMonsters"]), inline=False)
 
     install_link = item.get("installLink")
     if install_link:
-        embed.add_field(name="설치 링크", value=install_link, inline=False)
+        safe_add_embed_field(embed, name="설치 링크", value=install_link, inline=False)
 
-    embed.add_field(
+    sources_value = build_entry_sources_field_value(item)
+    if sources_value:
+        safe_add_embed_field(embed, name="출처", value=sources_value, inline=False)
+
+    safe_add_embed_field(
+        embed,
         name="페이지 바로가기",
         value=build_category_entry_link(data, category_id, item["id"]),
         inline=False,
@@ -1707,10 +1817,15 @@ class Yeonsam(commands.Cog):
             inline=False,
         )
         embed.add_field(
+            name="/스팀인기게임",
+            value="Steam 공식 Most Played 기준 인기 게임 TOP 5 또는 TOP 10을 확인합니다.",
+            inline=False,
+        )
+        embed.add_field(
             name="예시",
             value=(
                 "1. `/도움` 입력\n"
-                "2. `문서 선택`에서 Lethal Company 또는 Thunderstore 클릭\n"
+                "2. `문서 선택`에서 보고 싶은 게임 문서 클릭\n"
                 "3. `구역 -> 주제 -> 항목` 순서로 선택"
             ),
             inline=False,
