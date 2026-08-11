@@ -187,6 +187,7 @@ async def load_cogs():
     await bot.load_extension("cogs.welcome")
     await bot.load_extension("cogs.settings")
     await bot.load_extension("cogs.patch_alerts")
+    await bot.load_extension("cogs.free_game_alerts")
 
 
 @bot.event

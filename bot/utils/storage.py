@@ -95,6 +95,13 @@ def init_storage() -> None:
                     PRIMARY KEY (guild_id, game_slug)
                 );
 
+                CREATE TABLE IF NOT EXISTS free_game_alerts (
+                    guild_id TEXT PRIMARY KEY,
+                    channel_id TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL
+                );
+
                 CREATE TABLE IF NOT EXISTS runtime_state (
                     state_key TEXT PRIMARY KEY,
                     state_value TEXT NOT NULL,
@@ -343,6 +350,71 @@ def update_patch_last_seen(guild_id, game_slug: str, last_seen_id: str) -> None:
     _patch_subscription_store().update_last_seen(guild_id, game_slug, last_seen_id)
 
 
+def upsert_free_game_alert(guild_id, channel_id) -> None:
+    init_storage()
+    now = _utc_timestamp()
+    with _LOCK, _connect() as connection:
+        connection.execute(
+            """
+            INSERT INTO free_game_alerts (
+                guild_id, channel_id, created_at, updated_at
+            ) VALUES (?, ?, ?, ?)
+            ON CONFLICT(guild_id) DO UPDATE SET
+                channel_id = excluded.channel_id,
+                updated_at = excluded.updated_at
+            """,
+            (str(guild_id), str(channel_id), now, now),
+        )
+
+
+def get_free_game_alert(guild_id) -> dict | None:
+    init_storage()
+    with _LOCK, _connect() as connection:
+        row = connection.execute(
+            """
+            SELECT guild_id, channel_id
+            FROM free_game_alerts
+            WHERE guild_id = ?
+            """,
+            (str(guild_id),),
+        ).fetchone()
+    if row is None:
+        return None
+    return {
+        "guild_id": int(row["guild_id"]),
+        "channel_id": int(row["channel_id"]),
+    }
+
+
+def list_free_game_alerts() -> list[dict]:
+    init_storage()
+    with _LOCK, _connect() as connection:
+        rows = connection.execute(
+            """
+            SELECT guild_id, channel_id
+            FROM free_game_alerts
+            ORDER BY guild_id
+            """
+        ).fetchall()
+    return [
+        {
+            "guild_id": int(row["guild_id"]),
+            "channel_id": int(row["channel_id"]),
+        }
+        for row in rows
+    ]
+
+
+def remove_free_game_alert(guild_id) -> bool:
+    init_storage()
+    with _LOCK, _connect() as connection:
+        cursor = connection.execute(
+            "DELETE FROM free_game_alerts WHERE guild_id = ?",
+            (str(guild_id),),
+        )
+    return cursor.rowcount > 0
+
+
 def get_runtime_state(state_key: str) -> str | None:
     init_storage()
     with _LOCK, _connect() as connection:
@@ -372,6 +444,10 @@ def delete_guild_data(guild_id) -> None:
     init_storage()
     guild_id_text = str(guild_id)
     with _LOCK, _connect() as connection:
+        connection.execute(
+            "DELETE FROM free_game_alerts WHERE guild_id = ?",
+            (guild_id_text,),
+        )
         connection.execute(
             "DELETE FROM patch_subscriptions WHERE guild_id = ?",
             (guild_id_text,),
