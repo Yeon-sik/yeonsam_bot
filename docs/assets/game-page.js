@@ -315,17 +315,23 @@ function renderMonsterCategory(category, panel) {
     if (hasSections) {
         const insideMonsters = monsters.filter((monster) => monster.section === "inside");
         const outsideMonsters = monsters.filter((monster) => monster.section === "outside");
+        const daytimeMonsters = monsters.filter((monster) => monster.section === "daytime");
+        const companyMonsters = monsters.filter((monster) => monster.section === "company");
         const dummyMonsters = monsters.filter((monster) => monster.section === "dummy");
 
         summaryChips = [
             { label: "전체 몬스터", value: monsters.length },
             { label: "내부 위협", value: insideMonsters.length },
             { label: "외부 위협", value: outsideMonsters.length },
+            { label: "주간 생물", value: daytimeMonsters.length },
+            { label: "회사 건물", value: companyMonsters.length },
             { label: "더미 데이터", value: dummyMonsters.length }
         ];
         indexGroups = [
             { label: "내부", monsters: insideMonsters },
             { label: "외부", monsters: outsideMonsters },
+            { label: "주간", monsters: daytimeMonsters },
+            { label: "회사 건물", monsters: companyMonsters },
             { label: "더미", monsters: dummyMonsters }
         ];
         sections = [
@@ -340,6 +346,18 @@ function renderMonsterCategory(category, panel) {
                 title: "외부 몬스터",
                 copy: "기지 복귀와 회수 동선에서 자주 마주치는 위협입니다. 개활지 노출과 소음 관리가 핵심입니다.",
                 monsters: outsideMonsters
+            },
+            {
+                label: "DAYTIME",
+                title: "주간 생물·환경 위협",
+                copy: "낮부터 외부에 나타나는 생물과 환경형 위협입니다. 둥지·영역·시야 조건을 먼저 확인하세요.",
+                monsters: daytimeMonsters
+            },
+            {
+                label: "COMPANY",
+                title: "회사 건물 특수 위협",
+                copy: "71-Gordion 판매 카운터에서만 작동하는 특수 위협입니다. 소음과 판매 행동을 별도 규칙으로 관리하세요.",
+                monsters: companyMonsters
             },
             {
                 label: "DUMMY",
@@ -426,6 +444,7 @@ function renderMonsterCategory(category, panel) {
                 ${summaryChips.map((chip) => renderSummaryChip(chip.label, chip.value)).join("")}
             </div>
         </div>
+        ${renderResearchSummary(category.research)}
         ${renderMonsterIndex(indexGroups)}
         ${sections
             .filter((section) => section.monsters.length > 0)
@@ -484,16 +503,37 @@ function renderMonsterCard(monster) {
         tags.push('<span class="monster-tag monster-tag-dummy">DUMMY</span>');
     }
     if (monster.health) {
-        metaBlocks.unshift(renderMetaBlock("체력", monster.health));
+        metaBlocks.unshift(renderMetaBlock("체력·처치", monster.health));
+    }
+    if (monster.spawn) {
+        metaBlocks.push(renderMetaBlock("출현", monster.spawn));
+    }
+    if (monster.detection) {
+        metaBlocks.push(renderMetaBlock("감지·발동", monster.detection));
+    }
+    if (monster.damage) {
+        metaBlocks.push(renderMetaBlock("피해", monster.damage));
+    }
+    if (monster.strength) {
+        metaBlocks.push(renderMetaBlock("잡기 요구 힘", monster.strength));
+    }
+    if (monster.stun) {
+        metaBlocks.push(renderMetaBlock("기절", monster.stun));
     }
     if (monster.cashDrop) {
         metaBlocks.push(renderMetaBlock("드롭", monster.cashDrop));
+    }
+    if (monster.loot) {
+        metaBlocks.push(renderMetaBlock("전리품", monster.loot));
     }
     if (monster.description) {
         metaBlocks.push(renderMetaBlock("설명", monster.description, true));
     }
     if (monster.strategy) {
         metaBlocks.push(renderMetaBlock("공략", monster.strategy, true));
+    }
+    if (monster.versionNote) {
+        metaBlocks.push(renderMetaBlock("버전 주의", monster.versionNote, true));
     }
 
     const kicker = monster.section
@@ -521,6 +561,59 @@ function renderMonsterCard(monster) {
                 <dl class="monster-meta-list">${metaBlocks.join("")}</dl>
             </div>
         </article>
+    `;
+}
+
+function renderResearchSummary(research) {
+    if (!research) {
+        return "";
+    }
+
+    const metaBlocks = [];
+    if (research.gameVersion) {
+        metaBlocks.push(renderMetaBlock("검증 버전", research.gameVersion));
+    }
+    if (research.verifiedAt) {
+        metaBlocks.push(renderMetaBlock("확인일", research.verifiedAt));
+    }
+    if (research.method) {
+        metaBlocks.push(renderMetaBlock("정리 기준", research.method, true));
+    }
+    if (Array.isArray(research.notes) && research.notes.length > 0) {
+        const noteMarkup = research.notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("");
+        metaBlocks.push(renderMetaBlock("읽기 전 주의", `<ul>${noteMarkup}</ul>`, true, true));
+    }
+    if (Array.isArray(research.sources) && research.sources.length > 0) {
+        const sourceMarkup = research.sources
+            .filter((source) => /^https:\/\//.test(String(source?.url ?? "")))
+            .map((source) => `
+                <li>
+                    <a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer noopener">
+                        ${escapeHtml(source.label ?? source.url)}
+                    </a>
+                    ${source.type ? ` <span>(${escapeHtml(source.type)})</span>` : ""}
+                </li>
+            `)
+            .join("");
+        if (sourceMarkup) {
+            metaBlocks.push(renderMetaBlock("근거 자료", `<ul>${sourceMarkup}</ul>`, true, true));
+        }
+    }
+
+    if (metaBlocks.length === 0) {
+        return "";
+    }
+
+    return `
+        <section class="monster-index pixel-box" aria-label="공략 검증 정보">
+            <div class="monster-index-header">
+                <div>
+                    <p class="panel-label">RESEARCH NOTE</p>
+                    <p class="monster-index-copy">공식 패치와 커뮤니티 실전 자료를 구분해 교차검증한 기준입니다.</p>
+                </div>
+            </div>
+            <dl class="monster-meta-list">${metaBlocks.join("")}</dl>
+        </section>
     `;
 }
 
@@ -677,6 +770,12 @@ function getMonsterSectionLabel(section) {
     }
     if (section === "outside") {
         return "외부";
+    }
+    if (section === "daytime") {
+        return "주간";
+    }
+    if (section === "company") {
+        return "회사 건물";
     }
     return "더미";
 }
