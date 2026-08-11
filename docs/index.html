@@ -25,6 +25,7 @@
 
             <nav class="top-nav" aria-label="주요 메뉴">
                 <a href="#start">사용법</a>
+                <a href="#features">기능</a>
                 <a href="#game">가이드</a>
                 <a href="./status.html">상태</a>
             </nav>
@@ -36,8 +37,8 @@
                     <p class="panel-label">YEONSAM BOT</p>
                     <h1 id="page-title">서버 안내와 게임 공략을 한곳에서</h1>
                     <p class="hero-copy">
-                        연삼이는 새 멤버 안내, 서버 설정, 게임 가이드와 패치 알림을 연결하는 Discord 봇입니다.
-                        필요한 기능만 빠르게 설정하고 바로 사용할 수 있습니다.
+                        연삼이는 새 멤버 안내, 서버 설정, 게임 가이드, 공식 패치와 Steam 무료 배포 알림을 연결하는 Discord 봇입니다.
+                        아래에서 권한과 명령어, 실제 사용 순서를 한 번에 확인할 수 있습니다.
                     </p>
                     <div class="hero-actions">
                         <a class="action-button action-button-primary" href="#game">게임 가이드 보기</a>
@@ -73,6 +74,98 @@
                         </article>
                     </div>
                 </section>
+
+                <section id="features" class="content-section" aria-labelledby="features-title">
+                    <div class="section-header">
+                        <p class="panel-label">FEATURES &amp; HOW TO</p>
+                        <h2 id="features-title">기능별 사용법</h2>
+                        <p class="section-lead">일반 사용자는 바로 조회하고, 서버 관리자는 원하는 채널에 자동 알림을 연결할 수 있습니다.</p>
+                    </div>
+
+                    <div class="feature-grid">
+                        <article class="pixel-box feature-card">
+                            <div class="feature-card__header">
+                                <p class="feature-card__eyebrow">WELCOME</p>
+                                <span class="feature-badge">관리자 설정</span>
+                            </div>
+                            <h3>신규 멤버 환영</h3>
+                            <p>새 멤버가 들어오면 지정 채널에 서버 안내와 링크가 포함된 환영 메시지를 자동으로 보냅니다.</p>
+                            <ol class="command-steps">
+                                <li><code>/설정</code> 실행 후 환영 채널을 선택합니다.</li>
+                                <li>환영 문구와 규칙·안내 링크를 입력합니다.</li>
+                                <li>권한 진단 후 <strong>테스트 발송</strong>으로 확인합니다.</li>
+                            </ol>
+                            <p class="feature-note">채널 보기·메시지 보내기·링크 임베드·파일 첨부 권한이 필요합니다. 설정은 서버 관리자만 변경할 수 있습니다.</p>
+                        </article>
+
+                        <article class="pixel-box feature-card">
+                            <div class="feature-card__header">
+                                <p class="feature-card__eyebrow">STEAM FREE</p>
+                                <span class="feature-badge">조회 + 자동 알림</span>
+                            </div>
+                            <h3>Steam 기간 한정 무료 배포</h3>
+                            <p>GamerPower에서 확인된 Steam 무료 배포 게임과 종료 시각, 받기 링크를 보여줍니다.</p>
+                            <ul class="command-list">
+                                <li><code>/무료게임</code><span>현재 목록을 본인에게만 보이게 조회</span></li>
+                                <li><code>/무료알림설정 채널</code><span>관리자가 자동 알림 채널 지정</span></li>
+                                <li><code>/무료알림상태</code> · <code>/무료알림해제</code><span>설정 확인·해제</span></li>
+                            </ul>
+                            <p class="feature-note">기본 확인 주기는 6시간입니다. 일반 할인율 추적이 아니라 <strong>기간 한정 무료 배포</strong>만 다룹니다.</p>
+                        </article>
+
+                        <article class="pixel-box feature-card">
+                            <div class="feature-card__header">
+                                <p class="feature-card__eyebrow">PATCH NOTES</p>
+                                <span class="feature-badge">공식 Steam 소식</span>
+                            </div>
+                            <h3>게임 업데이트·패치노트</h3>
+                            <p>Lethal Company와 R.E.P.O.의 Steam 공식 공지를 감지해 선택한 채널에 전달합니다.</p>
+                            <ul class="command-list">
+                                <li><code>/패치알림설정 게임 채널</code><span>게임별 알림 시작</span></li>
+                                <li><code>/패치알림목록</code><span>현재 서버 설정 확인</span></li>
+                                <li><code>/패치알림테스트 게임</code><span>최신 공지 시험 발송</span></li>
+                                <li><code>/패치알림해제 게임</code><span>선택한 게임 알림 해제</span></li>
+                            </ul>
+                            <p class="feature-note">기본 확인 주기는 30분이며 모든 설정 명령은 서버 관리자 전용입니다.</p>
+                        </article>
+
+                        <article class="pixel-box feature-card">
+                            <div class="feature-card__header">
+                                <p class="feature-card__eyebrow">GAME GUIDES</p>
+                                <span class="feature-badge">누구나 사용</span>
+                            </div>
+                            <h3>게임 공략 검색</h3>
+                            <p>Discord 선택 메뉴나 이름 검색으로 몬스터, 아이템, 무기와 모드 설치 정보를 바로 엽니다.</p>
+                            <ul class="command-list">
+                                <li><code>/도움</code><span>게임 → 주제 → 항목 순서로 탐색</span></li>
+                                <li><code>/도움 항목검색: 배그</code><span>PUBG BATTLE GROUND 바로 열기</span></li>
+                                <li><code>/도움 항목검색: 삽</code><span>등록된 세부 항목 바로 열기</span></li>
+                            </ul>
+                            <p class="feature-note">웹 가이드는 아래 게임 카드를 눌러 명령어 없이도 이용할 수 있습니다.</p>
+                        </article>
+
+                        <article class="pixel-box feature-card feature-card--wide">
+                            <div class="feature-card__header">
+                                <p class="feature-card__eyebrow">SERVER TOOLS</p>
+                                <span class="feature-badge">운영·편의</span>
+                            </div>
+                            <h3>서버 운영과 Steam 순위</h3>
+                            <div class="command-columns">
+                                <ul class="command-list">
+                                    <li><code>/연삼</code><span>현재 서버 안내와 빠른 설정 버튼</span></li>
+                                    <li><code>/연삼도움말</code><span>주요 명령어 사용 흐름</span></li>
+                                    <li><code>/초대</code><span>최소 권한 설치 링크</span></li>
+                                </ul>
+                                <ul class="command-list">
+                                    <li><code>/스팀인기게임 표시개수: 10</code><span>Steam 공식 Most Played 순위</span></li>
+                                    <li><code>/연삼통계</code><span>관리자용 최근 7일 서버 단위 지표</span></li>
+                                    <li><code>/랜덤 시작 끝 개수</code><span>1~100 범위 랜덤 숫자</span></li>
+                                </ul>
+                            </div>
+                            <p class="feature-note">통계는 개인 사용자 ID를 저장하지 않고 서버 단위로 집계합니다.</p>
+                        </article>
+                    </div>
+                </section>
             </section>
 
             <aside class="right-panel" aria-label="게임 가이드와 지원">
@@ -96,7 +189,7 @@
                             <span class="game-feature-copy">
                                 <small class="guide-kind">GAME GUIDE</small>
                                 <strong>R.E.P.O.</strong>
-                                <small>몬스터 티어·운영 팁</small>
+                                <small>몬스터·아이템·모드·운영 팁</small>
                                 <span class="game-feature-action">가이드 열기 →</span>
                             </span>
                         </a>
@@ -113,7 +206,7 @@
                             <img src="./games/PUBG/weapons/m416.webp" alt="" width="120" height="120" loading="lazy" decoding="async">
                             <span class="game-feature-copy">
                                 <small class="guide-kind">GAME GUIDE</small>
-                                <strong>PUBG</strong>
+                                <strong>PUBG BATTLE GROUND</strong>
                                 <small>무기·소모품·투척물·교전 운영</small>
                                 <span class="game-feature-action">가이드 열기 →</span>
                             </span>

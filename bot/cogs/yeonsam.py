@@ -271,6 +271,16 @@ def build_search_candidates() -> list[dict[str, object]]:
             continue
 
         game_name = data.get("name", game_slug)
+        game_aliases = flatten_entry_aliases(data)
+        candidates.append(
+            create_search_candidate(
+                game_slug=game_slug,
+                game_name=game_name,
+                context="게임 홈",
+                display_name="전체 가이드",
+                keywords=[game_slug, game_name, *game_aliases],
+            )
+        )
         for topic_entry in data.get("guides", []):
             topic_context = str(topic_entry.get("label") or topic_entry.get("title") or "공략")
             topic_keywords = [
@@ -1808,25 +1818,49 @@ class Yeonsam(commands.Cog):
             inline=False,
         )
         embed.add_field(
-            name="/도움",
+            name="/설정 · /초대",
             value=(
-                "명령어 입력 후 선택 메뉴가 열립니다.\n"
-                "`문서 -> 구역 -> 주제 -> 항목` 순서로 클릭해서 탐색합니다.\n"
-                "JSON 데이터만 추가하면 같은 UI에 자동으로 포함되도록 구성되어 있습니다."
+                "관리자는 `/설정`에서 환영 채널, 문구·링크, 권한 진단과 테스트 발송을 순서대로 진행합니다.\n"
+                "`/초대`는 연삼이를 다른 서버에 설치하는 최소 권한 링크를 표시합니다."
             ),
             inline=False,
         )
         embed.add_field(
-            name="/스팀인기게임",
+            name="/도움 [항목검색]",
+            value=(
+                "명령어 입력 후 선택 메뉴가 열립니다.\n"
+                "`문서 -> 구역 -> 주제 -> 항목` 순서로 클릭해서 탐색합니다.\n"
+                "예: `항목검색: 배그`를 입력하면 PUBG BATTLE GROUND 가이드를 바로 엽니다."
+            ),
+            inline=False,
+        )
+        embed.add_field(
+            name="/무료게임 · /무료알림설정",
+            value=(
+                "현재 Steam 기간 한정 무료 배포 목록은 `/무료게임`으로 조회합니다.\n"
+                "관리자는 `/무료알림설정`, `/무료알림상태`, `/무료알림해제`로 자동 알림 채널을 관리합니다."
+            ),
+            inline=False,
+        )
+        embed.add_field(
+            name="/패치알림설정",
+            value=(
+                "관리자가 Lethal Company 또는 R.E.P.O.의 공식 Steam 업데이트 알림 채널을 지정합니다.\n"
+                "`/패치알림목록`, `/패치알림테스트`, `/패치알림해제`로 점검·관리할 수 있습니다."
+            ),
+            inline=False,
+        )
+        embed.add_field(
+            name="/스팀인기게임 [표시개수]",
             value="Steam 공식 Most Played 기준 인기 게임 TOP 5 또는 TOP 10을 확인합니다.",
             inline=False,
         )
         embed.add_field(
             name="예시",
             value=(
-                "1. `/도움` 입력\n"
-                "2. `문서 선택`에서 보고 싶은 게임 문서 클릭\n"
-                "3. `구역 -> 주제 -> 항목` 순서로 선택"
+                "1. `/설정`으로 환영 메시지를 테스트 발송\n"
+                "2. `/무료알림설정` 또는 `/패치알림설정`으로 운영 채널 연결\n"
+                "3. `/도움 항목검색: 배그`처럼 원하는 공략을 바로 검색"
             ),
             inline=False,
         )

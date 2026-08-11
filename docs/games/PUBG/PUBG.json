@@ -1,7 +1,8 @@
 {
   "slug": "PUBG",
   "pagePath": "PUBG.html",
-  "name": "PUBG: BATTLEGROUNDS",
+  "name": "PUBG BATTLE GROUND",
+  "aliases": ["배그"],
   "profileImage": "./PUBG/weapons/m416.webp",
   "dataVersion": "PC/Console Update 42.2",
   "checkedAt": "2026-08-10",

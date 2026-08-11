@@ -345,7 +345,7 @@
                     "section": "daytime",
                     "name": "Circuit Bees",
                     "nameKr": "회로 벌",
-                    "image": "./LethalCompany/entities/Circuit Bees.png",
+                    "image": "./LethalCompany/entities/Circuit Bees.webp",
                     "spawn": "주간 사전 생성 · Experimentation, Assurance, Vow, March, Adamance, Artifice",
                     "detection": "벌집 접근 또는 운반을 감지하면 가장 가까운 플레이어를 추격하고 멀어지면 벌집으로 돌아갑니다.",
                     "damage": "반복 접촉 전기 피해 10, 최대 초당 약 25 피해",
@@ -360,7 +360,7 @@
                     "section": "daytime",
                     "name": "Manticoil",
                     "nameKr": "만티코일",
-                    "image": "./LethalCompany/entities/Manticoil.png",
+                    "image": "./LethalCompany/entities/Manticoil.webp",
                     "spawn": "주간 · Experimentation, Assurance, Vow, Offense, March, Adamance, Artifice",
                     "detection": "플레이어 접근이나 큰 소리를 감지하면 날아갑니다.",
                     "damage": "직접 피해 없음",
@@ -376,7 +376,7 @@
                     "section": "daytime",
                     "name": "Roaming Locust",
                     "nameKr": "메뚜기",
-                    "image": "./LethalCompany/entities/Roaming Locust.png",
+                    "image": "./LethalCompany/entities/Roaming Locust.webp",
                     "spawn": "주간 · Experimentation, Assurance, Vow, March, Adamance, Artifice",
                     "detection": "군집을 통과하거나 접근하면 흩어집니다.",
                     "damage": "직접 피해 없음",
@@ -391,7 +391,7 @@
                     "section": "daytime",
                     "name": "Tulip Snake",
                     "nameKr": "튤립 뱀",
-                    "image": "./LethalCompany/entities/Tulip Snake.png",
+                    "image": "./LethalCompany/entities/Tulip Snake.webp",
                     "spawn": "주간 · Assurance, Vow, March, Adamance, Artifice",
                     "detection": "플레이어를 발견하면 반복해서 뛰어들어 헬멧에 붙습니다.",
                     "damage": "직접 공격 피해는 없지만 비행 종료 낙하, 시설 입구 팬, 발생 소음에 끌린 Eyeless Dog가 2차 위험입니다.",
@@ -974,6 +974,23 @@
             "id": "items",
             "label": "아이템",
             "title": "아이템 공략",
+            "description": "상점에서 구매하는 핵심 장비 14종을 할인 전 기본가, 운용 수치, 실제 사용법 기준으로 정리했습니다.",
+            "research": {
+                "gameVersion": "V80/V81 상점 데이터 기준",
+                "verifiedAt": "2026-08-11",
+                "method": "현행 Store 목록과 각 아이템 문서를 대조하고, 오래된 가격과 충돌하는 항목은 개별 현행 문서를 우선했습니다.",
+                "notes": [
+                    "가격은 할인 이벤트가 적용되지 않은 기본가입니다.",
+                    "이미지는 Zeekerss 게임 자산을 표시한 Fandom CDN 원본을 로컬에 보관했으며, 각 카드에는 수치와 용도를 확인한 위키 문서 링크를 남겼습니다. 이미지별 재배포 라이선스는 추정하지 않습니다."
+                ],
+                "sources": [
+                    {
+                        "label": "Lethal Company Wiki — Store",
+                        "url": "https://lethal-company.fandom.com/wiki/Store",
+                        "type": "item-reference"
+                    }
+                ]
+            },
             "groups": [
                 {
                     "id": "consumables-tools",
@@ -983,93 +1000,277 @@
                     "entries": [
                         {
                             "id": "walkie-talkie",
-                            "name": "Walkie-talkie",
+                            "name": "Walkie-Talkie",
                             "nameKr": "무전기",
-                            "price": 12,
+                            "image": "./LethalCompany/items/walkie-talkie.webp",
+                            "price": 10,
                             "terminalCommand": "walkie-talkie",
-                            "description": "함선 밖 팀원과 장거리 소통을 담당하는 핵심 통신 장비입니다.",
-                            "usage": "배터리를 아껴가며 정찰 담당자와 회수 담당자 사이의 콜을 유지하세요."
+                            "description": "켜진 무전기끼리 맵 전역에서 통신하는 배터리 장비입니다.",
+                            "usage": "함선 담당자와 탐사조가 최소 한 대씩 켜 두되, 송신할 때만 눌러 배터리를 절약하세요.",
+                            "stats": [
+                                {
+                                    "label": "배터리",
+                                    "value": "약 13분 40초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "0 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Walkie-Talkie",
+                                    "url": "https://lethal-company.fandom.com/wiki/Walkie-Talkie",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "flashlight",
                             "name": "Flashlight",
                             "nameKr": "손전등",
+                            "image": "./LethalCompany/items/flashlight.webp",
                             "price": 15,
                             "terminalCommand": "flashlight",
                             "description": "가장 저렴한 기본 조명 장비입니다.",
-                            "usage": "초반 입문용으로 무난하지만 배터리 소모가 빠라 예비 장비를 고려하는 편이 좋습니다."
+                            "usage": "무게가 없어 초반 정찰에 좋지만 지속 시간이 짧으므로 깊은 탐사에서는 프로 손전등을 우선하세요.",
+                            "stats": [
+                                {
+                                    "label": "배터리",
+                                    "value": "약 140초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "0 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Flashlight",
+                                    "url": "https://lethal-company.fandom.com/wiki/Flashlight",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "pro-flashlight",
                             "name": "Pro-flashlight",
                             "nameKr": "프로 손전등",
-                            "price": 25,
+                            "image": "./LethalCompany/items/pro-flashlight.webp",
+                            "price": 28,
                             "terminalCommand": "pro-flashlight",
                             "description": "기본 손전등보다 광량과 지속 시간이 좋은 상위 조명입니다.",
-                            "usage": "깊은 탐사 담당자나 후반 유료 행성에서 우선 지급하면 체감이 큽니다."
+                            "usage": "깊은 탐사 담당자나 후반 유료 행성에서 우선 지급하면 체감이 큽니다.",
+                            "stats": [
+                                {
+                                    "label": "배터리",
+                                    "value": "약 300초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "5 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Pro-flashlight",
+                                    "url": "https://lethal-company.fandom.com/wiki/Pro-flashlight",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "shovel",
                             "name": "Shovel",
-                            "nameKr": "샽",
+                            "nameKr": "삽",
+                            "image": "./LethalCompany/items/shovel.webp",
                             "price": 30,
                             "terminalCommand": "shovel",
                             "description": "근접 대응이 가능한 대표 도구입니다.",
-                            "usage": "붙잡힌 팀원 구출, 약한 몬스터 견제, 문 앞 교전 차단에 활용합니다."
+                            "usage": "붙잡힌 팀원 구출과 처치 가능한 몬스터 대응에 쓰되, 전도성 장비이므로 폭풍 날씨에는 낙뢰를 주의하세요.",
+                            "stats": [
+                                {
+                                    "label": "생물 피해",
+                                    "value": "1"
+                                },
+                                {
+                                    "label": "직원 피해",
+                                    "value": "20"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "14 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Shovel",
+                                    "url": "https://lethal-company.fandom.com/wiki/Shovel",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "lockpicker",
                             "name": "Lockpicker",
                             "nameKr": "락피커",
+                            "image": "./LethalCompany/items/lockpicker.webp",
                             "price": 20,
                             "terminalCommand": "lockpicker",
-                            "description": "잠긴 문을 시간차로 열어주는 장비입니다.",
-                            "usage": "정면 진입보다 우회 루트 개방용으로 사용하면 효율이 높습니다."
+                            "description": "일반 잠긴 문을 약 30초 뒤 여는 재사용 장비이며 보안문에는 작동하지 않습니다.",
+                            "usage": "열쇠를 아끼거나 우회 루트를 확보할 때 먼저 걸어 두고 주변 방을 탐색하세요.",
+                            "stats": [
+                                {
+                                    "label": "해제 시간",
+                                    "value": "약 30초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "11 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Lockpicker",
+                                    "url": "https://lethal-company.fandom.com/wiki/Lockpicker",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "stun-grenade",
                             "name": "Stun Grenade",
                             "nameKr": "섬광탄",
+                            "image": "./LethalCompany/items/stun-grenade.webp",
                             "price": 30,
                             "terminalCommand": "stun grenade",
-                            "description": "짧은 시간 적의 행동을 끊을 수 있는 긴급 대응 장비입니다.",
-                            "usage": "도주 타이밍 확보나 회수 직전 진입 차단용으로 던지는 편이 좋습니다."
+                            "description": "핀을 뽑은 뒤 약 3초 후 폭발하며 기본 5초 기절을 주는 일회용 장비입니다.",
+                            "usage": "도주 타이밍 확보나 회수 직전 진입 차단용으로 던지고, 손에 든 채 폭발하면 20 피해를 받으므로 즉시 투척하세요.",
+                            "stats": [
+                                {
+                                    "label": "신관",
+                                    "value": "약 3초"
+                                },
+                                {
+                                    "label": "기본 기절",
+                                    "value": "5초(개체별 배율 적용)"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Stun Grenade",
+                                    "url": "https://lethal-company.fandom.com/wiki/Stun_Grenade",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "extension-ladder",
                             "name": "Extension Ladder",
                             "nameKr": "확장 사다리",
+                            "image": "./LethalCompany/items/extension-ladder.webp",
                             "price": 60,
                             "terminalCommand": "extension ladder",
                             "description": "고저차가 큰 지형과 틈을 넘을 때 쓰는 보조 장비입니다.",
-                            "usage": "맵 이해도가 높은 팀원이 들고 다니며 루트 단축용으로 배치하세요."
+                            "usage": "맵 이해도가 높은 팀원이 루트 단축용으로 배치하고, 약 18초 뒤 접힐 때 아래에 서 있지 마세요.",
+                            "stats": [
+                                {
+                                    "label": "자동 접힘",
+                                    "value": "약 18초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "0 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Extension ladder",
+                                    "url": "https://lethal-company.fandom.com/wiki/Extension_ladder",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "tzp-inhalant",
                             "name": "TZP-Inhalant",
                             "nameKr": "TZP 흡입제",
-                            "price": 120,
+                            "image": "./LethalCompany/items/tzp-inhalant.webp",
+                            "price": 80,
                             "terminalCommand": "tzp-inhalant",
                             "description": "이동 속도와 스태미나 효율을 끌어올리는 버프형 장비입니다.",
-                            "usage": "장거리 외곽 회수나 고난도 긴급 탈출 때만 제한적으로 쓰는 편이 안전합니다."
+                            "usage": "장거리 외곽 회수나 긴급 탈출 때 짧게 흡입하고, 누적 흡입에 따른 시야·조작·음성 부작용을 감안하세요.",
+                            "stats": [
+                                {
+                                    "label": "총 사용량",
+                                    "value": "약 22초"
+                                },
+                                {
+                                    "label": "효과",
+                                    "value": "스태미나 소비 감소·이동 속도 증가"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — TZP-Inhalant",
+                                    "url": "https://lethal-company.fandom.com/wiki/TZP-Inhalant",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "zap-gun",
-                            "name": "Zap Gun",
+                            "name": "Zap gun",
                             "nameKr": "전기총",
+                            "image": "./LethalCompany/items/zap-gun.webp",
                             "price": 400,
                             "terminalCommand": "zap gun",
-                            "description": "특정 위협을 잠시 고정해 팀이 움직일 시간을 벌어주는 장비입니다.",
-                            "usage": "전담 사수가 뒤에서 조준을 유지하고 다른 팀원이 회수나 탈출을 진행하도록 맞추세요."
+                            "description": "조준 균형을 유지하는 동안 대상을 기절시키며 자체 살상 피해는 없는 배터리 장비입니다.",
+                            "usage": "전담 사수가 뒤에서 조준을 유지하고 다른 팀원이 공격·회수·탈출을 진행하도록 맞추세요.",
+                            "stats": [
+                                {
+                                    "label": "배터리",
+                                    "value": "총 약 60초"
+                                },
+                                {
+                                    "label": "실패 후 지연",
+                                    "value": "약 5초"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Zap gun",
+                                    "url": "https://lethal-company.fandom.com/wiki/Zap_gun",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "jetpack",
                             "name": "Jetpack",
                             "nameKr": "제트팩",
-                            "price": 700,
+                            "image": "./LethalCompany/items/jetpack.webp",
+                            "price": 900,
                             "terminalCommand": "jetpack",
                             "description": "비행 이동이 가능하지만 조종 난도가 높은 고가 장비입니다.",
-                            "usage": "외부 회수 최적화에 강하지만 추락과 폭발 리스크가 있으니 숙련자에게만 맡기세요."
+                            "usage": "외부 회수 최적화에 강하지만 과열·고속 충돌·추락으로 폭발할 수 있으니 숙련자에게 맡기세요.",
+                            "stats": [
+                                {
+                                    "label": "비행 가능 시간",
+                                    "value": "약 50초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "52.5 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Jetpack",
+                                    "url": "https://lethal-company.fandom.com/wiki/Jetpack",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -1083,37 +1284,109 @@
                             "id": "teleporter",
                             "name": "Teleporter",
                             "nameKr": "텔레포터",
+                            "image": "./LethalCompany/items/teleporter.webp",
                             "price": 375,
                             "terminalCommand": "teleporter",
-                            "description": "살아 있는 아군을 즉시 함선으로 귀환시키는 구조 장비입니다.",
-                            "usage": "회수 직전 사망 위험이 큰 팀원을 끊어 올리는 용도로 쓰면 손실을 줄일 수 있습니다."
+                            "description": "레이더에서 선택한 생존 직원 또는 시체를 함선으로 회수하는 장비입니다.",
+                            "usage": "위험한 팀원을 구조하거나 시체 회수에 쓰되, 대상이 들고 있던 모든 소지품은 현장에 떨어집니다.",
+                            "stats": [
+                                {
+                                    "label": "재사용 대기",
+                                    "value": "약 10초"
+                                },
+                                {
+                                    "label": "소지품",
+                                    "value": "전부 현장에 드롭"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Teleporter",
+                                    "url": "https://lethal-company.fandom.com/wiki/Teleporter",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "inverse-teleporter",
                             "name": "Inverse Teleporter",
                             "nameKr": "역방향 텔레포터",
+                            "image": "./LethalCompany/items/inverse-teleporter.webp",
                             "price": 425,
                             "terminalCommand": "inverse teleporter",
-                            "description": "플레이어를 시설 내부 무작위 위치로 보내는 특수 장비입니다.",
-                            "usage": "초반 빠른 진입이나 탐색 실험용으로만 제한적으로 사용하고, 팀 콜 없이는 남용하지 마세요."
+                            "description": "패드 위 플레이어를 소지품 없이 시설 내부 무작위 위치로 보내는 특수 장비입니다.",
+                            "usage": "초반 빠른 진입용으로 쓸 수 있지만 고립 위험이 크므로, 함선 담당자와 구조 계획을 정한 뒤 사용하세요.",
+                            "stats": [
+                                {
+                                    "label": "재사용 대기",
+                                    "value": "210초"
+                                },
+                                {
+                                    "label": "소지품",
+                                    "value": "함선에 남김"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Inverse teleporter",
+                                    "url": "https://lethal-company.fandom.com/wiki/Inverse_teleporter",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "signal-translator",
                             "name": "Signal Translator",
                             "nameKr": "신호 번역기",
+                            "image": "./LethalCompany/items/signal-translator.webp",
                             "price": 255,
                             "terminalCommand": "signal translator",
                             "description": "짧은 텍스트를 전 팀 화면에 띄우는 통신 보조 장비입니다.",
-                            "usage": "음성 전달이 어려운 상황에서 탈출, 위험 구역, 회수 지시를 짧게 공유할 때 유용합니다."
+                            "usage": "터미널에서 TRANSMIT 명령을 사용해 탈출·위험·회수 지시를 최대 9자로 압축해 공유하세요.",
+                            "stats": [
+                                {
+                                    "label": "메시지 길이",
+                                    "value": "최대 9자"
+                                },
+                                {
+                                    "label": "명령",
+                                    "value": "TRANSMIT [메시지]"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Signal translator",
+                                    "url": "https://lethal-company.fandom.com/wiki/Signal_translator",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "loud-horn",
                             "name": "Loud Horn",
                             "nameKr": "대형 경적",
+                            "image": "./LethalCompany/items/loud-horn.webp",
                             "price": 100,
                             "terminalCommand": "loud horn",
                             "description": "함선 위치를 소리로 알리거나 팀의 주의를 환기시키는 장비입니다.",
-                            "usage": "안개, 폭우, 야간 귀환 구간에서 방향 안내용으로 짧게 사용하는 편이 좋습니다."
+                            "usage": "안개·폭우·야간 귀환의 방향 신호로 쓰되, 눈 없는 개를 함선 쪽으로 유인할 수 있으므로 연속 사용을 피하세요.",
+                            "stats": [
+                                {
+                                    "label": "소리",
+                                    "value": "시설 내부에서도 들리는 함선 신호"
+                                },
+                                {
+                                    "label": "위험",
+                                    "value": "눈 없는 개 유인 가능"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Loud Horn",
+                                    "url": "https://lethal-company.fandom.com/wiki/Loud_Horn",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         }
                     ]
                 }
@@ -1122,57 +1395,613 @@
         {
             "id": "mods",
             "label": "모드",
-            "title": "모드 공략",
+            "title": "현행 인기 모드 가이드",
+            "description": "누적 다운로드, 최근 유지보수, V81 대응 기록과 Reddit 실사용 사례를 함께 확인해 기반·편의·콘텐츠 모드로 나눴습니다.",
+            "research": {
+                "gameVersion": "Lethal Company V81",
+                "verifiedAt": "2026-08-11",
+                "method": "Thunderstore 공식 API·패키지 페이지로 버전과 의존성을 확인하고, Reddit 사용 사례는 호환 보증이 아닌 실사용 참고 자료로만 반영했습니다.",
+                "notes": [
+                    "다운로드 수에는 모드팩 의존성 설치와 재다운로드가 포함되므로 활성 사용자 수와 같지 않습니다.",
+                    "모드 매니저에서 새 프로필을 만든 뒤 팀원과 프로필 코드를 공유하고, 기존 프로필은 복제해 보존하세요.",
+                    "Deprecated인 LateCompany와 ShipLoot은 대표 추천에서 제외했습니다. Late Join 대안은 실험판 경고와 함께 별도 표기했습니다."
+                ],
+                "sources": [
+                    {
+                        "label": "Thunderstore API 문서",
+                        "url": "https://thunderstore.io/api/docs/",
+                        "type": "official-api"
+                    },
+                    {
+                        "label": "Reddit — V81 호환 모드 논의",
+                        "url": "https://www.reddit.com/r/lethalcompany/comments/1toqcoq/are_there_any_good_mods_that_work_with_the_newest/",
+                        "type": "community"
+                    },
+                    {
+                        "label": "Reddit — V81 대형 로비 사용 사례",
+                        "url": "https://www.reddit.com/r/lethalcompany/comments/1uzuvn3/lethal_company_bigger_lobby/",
+                        "type": "community"
+                    },
+                    {
+                        "label": "Reddit — 몬스터 모드 추천",
+                        "url": "https://www.reddit.com/r/lethalcompany/comments/1vil4g3/monster_mod_recommendations/",
+                        "type": "community"
+                    }
+                ]
+            },
             "groups": [
                 {
-                    "id": "quality-of-life",
-                    "label": "편의성",
-                    "title": "편의성 모드",
-                    "description": "기본 플레이 감각은 유지하면서 UI나 인원 제한 같은 불편을 줄이는 계열입니다.",
+                    "id": "foundation",
+                    "label": "기반·현지화",
+                    "title": "기반 로더와 한국어 지원",
+                    "description": "직접 콘텐츠를 추가하기보다 다른 모드를 실행하거나 한국어 플레이를 돕는 기반 패키지입니다. 필요한 모드가 의존성으로 요구할 때 설치하세요.",
                     "entries": [
                         {
-                            "id": "morecompany",
-                            "name": "MoreCompany",
-                            "description": "기본 인원 제한을 넘어 더 많은 인원이 함께 플레이할 수 있게 돕는 대표 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "id": "bepinexpack",
+                            "name": "BepInExPack",
+                            "nameKr": "모드 로더 기반",
+                            "image": "./LethalCompany/mods/bepinexpack.png",
+                            "description": "Lethal Company의 다수 플러그인을 구동하는 기반 로더입니다. 모드 매니저는 요구된 버전을 자동으로 설치합니다.",
+                            "usage": "수동으로 여러 버전을 덮어쓰지 말고, 각 Thunderstore 프로필이 계산한 의존성 버전을 그대로 사용하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/BepInEx/BepInExPack/",
+                            "aliases": [
+                                "BepInEx-BepInExPack"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "5.4.2305 · 2026-03-17"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 32M 다운로드"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "없음"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — BepInExPack",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/BepInEx/BepInExPack/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — BepInEx",
+                                    "url": "https://github.com/BepInEx/BepInEx",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
-                            "id": "latecompany",
-                            "name": "LateCompany",
-                            "description": "게임이 이미 시작된 뒤에도 플레이어가 도중 참여할 수 있도록 지원하는 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "id": "lckr",
+                            "name": "LCKR",
+                            "nameKr": "Lethal Company 한국어 패치",
+                            "image": "./LethalCompany/mods/lckr.png",
+                            "description": "한국어 UI와 텍스트를 제공하는 클라이언트 현지화 모드입니다.",
+                            "usage": "V80 텍스트 대응은 확인됐지만 V81 전체 문구 보증은 아니므로, 문제 발생 시 번역 모드만 끈 별도 프로필과 비교하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/Piggy/LCKR/",
+                            "aliases": [
+                                "Piggy-LCKR",
+                                "한글패치",
+                                "한국어패치"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "2.1.1 · 2026-04-04"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 1.7M 다운로드"
+                                },
+                                {
+                                    "label": "적용 범위",
+                                    "value": "클라이언트"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2100"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — LCKR",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/Piggy/LCKR/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — LCKorean",
+                                    "url": "https://github.com/Piggy3590/LCKorean",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
-                            "id": "reserveditemslotcore",
-                            "name": "ReservedItemSlotCore",
-                            "description": "손전등이나 무전기 같은 전용 슬롯 기반 모드의 기반이 되는 코어 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "id": "lethal-level-loader",
+                            "name": "LethalLevelLoader",
+                            "nameKr": "커스텀 달·인테리어 로더",
+                            "image": "./LethalCompany/mods/lethal-level-loader.png",
+                            "description": "커스텀 달과 인테리어를 게임에 연결하는 대형 콘텐츠 프레임워크입니다. 단독 설치만으로 새 맵이 생기지는 않습니다.",
+                            "usage": "로더가 V81을 지원해도 개별 달·인테리어의 호환은 별도이므로 각 콘텐츠 페이지의 버전 기록을 다시 확인하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/IAmBatby/LethalLevelLoader/",
+                            "aliases": [
+                                "IAmBatby-LethalLevelLoader",
+                                "LLL"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "1.7.8 · 2026-07-05"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 13M 다운로드"
+                                },
+                                {
+                                    "label": "호환",
+                                    "value": "V81 명시"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2305 외 2개"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — LethalLevelLoader",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/IAmBatby/LethalLevelLoader/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — LethalLevelLoader",
+                                    "url": "https://github.com/IAmBatby/LethalLevelLoader",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         }
                     ]
                 },
                 {
-                    "id": "content-expansion",
-                    "label": "콘텐츠 확장",
-                    "title": "콘텐츠 확장 모드",
-                    "description": "위협, 밸런스, 진행 감각을 크게 바꾸는 계열입니다. 팀 합의 후 사용하는 편이 좋습니다.",
+                    "id": "multiplayer-quality-of-life",
+                    "label": "멀티·편의",
+                    "title": "로비와 편의성 모드",
+                    "description": "기본 플레이를 유지하면서 인원, UI, 전용 슬롯 같은 불편을 줄이는 계열입니다. 멀티플레이에서는 같은 프로필 사용을 우선하세요.",
                     "entries": [
                         {
-                            "id": "brutalcompanyminus",
-                            "name": "BrutalCompanyMinus",
-                            "description": "이벤트와 난이도 변수를 추가해 판마다 다른 압박감을 주는 고난도 확장 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "id": "morecompany",
+                            "name": "MoreCompany",
+                            "nameKr": "대형 로비·코스메틱",
+                            "image": "./LethalCompany/mods/morecompany.png",
+                            "description": "기본 로비 인원을 확장하고 코스메틱을 추가하는 대표 대형 로비 모드입니다.",
+                            "usage": "참가자 전원이 같은 버전과 프로필을 사용하세요. 8명을 넘기면 일부 UI가 완전히 맞지 않을 수 있습니다.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/notnotnotswipez/MoreCompany/",
+                            "aliases": [
+                                "notnotnotswipez-MoreCompany",
+                                "대형로비"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "1.14.0 · 2026-04-25"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 27M 다운로드"
+                                },
+                                {
+                                    "label": "멀티 권장",
+                                    "value": "전원 동일 프로필"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2100"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — MoreCompany",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/notnotnotswipez/MoreCompany/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — MoreCompany",
+                                    "url": "https://github.com/notnotnotswipez/MoreCompany",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
-                            "id": "sellbodiesfixed",
+                            "id": "general-improvements",
+                            "name": "GeneralImprovements",
+                            "nameKr": "종합 편의 개선",
+                            "image": "./LethalCompany/mods/general-improvements.png",
+                            "description": "스캐너, 함선 모니터, 전리품 가치 표시 등 여러 편의 기능을 하나의 설정 가능한 모드로 묶습니다.",
+                            "usage": "다른 UI·스캐너 모드와 기능이 겹치지 않도록 필요한 옵션만 켜세요. Deprecated ShipLoot의 현행 대안으로 적합합니다.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/ShaosilGaming/GeneralImprovements/",
+                            "aliases": [
+                                "ShaosilGaming-GeneralImprovements",
+                                "GI"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "1.5.5 · 2026-04-15"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 3.1M 다운로드"
+                                },
+                                {
+                                    "label": "호환",
+                                    "value": "V81 대응 변경 기록 확인"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2100"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — GeneralImprovements",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/ShaosilGaming/GeneralImprovements/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — GeneralImprovements",
+                                    "url": "https://github.com/Shaosil/LethalCompanyMods-GeneralImprovements",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "reserved-item-slot-core",
+                            "name": "ReservedItemSlotCore",
+                            "nameKr": "전용 슬롯 프레임워크",
+                            "image": "./LethalCompany/mods/reserved-item-slot-core.png",
+                            "description": "손전등·무전기·무기 같은 전용 슬롯 애드온을 작동시키는 핵심 프레임워크입니다. Core만 설치해도 슬롯이 생기지는 않습니다.",
+                            "usage": "ReservedFlashlightSlot 같은 슬롯 애드온을 함께 고르고, 핫바 재배열·AdvancedCompany 계열과 충돌 여부를 확인하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/FlipMods/ReservedItemSlotCore/",
+                            "aliases": [
+                                "FlipMods-ReservedItemSlotCore",
+                                "전용슬롯"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "2.0.55 · 2026-04-11"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 23M 다운로드"
+                                },
+                                {
+                                    "label": "주의",
+                                    "value": "별도 슬롯 애드온 필요"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2100"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — ReservedItemSlotCore",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/FlipMods/ReservedItemSlotCore/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — ReservedItemSlotMods",
+                                    "url": "https://github.com/cmooref17/ReservedItemSlotMods",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "reserved-flashlight-slot",
+                            "name": "ReservedFlashlightSlot",
+                            "nameKr": "손전등 전용 슬롯",
+                            "image": "./LethalCompany/mods/reserved-flashlight-slot.png",
+                            "description": "손전등을 기본 인벤토리와 분리된 전용 슬롯에 넣는 대표 애드온입니다.",
+                            "usage": "ReservedItemSlotCore와 함께 설치하고, 팀원도 같은 슬롯 구성을 쓰게 프로필 코드를 공유하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/FlipMods/ReservedFlashlightSlot/",
+                            "aliases": [
+                                "FlipMods-ReservedFlashlightSlot",
+                                "손전등슬롯"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "2.0.10"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 16M 다운로드"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · ReservedItemSlotCore 2.0.41+"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — ReservedFlashlightSlot",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/FlipMods/ReservedFlashlightSlot/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — ReservedItemSlotMods",
+                                    "url": "https://github.com/cmooref17/ReservedItemSlotMods",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "lobby-control-experimental",
+                            "name": "LobbyControl Experimental",
+                            "nameKr": "중도 참여·호스트 제어 실험판",
+                            "image": "./LethalCompany/mods/lobby-control-experimental.png",
+                            "description": "Deprecated LateCompany를 대신해 중도 참여와 로비 제어를 제공하는 실험판 모드입니다.",
+                            "usage": "안정 추천이 아닙니다. LateCompany·ShipLobby·VeryLateCompany·AdvancedCompany와 함께 쓰지 말고, 복제 프로필에서 먼저 시험하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/mattymatty/LobbyControl_Experimental/",
+                            "aliases": [
+                                "mattymatty-LobbyControl_Experimental",
+                                "Late Join",
+                                "LateCompany 대안"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "5.12.3 · 2026-07-01"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 134K 다운로드"
+                                },
+                                {
+                                    "label": "안정성",
+                                    "value": "Experimental"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2100"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — LobbyControl Experimental",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/mattymatty/LobbyControl_Experimental/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — LobbyControl",
+                                    "url": "https://github.com/mattymatty97/LTC_LobbyControl",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "content-challenge",
+                    "label": "콘텐츠·고난도",
+                    "title": "진행과 위협을 바꾸는 모드",
+                    "description": "경제·몬스터·이벤트·탈출 규칙을 바꾸므로 호스트가 먼저 설정을 정하고 전원이 같은 프로필을 쓰는 것이 안전합니다.",
+                    "entries": [
+                        {
+                            "id": "lategame-upgrades",
+                            "name": "Lategame Upgrades",
+                            "nameKr": "후반 업그레이드 확장",
+                            "image": "./LethalCompany/mods/lategame-upgrades.png",
+                            "description": "터미널 앱에서 구매하는 다수의 후반 업그레이드를 추가하며 대부분의 수치를 설정할 수 있습니다.",
+                            "usage": "진행과 경제 밸런스를 크게 바꾸므로 업그레이드 공유 방식과 가격 설정을 팀 합의 후 고정하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/malco/Lategame_Upgrades/",
+                            "aliases": [
+                                "malco-Lategame_Upgrades",
+                                "LGU"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "3.14.1 · 2026-08-10"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 11M 다운로드"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · LethalLib 외 4개"
+                                },
+                                {
+                                    "label": "멀티 권장",
+                                    "value": "전원 동일 설정"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — Lategame Upgrades",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/malco/Lategame_Upgrades/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — LC-LateGameUpgrades",
+                                    "url": "https://github.com/Malcolm-Q/LC-LateGameUpgrades",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "brutal-company-minus",
+                            "name": "Brutal Company Minus",
+                            "nameKr": "고난도 이벤트 오버홀",
+                            "image": "./LethalCompany/mods/brutal-company-minus.png",
+                            "description": "40개 이상의 이벤트와 날씨·난이도 변수를 추가해 매 판의 압박을 크게 높입니다.",
+                            "usage": "바닐라 난이도에 익숙한 팀이 별도 프로필로 시작하세요. 초보자 온보딩 프로필에는 넣지 않는 편이 좋습니다.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/DrinkableWater/Brutal_Company_Minus/",
+                            "aliases": [
+                                "DrinkableWater-Brutal_Company_Minus",
+                                "BrutalCompanyMinus"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "0.13.21 · 2026-07-01"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 1.2M 다운로드"
+                                },
+                                {
+                                    "label": "호환",
+                                    "value": "README에 V81 대응 명시"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · StarlancerAIFix"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — Brutal Company Minus",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/DrinkableWater/Brutal_Company_Minus/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — BrutalCompanyMinus",
+                                    "url": "https://github.com/Sylkadi/BrutalCompanyMinus",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "sell-bodies-fixed",
                             "name": "SellBodiesFixed",
-                            "description": "사망한 팀원의 시체를 회수 자원처럼 활용할 수 있게 만들어 운영 선택지를 늘리는 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "nameKr": "몬스터 시체 판매",
+                            "image": "./LethalCompany/mods/sell-bodies-fixed.png",
+                            "description": "사망한 팀원이 아니라 처치한 몬스터의 시체를 회수해 회사에 판매하는 경제 확장 모드입니다.",
+                            "usage": "전원이 같은 설정을 쓰고, Butler·Earth Leviathan 등 미지원 개체가 있음을 감안해 회수 동선을 계획하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/Entity378/SellBodiesFixed/",
+                            "aliases": [
+                                "Entity378-SellBodiesFixed",
+                                "시체판매"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "1.14.0 · 2026-04-27"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 3M 다운로드"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · LethalLib 외 3개"
+                                },
+                                {
+                                    "label": "용량 주의",
+                                    "value": "약 80MB"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — SellBodiesFixed",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/Entity378/SellBodiesFixed/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — SellBodiesFixed",
+                                    "url": "https://github.com/Entity378/LC-SellBodiesFixed",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
-                            "id": "shiploot",
-                            "name": "ShipLoot",
-                            "description": "함선 안 전리품 가치를 더 직관적으로 보여줘 회수 판단을 빠르게 돕는 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "id": "biodiversity",
+                            "name": "Biodiversity",
+                            "nameKr": "바닐라풍 생물 다양성 확장",
+                            "image": "./LethalCompany/mods/biodiversity.png",
+                            "description": "기존 분위기에 맞춘 신규 몬스터와 아이템을 추가하는 콘텐츠 확장 모드입니다.",
+                            "usage": "Known Issues의 AI 고착·NavMesh 로그를 먼저 읽고, 커스텀 달에서는 Ogopogo 등 일부 콘텐츠가 제한될 수 있음을 공유하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/super_fucking_cool_and_badass_team/Biodiversity/",
+                            "aliases": [
+                                "super_fucking_cool_and_badass_team-Biodiversity"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "0.2.9 · 2026-05-16"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 854K 다운로드"
+                                },
+                                {
+                                    "label": "호환",
+                                    "value": "V81 명시"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · LethalLib"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — Biodiversity",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/super_fucking_cool_and_badass_team/Biodiversity/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — BiodiversityLC",
+                                    "url": "https://github.com/BiodiversityLC",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "facility-meltdown",
+                            "name": "FacilityMeltdown",
+                            "nameKr": "장치 회수 후 시설 붕괴",
+                            "image": "./LethalCompany/mods/facility-meltdown.png",
+                            "description": "Apparatus를 제거하면 약 2분짜리 시설 붕괴 탈출 이벤트를 시작합니다.",
+                            "usage": "장치 회수 전에 출구와 귀환 동선을 확보하세요. 커스텀 달의 경고등은 해당 달 제작자의 지원 여부에 따라 달라집니다.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/loaforc/FacilityMeltdown/",
+                            "aliases": [
+                                "loaforc-FacilityMeltdown",
+                                "멜트다운"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "2.7.5 · 2026-05-17"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 4.5M 다운로드"
+                                },
+                                {
+                                    "label": "탈출 시간",
+                                    "value": "약 2분"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · DawnLib"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — FacilityMeltdown",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/loaforc/FacilityMeltdown/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — FacilityMeltdown",
+                                    "url": "https://github.com/LoafOrc/FacilityMeltdown",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         }
                     ]
                 }

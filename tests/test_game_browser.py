@@ -12,6 +12,7 @@ from cogs.yeonsam import (  # noqa: E402
     GameBrowserView,
     build_game_browser_embed,
     build_search_candidates,
+    collect_game_browser_image_paths,
     select_monster_research_sources,
 )
 from utils.game_content import load_game_data  # noqa: E402
@@ -80,6 +81,38 @@ class GameBrowserTests(unittest.TestCase):
                     any("wiki" in source_type or "community-data" in source_type for source_type in selected_types)
                 )
                 self.assertTrue(any("practical" in source_type for source_type in selected_types))
+
+    def test_item_and_mod_images_are_available_to_discord_records(self):
+        cases = (
+            ("LethalCompany", "items", "shovel", ".webp"),
+            ("LethalCompany", "mods", "lckr", ".png"),
+            ("REPO", "items", "gun", ".webp"),
+            ("REPO", "mods", "repolib", ".png"),
+        )
+
+        for game_name, topic, entry, suffix in cases:
+            image_paths = collect_game_browser_image_paths(
+                game=game_name,
+                section="guides",
+                topic=topic,
+                entry=entry,
+            )
+            with self.subTest(game=game_name, topic=topic, entry=entry):
+                self.assertEqual(len(image_paths), 1)
+                self.assertTrue(image_paths[0].is_file())
+                self.assertEqual(image_paths[0].suffix.lower(), suffix)
+
+        for game_name in GAME_NAMES:
+            for topic in ("items", "mods"):
+                image_paths = collect_game_browser_image_paths(
+                    game=game_name,
+                    section="guides",
+                    topic=topic,
+                )
+                with self.subTest(game=game_name, topic=topic, mode="overview"):
+                    self.assertGreater(len(image_paths), 0)
+                    self.assertLessEqual(len(image_paths), 10)
+                    self.assertTrue(all(path.is_file() for path in image_paths))
 
 
 if __name__ == "__main__":

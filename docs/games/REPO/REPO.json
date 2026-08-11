@@ -554,64 +554,160 @@
                             "name": "Health Upgrade",
                             "nameKr": "체력 업그레이드",
                             "priceRange": "$4,000~$5,000",
-                            "description": "최대 HP를 20 증가시킵니다. 중첩 구매가 가능합니다.",
-                            "usage": "초반 생존율을 높이는 필수 업그레이드입니다."
+                            "description": "최대 체력을 20 올립니다.",
+                            "usage": "누적 구매로 실수 허용 범위를 늘리는 가장 단순한 생존 투자입니다.",
+                            "image": "./REPO/items/health-upgrade.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/6/6a/Upgrade_Health_Albedo.png/revision/latest?cb=20250322055034",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "+20 최대 HP"
+                                },
+                                {
+                                    "label": "진열 순환",
+                                    "value": "2개"
+                                }
+                            ]
                         },
                         {
                             "id": "strength-upgrade",
                             "name": "Strength Upgrade",
                             "nameKr": "근력 업그레이드",
-                            "priceRange": "$5,000~$10,000",
-                            "description": "들 수 있는 무게 한도를 높이고 더 멀리, 더 높이 물건을 들 수 있게 합니다. 일부 몬스터를 스턴시키는 데도 필요합니다.",
-                            "usage": "귀중품 회수 효율을 높이는 핵심 업그레이드입니다. 레벨 13 달성을 목표로 하세요."
+                            "priceRange": "$5,000~$8,000",
+                            "description": "잡기 힘을 20% 올려 더 무거운 귀중품과 일부 적을 다룰 수 있게 합니다.",
+                            "usage": "대형 귀중품 운반과 힘 등급이 필요한 적 제압을 함께 개선합니다.",
+                            "image": "./REPO/items/strength-upgrade.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/c/c7/Strength_Upgrade.png/revision/latest?cb=20250601225303",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "+20% 잡기 힘"
+                                },
+                                {
+                                    "label": "진열 순환",
+                                    "value": "2개"
+                                }
+                            ]
                         },
                         {
                             "id": "sprint-speed-upgrade",
                             "name": "Sprint Speed Upgrade",
                             "nameKr": "달리기 속도 업그레이드",
-                            "priceRange": "$6,000~$8,000",
-                            "description": "달리기 속도를 높여줍니다.",
-                            "usage": "몬스터 회피 및 귀중품 운반 속도를 향상시킵니다."
+                            "priceRange": "$5,000~$8,000",
+                            "description": "질주 속도를 20% 올립니다.",
+                            "usage": "운반 왕복과 추격 이탈 모두에 직접 도움이 됩니다.",
+                            "image": "./REPO/items/sprint-speed-upgrade.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/2/20/Sprint_Speed_Upgrade.png/revision/latest?cb=20250601225303",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "+20% 질주 속도"
+                                },
+                                {
+                                    "label": "진열 순환",
+                                    "value": "3개"
+                                }
+                            ]
                         },
                         {
                             "id": "stamina-upgrade",
                             "name": "Stamina Upgrade",
                             "nameKr": "스태미나 업그레이드",
-                            "priceRange": "$2,000~$4,000",
-                            "description": "최대 스태미나를 10 증가시킵니다. 중첩 구매가 가능합니다.",
-                            "usage": "장거리 운반과 몬스터 회피 시 지구력을 높여줍니다."
+                            "priceRange": "$2,000",
+                            "description": "최대 스태미나를 10 올립니다.",
+                            "usage": "저렴하고 진열 수가 많아 초반 장거리 운반 안정성이 좋습니다.",
+                            "image": "./REPO/items/stamina-upgrade.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/8/8c/Stamina_Upgrade.png/revision/latest?cb=20250601225303",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "+10 최대 스태미나"
+                                },
+                                {
+                                    "label": "진열 순환",
+                                    "value": "4개"
+                                }
+                            ]
                         },
                         {
                             "id": "range-upgrade",
                             "name": "Range Upgrade",
                             "nameKr": "사거리 업그레이드",
                             "priceRange": "$5,000~$8,000",
-                            "description": "아이템을 집을 수 있는 거리를 늘려줍니다.",
-                            "usage": "4인 이상 대규모 파티에서 특히 유용합니다."
+                            "description": "잡기 사거리를 40% 올립니다.",
+                            "usage": "위험한 물체나 적과 거리를 유지하며 상호작용하기 쉬워집니다.",
+                            "image": "./REPO/items/range-upgrade.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/9/9c/Range_Upgrade.png/revision/latest?cb=20250601225303",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "+40% 잡기 사거리"
+                                },
+                                {
+                                    "label": "진열 순환",
+                                    "value": "3개"
+                                }
+                            ]
                         },
                         {
                             "id": "extra-jump",
-                            "name": "Extra Jump",
+                            "name": "Extra Jump Upgrade",
                             "nameKr": "추가 점프",
-                            "priceRange": "$10,000",
-                            "description": "2단 점프를 가능하게 합니다.",
-                            "usage": "높은 지형 이동과 몬스터 회피에 유용합니다."
+                            "priceRange": "$8,000~$12,000",
+                            "description": "공중에서 가능한 추가 점프 횟수를 1회 늘립니다.",
+                            "usage": "수직 동선과 낙하 복구에 좋지만 진열 수가 적습니다.",
+                            "image": "./REPO/items/extra-jump.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/5/54/Extra_Jump_Upgrade.png/revision/latest?cb=20250601225303",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "+1 공중 점프"
+                                },
+                                {
+                                    "label": "진열 순환",
+                                    "value": "1개"
+                                }
+                            ]
                         },
                         {
                             "id": "tumble-launch-upgrade",
                             "name": "Tumble Launch Upgrade",
                             "nameKr": "텀블 발사 업그레이드",
                             "priceRange": "$4,000~$5,000",
-                            "description": "달리고 점프 후 Q키를 눌러 더 멀리 날아갈 수 있게 합니다. 업데이트로 레드 모드에서 벽을 잡을 수 있는 기능도 추가되었습니다.",
-                            "usage": "빠른 이동과 탈출에 활용됩니다."
+                            "description": "텀블 발사의 거리와 속도를 강화합니다.",
+                            "usage": "점프·텀블 연계로 긴급 이탈할 때 씁니다. 벽 잡기는 별도 Tumble Climb 업그레이드입니다.",
+                            "image": "./REPO/items/tumble-launch-upgrade.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/0/09/Tumble_Launch_Upgrade.png/revision/latest?cb=20250601225348",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "텀블 발사 거리·속도 증가"
+                                },
+                                {
+                                    "label": "진열 순환",
+                                    "value": "1개"
+                                }
+                            ]
                         },
                         {
                             "id": "map-player-count-upgrade",
                             "name": "Map Player Count Upgrade",
                             "nameKr": "맵 생존자 표시 업그레이드",
-                            "priceRange": "$10,000~$11,000",
-                            "description": "맵을 열었을 때 생존해 있는 팀원이 누구인지 표시됩니다. 멀티플레이어 전용입니다.",
-                            "usage": "5~6인 대파티에서 팀원 관리에 필수적입니다."
+                            "priceRange": "$8,000~$12,000",
+                            "description": "맵에 현재 살아 있는 플레이어 수를 표시합니다.",
+                            "usage": "멀티플레이 전용이며 세이브당 한 번만 구매합니다.",
+                            "image": "./REPO/items/map-player-count-upgrade.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/4/40/Player_Count_Upgrade.png/revision/latest?cb=20250601225303",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "생존 플레이어 수 표시"
+                                },
+                                {
+                                    "label": "진열 순환",
+                                    "value": "1개"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -619,71 +715,190 @@
                     "id": "weapons",
                     "label": "무기",
                     "title": "무기 및 전투 아이템",
-                    "description": "몬스터를 처치하거나 스턴시키는 데 사용되는 장비입니다. 파괴 또는 분실 시 다음 레벨 시작 시 자동 복귀됩니다.",
+                    "description": "사용 횟수를 소진하면 Energy Crystal이 충전된 트럭 스테이션에서 재충전합니다. 피해와 스턴 가능 무게 등급은 유지 관리 위키 기준입니다.",
                     "entries": [
                         {
                             "id": "gun",
                             "name": "Gun",
                             "nameKr": "총",
-                            "priceRange": "$42,000",
-                            "description": "원거리 무기입니다. 에너지 크리스탈로 충전해서 사용합니다.",
-                            "usage": "원거리 공격이 필요할 때 유용합니다."
+                            "priceRange": "$18,000~$20,000",
+                            "description": "15발을 쓰는 원거리 권총입니다. 몬스터 80, 플레이어 100 피해를 주며 중형 이하 적을 스턴시킵니다.",
+                            "usage": "탄 수가 제한되므로 안전한 원거리 확정타와 팀 구조 상황에 아끼세요.",
+                            "image": "./REPO/items/gun.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/1/13/GunHandgun.png/revision/latest?cb=20250407223744",
+                            "stats": [
+                                {
+                                    "label": "피해",
+                                    "value": "몬스터 80 / 플레이어 100"
+                                },
+                                {
+                                    "label": "충전당",
+                                    "value": "15발"
+                                },
+                                {
+                                    "label": "스턴",
+                                    "value": "중형 이하"
+                                }
+                            ]
                         },
                         {
                             "id": "sword",
                             "name": "Sword",
                             "nameKr": "검",
-                            "priceRange": "$23,000",
-                            "description": "근거리 무기입니다. 스크롤 방향에 따라 동적으로 휘두릅니다.",
-                            "usage": "근접 전투 시 효과적입니다."
+                            "priceRange": "$18,000~$20,000",
+                            "description": "휘두름당 50 피해를 주는 15회 충전식 근접 무기이며 경량 이하 적을 스턴시킵니다.",
+                            "usage": "스크롤 휘두름 방향을 조절해 귀중품을 치지 않도록 공격선을 비우세요.",
+                            "image": "./REPO/items/sword.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/a/ae/MeleeSword.png/revision/latest?cb=20250407223745",
+                            "stats": [
+                                {
+                                    "label": "피해",
+                                    "value": "50"
+                                },
+                                {
+                                    "label": "충전당",
+                                    "value": "15회"
+                                },
+                                {
+                                    "label": "스턴",
+                                    "value": "경량 이하"
+                                }
+                            ]
                         },
                         {
                             "id": "frying-pan",
                             "name": "Frying Pan",
                             "nameKr": "프라이팬",
-                            "priceRange": "$28,000~$30,000",
-                            "description": "근거리 무기입니다. 스크롤 방향에 따라 동적으로 휘두릅니다.",
-                            "usage": "검보다 저렴한 근접 무기 옵션입니다."
+                            "priceRange": "$14,000~$18,000",
+                            "description": "휘두름당 18 피해를 주는 15회 충전식 근접 무기이며 중형 이하 적을 스턴시킵니다.",
+                            "usage": "처치력보다 넓은 중형 스턴 범위를 이용한 팀 구조에 적합합니다.",
+                            "image": "./REPO/items/frying-pan.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/3/3f/MeleeFryingPan.png/revision/latest?cb=20250407223745",
+                            "stats": [
+                                {
+                                    "label": "피해",
+                                    "value": "18"
+                                },
+                                {
+                                    "label": "충전당",
+                                    "value": "15회"
+                                },
+                                {
+                                    "label": "스턴",
+                                    "value": "중형 이하"
+                                }
+                            ]
                         },
                         {
                             "id": "sledge-hammer",
                             "name": "Sledge Hammer",
                             "nameKr": "대형 망치",
-                            "priceRange": "$30,000~$40,000",
-                            "description": "강력한 근거리 무기입니다. 스크롤 방향에 따라 동적으로 휘두릅니다.",
-                            "usage": "강력한 한 방이 필요할 때 적합합니다."
+                            "priceRange": "$38,000~$48,000",
+                            "description": "휘두름당 150 피해를 주는 10회 충전식 중무기이며 중량급 이하 적을 스턴시킵니다.",
+                            "usage": "강하지만 비싸고 휘두름이 위험하므로 팀원과 귀중품을 공격선에서 빼세요.",
+                            "image": "./REPO/items/sledge-hammer.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/0/0d/MeleeSledgeHammer.png/revision/latest?cb=20250407223745",
+                            "stats": [
+                                {
+                                    "label": "피해",
+                                    "value": "150"
+                                },
+                                {
+                                    "label": "충전당",
+                                    "value": "10회"
+                                },
+                                {
+                                    "label": "스턴",
+                                    "value": "중량급 이하"
+                                }
+                            ]
                         },
                         {
                             "id": "inflatable-hammer",
                             "name": "Inflatable Hammer",
                             "nameKr": "풍선 망치",
-                            "priceRange": "$9,000~$10,000",
-                            "description": "매우 약한 근거리 무기입니다.",
-                            "usage": "초반 저예산 무기 옵션이나 소형 몬스터 처리용입니다."
+                            "priceRange": "$8,000~$12,000",
+                            "description": "평소 5 피해를 주지만 타격 시 드물게 폭발해 250 피해와 스턴을 일으키는 20회 무기입니다.",
+                            "usage": "폭발 여부를 전제로 근접하면 안 됩니다. 약 5%라는 확률은 커뮤니티 추정입니다.",
+                            "image": "./REPO/items/inflatable-hammer.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/9/96/MeleeInflatableHammer.png/revision/latest?cb=20250407223745",
+                            "stats": [
+                                {
+                                    "label": "일반 피해",
+                                    "value": "5"
+                                },
+                                {
+                                    "label": "폭발 피해",
+                                    "value": "250"
+                                },
+                                {
+                                    "label": "충전당",
+                                    "value": "20회"
+                                }
+                            ]
                         },
                         {
                             "id": "roll-staff",
                             "name": "Roll Staff",
                             "nameKr": "구르기 스태프",
-                            "priceRange": "변동",
-                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 스태프 계열 무기입니다. 몬스터나 오브젝트를 굴리는 효과를 냅니다.",
-                            "usage": "몬스터를 밀어내거나 이동시킬 때 활용됩니다."
+                            "priceRange": "$22,000~$30,000",
+                            "description": "6회 사용하며 적·플레이어를 멀리 굴리고 물체는 사용자 쪽으로 당깁니다.",
+                            "usage": "위험한 적을 밀어내거나 멀리 있는 귀중품을 회수하는 통제 도구로 쓰세요.",
+                            "image": "./REPO/items/roll-staff.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/9/94/RollStaff.png/revision/latest?cb=20260508141957",
+                            "stats": [
+                                {
+                                    "label": "충전당",
+                                    "value": "6회"
+                                },
+                                {
+                                    "label": "효과",
+                                    "value": "대상 구르기"
+                                }
+                            ],
+                            "versionNote": "v0.4.4에서 굴러가는 물체가 플레이어 대신 적을 노리며, 영향을 받은 플레이어는 카메라로 방향을 조절할 수 있게 됐습니다."
                         },
                         {
                             "id": "zero-gravity-staff",
                             "name": "Zero Gravity Staff",
                             "nameKr": "무중력 스태프",
-                            "priceRange": "변동",
-                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 스태프 계열 무기입니다. 대상을 무중력 상태로 만듭니다.",
-                            "usage": "몬스터나 귀중품을 공중에 띄워 이동시키는 데 활용됩니다."
+                            "priceRange": "$14,000~$18,000",
+                            "description": "6회 사용해 대상 플레이어·적·물체를 무중력 상태로 만듭니다.",
+                            "usage": "무거운 귀중품 이동, 적 무력화, 자신의 수직 이동에 쓸 수 있습니다.",
+                            "image": "./REPO/items/zero-gravity-staff.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/8/8d/ZeroGravityStaff.png/revision/latest?cb=20260508142240",
+                            "stats": [
+                                {
+                                    "label": "충전당",
+                                    "value": "6회"
+                                },
+                                {
+                                    "label": "효과",
+                                    "value": "대상 무중력"
+                                }
+                            ],
+                            "versionNote": "v0.4.4에서 적이 아닌 대상의 지속 시간과 제어가 개선돼 자기 자신에게 사용한 비행 운용이 가능해졌습니다."
                         },
                         {
                             "id": "void-staff",
                             "name": "Void Staff",
                             "nameKr": "보이드 스태프",
-                            "priceRange": "변동",
-                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 스태프 계열 무기입니다. 효과 지속 시간이 길어졌습니다.",
-                            "usage": "강력한 효과 지속이 필요한 상황에서 활용됩니다."
+                            "priceRange": "$22,000~$30,000",
+                            "description": "6회 사용해 강한 공허 흡인장을 만들며 중심부에서 간헐적으로 바깥 방향 힘도 발생합니다.",
+                            "usage": "적과 물체가 한곳에 엉키므로 깨질 귀중품과 팀원을 먼저 치우세요.",
+                            "image": "./REPO/items/void-staff.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/a/a3/VoidStaff.png/revision/latest?cb=20260508142040",
+                            "stats": [
+                                {
+                                    "label": "충전당",
+                                    "value": "6회"
+                                },
+                                {
+                                    "label": "효과",
+                                    "value": "강한 흡인장"
+                                }
+                            ],
+                            "versionNote": "v0.4.4에서 무거운 대상까지 끌어당기는 힘이 강해지고 중심부의 무작위 바깥 방향 힘이 추가됐습니다."
                         }
                     ]
                 },
@@ -697,57 +912,145 @@
                             "id": "grenade",
                             "name": "Grenade",
                             "nameKr": "수류탄",
-                            "priceRange": "$3,000",
-                            "description": "노움이나 고무오리 등 소형 몬스터를 폭발로 처치하는 투척 아이템입니다.",
-                            "usage": "무리 지어 다니는 소형 몬스터 처리에 효과적입니다."
+                            "priceRange": "$2,000~$3,000",
+                            "description": "반경 10m에서 몬스터 160, 플레이어 75 피해를 줍니다.",
+                            "usage": "좁은 방의 소형 적 무리를 정리할 때 쓰되 팀원과 귀중품을 폭발권 밖으로 빼세요.",
+                            "image": "./REPO/items/grenade.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/f/fb/Grenade.png/revision/latest?cb=20250407223744",
+                            "stats": [
+                                {
+                                    "label": "피해",
+                                    "value": "몬스터 160 / 플레이어 75"
+                                },
+                                {
+                                    "label": "반경",
+                                    "value": "10m"
+                                }
+                            ]
                         },
                         {
                             "id": "shockwave-grenade",
                             "name": "Shockwave Grenade",
                             "nameKr": "충격파 수류탄",
-                            "priceRange": "$3,000",
-                            "description": "폭발 시 주변 몬스터를 뒤로 밀어내는 투척 아이템입니다.",
-                            "usage": "몬스터를 멀리 밀어내 탈출 공간을 확보할 때 유용합니다."
+                            "priceRange": "$2,000",
+                            "description": "직접 피해 없이 반경 30m의 대상들을 강하게 밀어냅니다.",
+                            "usage": "추격 경로를 끊거나 낙하 지형으로 보내는 탈출 도구입니다.",
+                            "image": "./REPO/items/shockwave-grenade.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/2/29/GrenadeShockwave.png/revision/latest?cb=20250407223744",
+                            "stats": [
+                                {
+                                    "label": "직접 피해",
+                                    "value": "0"
+                                },
+                                {
+                                    "label": "반경",
+                                    "value": "30m"
+                                }
+                            ]
                         },
                         {
                             "id": "stun-grenade",
                             "name": "Stun Grenade",
                             "nameKr": "스턴 수류탄",
-                            "priceRange": "$3,000",
-                            "description": "몬스터를 일시적으로 스턴시키는 투척 아이템입니다.",
-                            "usage": "위험한 상황에서 시간을 벌 때 효과적입니다."
+                            "priceRange": "$2,000",
+                            "description": "직접 피해 없이 반경 30m의 적을 최대 15초 스턴시킵니다.",
+                            "usage": "중량 때문에 들 수 없는 적도 멈출 수 있어 구조와 집중 공격의 시작점으로 좋습니다.",
+                            "image": "./REPO/items/stun-grenade.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/c/c7/GrenadeStun.png/revision/latest?cb=20250407223744",
+                            "stats": [
+                                {
+                                    "label": "직접 피해",
+                                    "value": "0"
+                                },
+                                {
+                                    "label": "반경",
+                                    "value": "30m"
+                                },
+                                {
+                                    "label": "최대 스턴",
+                                    "value": "15초"
+                                }
+                            ]
                         },
                         {
                             "id": "rubber-duck",
                             "name": "Rubber Duck",
                             "nameKr": "고무 오리",
-                            "priceRange": "$16,000",
-                            "description": "던지면 튀어다니며 몬스터의 주의를 분산시킵니다. 충격 시 폭발할 가능성이 높으며 궤적이 불규칙합니다.",
-                            "usage": "몬스터 주의 분산과 피해를 동시에 줄 수 있는 유틸리티 아이템입니다."
+                            "priceRange": "$14,000~$18,000",
+                            "description": "튕길 때마다 10% 확률로 폭발하며 충돌 50, 폭발 250 피해를 줍니다. 튕길수록 빨라집니다.",
+                            "usage": "궤도가 불규칙한 고위험 도구입니다. 귀중품과 팀원이 없는 공간에서만 던지세요.",
+                            "image": "./REPO/items/rubber-duck.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/9/96/RubberDuck.png/revision/latest?cb=20250407223746",
+                            "stats": [
+                                {
+                                    "label": "충돌 피해",
+                                    "value": "50"
+                                },
+                                {
+                                    "label": "폭발 피해",
+                                    "value": "250"
+                                },
+                                {
+                                    "label": "폭발 확률",
+                                    "value": "튕김마다 10%"
+                                }
+                            ]
                         }
                     ]
                 },
                 {
                     "id": "mines",
-                    "label": "지뢰",
-                    "title": "설치형 지뢰",
+                    "label": "설치형 함정",
+                    "title": "설치형 함정",
                     "description": "바닥에 설치해 몬스터가 밟을 때 효과를 발동하는 아이템입니다.",
                     "entries": [
                         {
                             "id": "stun-mine",
-                            "name": "Stun Mine",
-                            "nameKr": "스턴 지뢰",
-                            "priceRange": "$3,000",
-                            "description": "지나가는 이족보행 몬스터를 일시적으로 스턴시켜 팀이 이동할 시간을 벌어줍니다.",
-                            "usage": "탈출로나 귀중품 주변에 설치해 시간을 확보하는 데 유용합니다."
+                            "name": "Trapzap",
+                            "nameKr": "트랩잽 (스턴 덫)",
+                            "priceRange": "$2,000~$3,000",
+                            "description": "범위 안의 대상을 여러 차례 전기 충격으로 스턴시키며 플레이어에게는 충격당 3 피해를 줍니다. 작동 후 파괴됩니다.",
+                            "usage": "문턱·좁은 통로에 설치하되 팀 동선과 겹치지 않게 콜을 공유하세요.",
+                            "image": "./REPO/items/stun-mine.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/5/5b/Trapzap_transparent.png/revision/latest?cb=20250816230302",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "반복 스턴"
+                                },
+                                {
+                                    "label": "플레이어 피해",
+                                    "value": "충격당 3"
+                                },
+                                {
+                                    "label": "소모",
+                                    "value": "작동 후 파괴"
+                                }
+                            ],
+                            "aliases": [
+                                "Stun Mine",
+                                "스턴 지뢰"
+                            ]
                         },
                         {
                             "id": "shockwave-mine",
                             "name": "Shockwave Mine",
                             "nameKr": "충격파 지뢰",
-                            "priceRange": "$3,000",
-                            "description": "지나가는 이족보행 몬스터를 뒤로 밀어내는 지뢰입니다.",
-                            "usage": "좁은 통로에 설치해 몬스터 접근을 차단하는 데 효과적입니다."
+                            "priceRange": "$2,000~$3,000",
+                            "description": "직접 피해 없이 반경 30m에서 대상을 밀어냅니다.",
+                            "usage": "밀려난 적의 재진입이 늦어지는 긴 직선 통로에 설치하세요.",
+                            "image": "./REPO/items/shockwave-mine.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/6/6b/MineShockwave.png/revision/latest?cb=20250407223745",
+                            "stats": [
+                                {
+                                    "label": "직접 피해",
+                                    "value": "0"
+                                },
+                                {
+                                    "label": "반경",
+                                    "value": "30m"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -761,49 +1064,145 @@
                             "id": "recharge-drone",
                             "name": "Recharge Drone",
                             "nameKr": "충전 드론",
-                            "priceRange": "$4,000",
-                            "description": "함께 이동하며 배터리가 남아있는 동안 충전 가능한 아이템을 자동으로 재충전해주는 드론입니다.",
-                            "usage": "총이나 다른 충전 아이템을 자주 쓰는 팀에게 유용합니다."
+                            "priceRange": "$14,000~$18,000",
+                            "description": "완충 드론 하나가 완전히 빈 충전식 아이템 하나를 전부 충전하며 완료 후 자동 정지합니다.",
+                            "usage": "안전한 방에서 빈 장비 하나에 집중해 에너지 낭비를 막으세요.",
+                            "image": "./REPO/items/recharge-drone.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/8/8d/DroneRecharge.png/revision/latest?cb=20250407223743",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "빈 장비 1개 완전 충전"
+                                },
+                                {
+                                    "label": "제어",
+                                    "value": "완충 후 자동 정지"
+                                }
+                            ]
                         },
                         {
                             "id": "roll-drone",
                             "name": "Roll Drone",
                             "nameKr": "구르기 드론",
-                            "priceRange": "$9,000~$11,000",
-                            "description": "인터랙션하면 세미봇을 빠르게 굴러가는 공 형태로 만들어 몬스터로부터 빠르게 탈출할 수 있게 합니다.",
-                            "usage": "몬스터 추격에서 빠르게 이탈할 때 사용합니다."
+                            "priceRange": "$8,000~$12,000",
+                            "description": "플레이어는 바라보는 방향으로 굴리고, 물체는 사용자 쪽으로 끌며, 적은 스턴시켜 바깥으로 굴립니다.",
+                            "usage": "팀원 긴급 이탈이나 위험한 적 밀어내기에 사용하고 절벽 방향을 확인하세요.",
+                            "image": "./REPO/items/roll-drone.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/1/11/DroneRoll.png/revision/latest?cb=20250407223743",
+                            "stats": [
+                                {
+                                    "label": "플레이어",
+                                    "value": "시선 방향 구르기"
+                                },
+                                {
+                                    "label": "물체",
+                                    "value": "사용자 쪽 이동"
+                                },
+                                {
+                                    "label": "적",
+                                    "value": "스턴 후 밀어냄"
+                                }
+                            ]
                         },
                         {
                             "id": "feather-drone",
                             "name": "Feather Drone",
                             "nameKr": "깃털 드론",
-                            "priceRange": "$15,000",
-                            "description": "낙하 속도를 줄여주는 드론입니다.",
-                            "usage": "높은 지형에서 안전하게 착지할 때 유용합니다."
+                            "priceRange": "$14,000~$18,000",
+                            "description": "플레이어·물체·스턴된 적의 무게를 줄입니다. 플레이어는 더 높이 뛰고 귀중품 흔들림은 줄어듭니다.",
+                            "usage": "무거운 귀중품 운반 전에 부착하거나 낙하·점프 동선을 단축할 때 쓰세요.",
+                            "image": "./REPO/items/feather-drone.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/d/d2/DroneFeather.png/revision/latest?cb=20250407223743",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "대상 경량화"
+                                },
+                                {
+                                    "label": "대상",
+                                    "value": "플레이어·물체·스턴된 적"
+                                }
+                            ]
                         },
                         {
                             "id": "zero-gravity-drone",
                             "name": "Zero Gravity Drone",
                             "nameKr": "무중력 드론",
-                            "priceRange": "$28,000",
-                            "description": "주변에 소형 무중력 구역을 생성하는 드론입니다.",
-                            "usage": "귀중품이나 몬스터를 공중에 띄울 때 활용됩니다."
-                        },
+                            "priceRange": "$22,000~$30,000",
+                            "description": "플레이어에게 높은 점프와 느린 낙하를 주며 물체는 무중력 상태로 붙잡아 둡니다.",
+                            "usage": "귀중품을 공중 고정할 때 이동 관성을 확인하고 팀원이 준비된 뒤 켜세요.",
+                            "image": "./REPO/items/zero-gravity-drone.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/5/57/DroneZeroGravity.png/revision/latest?cb=20250407223743",
+                            "stats": [
+                                {
+                                    "label": "플레이어",
+                                    "value": "높은 점프·느린 낙하"
+                                },
+                                {
+                                    "label": "물체",
+                                    "value": "무중력 고정"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "vehicles",
+                    "label": "차량",
+                    "title": "탑승형 차량",
+                    "description": "Scout와 Hauler는 드론이 아니라 직접 탑승·운전하며 서비스 스테이션에서 수리하는 차량입니다.",
+                    "entries": [
                         {
                             "id": "scout",
                             "name": "Scout",
                             "nameKr": "스카우트",
-                            "priceRange": "변동",
-                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 정찰용 드론입니다.",
-                            "usage": "맵을 정찰하거나 몬스터 위치를 파악할 때 사용합니다."
+                            "priceRange": "$19,000~$20,000",
+                            "description": "빠르게 운전하고 드리프트할 수 있는 소형 정찰 차량입니다. 속도를 낸 충돌은 대상에 피해를 줄 수 있습니다.",
+                            "usage": "먼 동선 정찰과 이탈에 유리합니다. 충돌 피해의 정확한 공식 수치는 확인되지 않았습니다.",
+                            "image": "./REPO/items/scout.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/6/69/Scout.png/revision/latest?cb=20260521094947",
+                            "stats": [
+                                {
+                                    "label": "분류",
+                                    "value": "탑승형 차량"
+                                },
+                                {
+                                    "label": "역할",
+                                    "value": "고속 정찰·이동"
+                                },
+                                {
+                                    "label": "수리",
+                                    "value": "서비스 스테이션"
+                                }
+                            ]
                         },
                         {
                             "id": "hauler",
                             "name": "Hauler",
-                            "nameKr": "운반 드론",
-                            "priceRange": "변동",
-                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 귀중품 운반 보조 드론입니다.",
-                            "usage": "귀중품을 추출 지점까지 운반하는 것을 보조합니다."
+                    "nameKr": "홀러 (운반 차량)",
+                            "priceRange": "$38,000~$48,000",
+                            "description": "Scout보다 느리고 크지만 튼튼한 운반 차량입니다. 합계 $20,000 이하의 소형 귀중품을 내부에 잠가 추출까지 보호합니다.",
+                            "usage": "여러 소형품을 묶어 운반하세요. 파괴되면 내용물을 잃을 수 있습니다.",
+                            "image": "./REPO/items/hauler.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/8/83/Hauler.png/revision/latest?cb=20260521094910",
+                            "stats": [
+                                {
+                                    "label": "분류",
+                                    "value": "탑승형 차량"
+                                },
+                                {
+                                    "label": "보관 한도",
+                                    "value": "소형 귀중품 합계 $20,000"
+                                },
+                                {
+                                    "label": "충돌 피해",
+                                    "value": "20~50 (위키)"
+                                },
+                                {
+                                    "label": "운전자 폭발 피해",
+                                    "value": "최대 100 (위키)"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -817,57 +1216,150 @@
                             "id": "energy-crystal",
                             "name": "Energy Crystal",
                             "nameKr": "에너지 크리스탈",
-                            "priceRange": "$7,000~$11,000",
-                            "description": "트럭 내 충전 스테이션에 넣으면 충전 가능한 모든 아이템을 재충전합니다. 에너지 소진 시 파괴됩니다. 항상 기본 크리스탈 하나는 지급됩니다.",
-                            "usage": "총, 드론 등 충전형 아이템을 쓰는 팀의 필수 소모품입니다."
+                            "priceRange": "$5,000~$24,000",
+                            "description": "트럭 에너지 5칸을 채워 충전식 아이템 하나를 완충합니다. 트럭은 최대 10개, 총 50칸을 저장하며 런 시작 시 1개가 무료 지급됩니다.",
+                            "usage": "충전 수요가 없으면 비축하세요. 소모되면 다음 레벨에 복귀하지 않습니다.",
+                            "image": "./REPO/items/energy-crystal.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/f/fc/EnergyCrystal.png/revision/latest?cb=20250407223743",
+                            "stats": [
+                                {
+                                    "label": "크리스탈 1개",
+                                    "value": "에너지 5칸"
+                                },
+                                {
+                                    "label": "트럭 최대",
+                                    "value": "10개 / 50칸"
+                                },
+                                {
+                                    "label": "기본 지급",
+                                    "value": "런 시작 시 1개"
+                                }
+                            ]
                         },
                         {
                             "id": "extraction-tracker",
                             "name": "Extraction Tracker",
                             "nameKr": "추출 지점 추적기",
-                            "priceRange": "$5,000",
-                            "description": "보조 추출 지점의 위치를 알려주는 추적기입니다.",
-                            "usage": "빠르게 추출 지점을 찾아야 할 때 효율을 높여줍니다."
+                            "priceRange": "$4,000~$5,000",
+                            "description": "현재 위치에서 가장 가까운 추출 지점을 가리킵니다.",
+                            "usage": "복잡한 맵이나 보조 추출 지점으로 우회할 때 길찾기 시간을 줄입니다.",
+                            "image": "./REPO/items/extraction-tracker.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/4/44/TrackerExtraction.png/revision/latest?cb=20250407223746",
+                            "stats": [
+                                {
+                                    "label": "추적 대상",
+                                    "value": "가장 가까운 추출 지점"
+                                }
+                            ]
                         },
                         {
                             "id": "valuable-tracker",
                             "name": "Valuable Tracker",
                             "nameKr": "귀중품 추적기",
-                            "priceRange": "$15,000",
-                            "description": "레벨 내 귀중품의 위치를 추적해주는 장비입니다.",
-                            "usage": "넓은 맵에서 귀중품을 빠짐없이 회수할 때 유용합니다."
+                            "priceRange": "$5,000~$8,000",
+                            "description": "현재 위치에서 가장 가까운 귀중품을 가리킵니다.",
+                            "usage": "마지막 할당량을 채우거나 놓친 작은 귀중품을 찾을 때 사용하세요.",
+                            "image": "./REPO/items/valuable-tracker.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/3/32/TrackerValuable.png/revision/latest?cb=20250407223746",
+                            "stats": [
+                                {
+                                    "label": "추적 대상",
+                                    "value": "가장 가까운 귀중품"
+                                }
+                            ]
                         },
                         {
                             "id": "zero-gravity-orb",
                             "name": "Zero Gravity Orb",
                             "nameKr": "무중력 구슬",
-                            "priceRange": "$39,000",
-                            "description": "소형 무중력 구역을 생성합니다.",
-                            "usage": "무거운 귀중품을 이동시키거나 몬스터를 공중에 띄울 때 활용됩니다."
+                            "priceRange": "$38,000~$48,000",
+                            "description": "주변에 무중력 영역을 만듭니다. 멈춘 물체는 제자리에 남고 움직이던 물체는 관성을 유지합니다.",
+                            "usage": "대형 귀중품 이동 방향을 먼저 정해 관성 충돌을 막으세요.",
+                            "image": "./REPO/items/zero-gravity-orb.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/3/3d/ZeroGravityOrb.png/revision/latest?cb=20250407223747",
+                            "stats": [
+                                {
+                                    "label": "효과",
+                                    "value": "범위 무중력"
+                                },
+                                {
+                                    "label": "물체",
+                                    "value": "정지 유지 / 이동 관성 유지"
+                                }
+                            ]
                         },
                         {
                             "id": "leaf-blower",
                             "name": "Leaf Blower",
                             "nameKr": "낙엽 청소기",
-                            "priceRange": "변동",
-                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 아이템입니다. 몬스터, 세미봇, 아이템, 귀중품을 뒤로 밀어냅니다. 귀중품에 낙하 피해를 줄 수 있으니 주의가 필요합니다.",
-                            "usage": "몬스터를 밀어내 탈출 공간을 만들거나 귀중품을 이동시키는 데 사용합니다."
+                            "priceRange": "$8,000~$12,000",
+                            "description": "귀중품·플레이어·소형 적을 밀어냅니다. 기본 배터리는 6이며 적을 불 때는 에너지를 4배 빠르게 씁니다.",
+                            "usage": "가벼운 귀중품을 안전한 방향으로 밀되 낙하 파손과 급격한 배터리 소모를 주의하세요.",
+                            "image": "./REPO/items/leaf-blower.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/e/e3/LeafBlower.png/revision/latest?cb=20260507141429",
+                            "stats": [
+                                {
+                                    "label": "배터리",
+                                    "value": "6"
+                                },
+                                {
+                                    "label": "적 대상 소모",
+                                    "value": "4배"
+                                },
+                                {
+                                    "label": "효과",
+                                    "value": "밀어내기"
+                                }
+                            ]
                         },
                         {
                             "id": "semibot-walkies",
                             "name": "Semibot Walkies",
                             "nameKr": "세미봇 무전기",
-                            "priceRange": "변동",
-                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 통신 장비입니다. 팀원과 분리된 상황에서 소통할 수 있습니다.",
-                            "usage": "넓은 맵에서 팀원과 분리되었을 때 위치와 정보를 공유합니다."
+                            "priceRange": "$22,000~$30,000",
+                            "description": "한 쌍의 기기로 다른 세미봇의 흑백 시점·조작·음성을 원격 공유합니다. 거리와 배터리 제한이 없습니다.",
+                            "usage": "한 명을 안전한 위치에 두고 정찰·구조 경로를 원격 확인하는 팀 운영에 적합합니다.",
+                            "image": "./REPO/items/semibot-walkies.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/2/2d/Semibot_walkiee.png/revision/latest?cb=20260521164640",
+                            "stats": [
+                                {
+                                    "label": "구성",
+                                    "value": "2개 한 쌍"
+                                },
+                                {
+                                    "label": "거리",
+                                    "value": "제한 없음"
+                                },
+                                {
+                                    "label": "배터리",
+                                    "value": "제한 없음"
+                                }
+                            ]
                         },
                         {
                             "id": "defibro",
                             "name": "Defibro",
                             "nameKr": "제세동기",
-                            "priceRange": "변동",
-                            "description": "v0.4.0 코스메틱 업데이트에서 추가된 1회용 부활 아이템입니다. 인벤토리에 장착한 상태로 사망하면 가장 가까운 지형 가장자리에서 부활합니다. 사용 시 적을 스턴시키는 충격파도 발생합니다. 싱글플레이에서도 작동합니다.",
-                            "usage": "고위험 구역 진입 전 필수적으로 갖추는 것이 좋습니다. 팀원 근처에서 사용하면 팀원도 부활시킬 수 있습니다."
+                            "priceRange": "$38,000~$48,000",
+                            "description": "인벤토리에 든 채 가까운 시체에 사용하면 해당 플레이어를 50 HP로 부활시키고 사라집니다. 싱글플레이에서도 작동합니다.",
+                            "usage": "자동 부활품이 아닙니다. 시체 가까이에서 직접 사용해야 합니다.",
+                            "image": "./REPO/items/defibro.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/d/dd/Defibroo.png/revision/latest?cb=20260521164818",
+                            "stats": [
+                                {
+                                    "label": "부활 체력",
+                                    "value": "50 HP"
+                                },
+                                {
+                                    "label": "소모",
+                                    "value": "부활 후 사라짐"
+                                },
+                                {
+                                    "label": "싱글플레이",
+                                    "value": "작동"
+                                }
+                            ],
+                            "versionNote": "공식 v0.4.1에서 사용 시 주변 적을 스턴시키는 충격파가 추가됐습니다."
                         }
                     ]
                 },
@@ -881,17 +1373,41 @@
                             "id": "cart",
                             "name": "C.A.R.T.",
                             "nameKr": "카트",
-                            "priceRange": "$39,000",
-                            "description": "귀중품을 담아 추출 지점으로 운반하는 추가 카트입니다.",
-                            "usage": "귀중품 양이 많을 때 두 번째 카트를 활용해 운반 효율을 높이세요."
+                            "priceRange": "$38,000~$48,000",
+                            "description": "런 시작 시 1대가 무료 지급되는 대형 카트입니다. 구매분을 포함해 최대 4대까지 보유합니다.",
+                            "usage": "카트를 지나치게 분산하지 말고 팀 규모와 귀중품 양에 맞춰 추가 구매하세요.",
+                            "image": "./REPO/items/cart.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/1/11/CartBig.png/revision/latest?cb=20250407223742",
+                            "stats": [
+                                {
+                                    "label": "기본 지급",
+                                    "value": "1대"
+                                },
+                                {
+                                    "label": "최대 보유",
+                                    "value": "4대 (기본 포함)"
+                                }
+                            ]
                         },
                         {
                             "id": "pocket-cart",
                             "name": "Pocket C.A.R.T.",
                             "nameKr": "포켓 카트",
-                            "priceRange": "$15,000~$18,000",
-                            "description": "일반 카트보다 작고 저렴한 소형 카트입니다.",
-                            "usage": "초반 자금이 부족할 때 보조 운반 수단으로 활용됩니다."
+                            "priceRange": "$14,000~$18,000",
+                            "description": "인벤토리에 넣어 휴대할 수 있는 소형 카트이며 최대 2대까지 보유합니다.",
+                            "usage": "좁은 방이나 긴 우회 동선에서 소형 귀중품을 모은 뒤 본 카트로 합치세요.",
+                            "image": "./REPO/items/pocket-cart.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/c/cc/CartSmall.png/revision/latest?cb=20250407223743",
+                            "stats": [
+                                {
+                                    "label": "휴대",
+                                    "value": "인벤토리"
+                                },
+                                {
+                                    "label": "최대 보유",
+                                    "value": "2대"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -905,25 +1421,1280 @@
                             "id": "small-health-pack",
                             "name": "Small Health Pack",
                             "nameKr": "소형 구급 키트",
-                            "priceRange": "$3,000",
-                            "description": "즉시 HP를 25 회복합니다.",
-                            "usage": "가볍게 다쳤을 때 사용하는 저가 회복 아이템입니다."
+                            "priceRange": "$3,000~$6,000",
+                            "description": "HP를 25 회복합니다.",
+                            "usage": "작은 부상을 메워 다음 공격의 사망선을 벗어날 때 사용하세요.",
+                            "image": "./REPO/items/small-health-pack.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/5/50/HealthSmall.png/revision/latest?cb=20250407223745",
+                            "stats": [
+                                {
+                                    "label": "회복",
+                                    "value": "+25 HP"
+                                },
+                                {
+                                    "label": "최대 보유",
+                                    "value": "3개"
+                                }
+                            ]
                         },
                         {
                             "id": "medium-health-pack",
                             "name": "Medium Health Pack",
                             "nameKr": "중형 구급 키트",
-                            "priceRange": "$5,000~$6,000",
-                            "description": "즉시 HP를 50 회복합니다.",
-                            "usage": "중간 정도 피해를 받은 상황에서 사용합니다."
+                            "priceRange": "$5,000~$11,000",
+                            "description": "HP를 50 회복합니다.",
+                            "usage": "비용과 회복량의 중간 선택지로 팀 공용 비상분을 남겨 두세요.",
+                            "image": "./REPO/items/medium-health-pack.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/e/e7/HealthMedium.png/revision/latest?cb=20250407223745",
+                            "stats": [
+                                {
+                                    "label": "회복",
+                                    "value": "+50 HP"
+                                },
+                                {
+                                    "label": "최대 보유",
+                                    "value": "3개"
+                                }
+                            ]
                         },
                         {
                             "id": "large-health-pack",
                             "name": "Large Health Pack",
                             "nameKr": "대형 구급 키트",
-                            "priceRange": "$9,000~$13,000",
-                            "description": "즉시 HP를 100 회복합니다.",
-                            "usage": "큰 피해를 받은 상황이나 위급할 때 사용합니다."
+                            "priceRange": "$9,000~$21,000",
+                            "description": "HP를 100 회복합니다.",
+                            "usage": "손실 체력이 큰 플레이어나 전투 전 완전 회복에 적합합니다.",
+                            "image": "./REPO/items/large-health-pack.webp",
+                            "imageSource": "https://static.wikia.nocookie.net/repo-2025horror/images/c/ca/HealthLarge.png/revision/latest?cb=20250407223745",
+                            "stats": [
+                                {
+                                    "label": "회복",
+                                    "value": "+100 HP"
+                                },
+                                {
+                                    "label": "최대 보유",
+                                    "value": "3개"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "description": "v0.4.4 기준 서비스 스테이션 구매품 40종입니다. 가격은 플레이어 수·구매 횟수·개별 생성값에 따라 달라질 수 있습니다.",
+            "research": {
+                "gameVersion": "v0.4.4",
+                "verifiedAt": "2026-08-11",
+                "method": "semiwork 공식 Steam 패치 노트로 버전 변경점을 확인하고, 2026-07-27 유지 관리 위키의 Purchased Items 고정 리비전과 개별 문서를 대조했습니다. 게임사가 전체 상점 수치표를 공개하지 않아 가격·피해·사용 횟수는 유지 관리 위키 데이터로 표기합니다.",
+                "notes": [
+                    "가격 범위와 피해·충전량은 공식 개발자 수치표가 아니라 유지 관리 커뮤니티 위키의 현재 데이터입니다.",
+                    "업그레이드 가격은 기본값·플레이어 수·해당 업그레이드 구매 횟수에 따라 계산되며 비업그레이드 장비도 중복품 가격이 다를 수 있습니다.",
+                    "구매 장비는 파손·분실해도 다음 레벨에 복귀하지만 트럭에 투입해 소모되는 Energy Crystal은 복귀하지 않습니다.",
+                    "Gun은 종합 표가 $18,000~$20,000, 개별 문서가 $19,000~$20,000으로 충돌해 더 넓은 종합 표 범위를 사용했습니다.",
+                    "Inflatable Hammer의 폭발 확률 약 5%는 커뮤니티 추정치이며 공식 확률이 아닙니다.",
+                    "Tumble Launch와 벽을 잡는 Tumble Climb은 별도 업그레이드입니다.",
+                    "이미지 원본 URL은 PNG 이름이지만 실제 응답은 WEBP 바이트여서 로컬 확장자도 .webp로 맞췄습니다."
+                ],
+                "sources": [
+                    {
+                        "label": "semiwork — v0.4.4 패치 노트 (2026-05-25)",
+                        "url": "https://steamcommunity.com/games/3241660/announcements/detail/1833334318576798",
+                        "type": "official"
+                    },
+                    {
+                        "label": "semiwork — v0.4.0 코스메틱 업데이트 (2026-05-07)",
+                        "url": "https://steamcommunity.com/games/3241660/announcements/detail/1832065502811979",
+                        "type": "official"
+                    },
+                    {
+                        "label": "R.E.P.O. Wiki — Purchased Items rev.10377 (2026-07-27)",
+                        "url": "https://repo-2025horror.fandom.com/wiki/Purchased_Items?oldid=10377",
+                        "type": "maintained-wiki"
+                    },
+                    {
+                        "label": "R.E.P.O. Wiki — Scout rev.8744",
+                        "url": "https://repo-2025horror.fandom.com/wiki/Scout?oldid=8744",
+                        "type": "maintained-wiki"
+                    },
+                    {
+                        "label": "R.E.P.O. Wiki — Hauler rev.9699",
+                        "url": "https://repo-2025horror.fandom.com/wiki/Hauler?oldid=9699",
+                        "type": "maintained-wiki"
+                    },
+                    {
+                        "label": "R.E.P.O. Wiki — Defibro rev.9849",
+                        "url": "https://repo-2025horror.fandom.com/wiki/Defibro?oldid=9849",
+                        "type": "maintained-wiki"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "mods",
+            "label": "모드",
+            "title": "현행 추천 모드",
+            "description": "2026-08-11 Thunderstore 최신 패키지를 기준으로 유지 상태와 v0.4.4 근거를 확인한 12종입니다. r2modman/Thunderstore App의 새 프로필에서 모드팩 전체 버전을 맞추는 방식을 권장합니다.",
+            "research": {
+                "gameVersion": "v0.4.4",
+                "verifiedAt": "2026-08-11",
+                "method": "Thunderstore 공개 패키지 API와 패키지 페이지에서 최신 버전·갱신일·deprecated 상태·manifest 의존성·changelog를 확인했습니다. 호환성은 v0.4.4 명시와 v0.4 계열/게시 시점 추정을 분리했고 Reddit·PC Gamer는 인기·사용 사례의 보조 신호로만 사용했습니다.",
+                "notes": [
+                    "모드는 semiwork 공식 지원 콘텐츠가 아닌 제3자 패키지입니다. 업데이트 직후에는 새 프로필에서 최소 구성부터 켜고 로그를 확인하세요.",
+                    "다운로드 수는 설치·재설치·자동 의존성 다운로드를 포함할 수 있는 인기 신호이며 활성 사용자·안정성·품질 증명이 아닙니다.",
+                    "명시적 v0.4.4 근거가 확인된 핵심 패키지는 REPOLib, RPKP, EnemyReport입니다. 나머지는 제한적 호환 판단입니다.",
+                    "로비 인원 확장, 업그레이드 공유, 번역 패치는 같은 역할의 패키지를 둘 이상 동시에 사용하지 마세요.",
+                    "MoreUpgrades 1.7.3은 REPOLib 3.0.0을 요구하지만 현행 REPOLib은 4.2.0이라 실제 로드 검증이 필요합니다.",
+                    "MorePlayersSimple 1.2.2는 설명에 v0.4.4, changelog에 v0.4.3이 적혀 있어 출처 내부 충돌을 경고합니다.",
+                    "zelofi-MorePlayers, Traktool-SharedUpgrades, Rebateman-LateJoin, x753_REPO-CustomColors, GalaxyMods-MoreShopItems는 deprecated라 제외했습니다. 오래된 REPO_HD는 REPOFidelity와 함께 쓰지 않습니다."
+                ],
+                "sources": [
+                    {
+                        "label": "Thunderstore API 문서",
+                        "url": "https://thunderstore.io/api/docs/",
+                        "type": "primary-platform"
+                    },
+                    {
+                        "label": "Thunderstore R.E.P.O. 카탈로그",
+                        "url": "https://thunderstore.io/c/repo/",
+                        "type": "primary-platform"
+                    },
+                    {
+                        "label": "semiwork v0.4.4 패치 노트",
+                        "url": "https://steamcommunity.com/games/3241660/announcements/detail/1833334318576798",
+                        "type": "official-version"
+                    },
+                    {
+                        "label": "Reddit 모드 추천 (2026-01-10)",
+                        "url": "https://www.reddit.com/r/REPOgame/comments/1q9d9rg/mod_recomendations/",
+                        "type": "community-popularity"
+                    },
+                    {
+                        "label": "Reddit Best mods 토론 (2026-01-07)",
+                        "url": "https://www.reddit.com/r/REPOgame/comments/1q6gssa/what_are_the_best_mods_for_repo/",
+                        "type": "community-popularity"
+                    },
+                    {
+                        "label": "Reddit Shared Upgrades 구버전 파손 사례",
+                        "url": "https://www.reddit.com/r/REPOgame/comments/1p7sgm5/shared_upgrades_mod/",
+                        "type": "community-warning"
+                    },
+                    {
+                        "label": "PC Gamer 모드 가이드 (역사적 참고)",
+                        "url": "https://www.pcgamer.com/games/horror/best-repo-mods/",
+                        "type": "historical-guide"
+                    }
+                ]
+            },
+            "groups": [
+                {
+                    "id": "mod-foundation",
+                    "label": "기반·설정",
+                    "title": "모드 로더와 공용 라이브러리",
+                    "description": "기반 패키지는 정확한 버전과 의존성 해석이 중요합니다.",
+                    "entries": [
+                        {
+                            "id": "bepinex-pack",
+                            "name": "BepInExPack",
+                            "nameKr": "BepInEx 기반 팩",
+                            "image": "./REPO/mods/bepinex-pack.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/BepInEx-BepInExPack-5.4.2305.png",
+                            "packageName": "BepInEx-BepInExPack",
+                            "aliases": [
+                                "BepInEx-BepInExPack",
+                                "BepInEx BepInExPack"
+                            ],
+                            "version": "5.4.2305",
+                            "updatedAt": "2026-03-17",
+                            "categories": [
+                                "Libraries"
+                            ],
+                            "scope": "모드 사용 전원",
+                            "dependencies": [],
+                            "compatibility": "현행 기반 버전; 개별 기능의 호환 표시는 아님",
+                            "downloadStats": {
+                                "latestVersion": 4191285,
+                                "totalDisplay": "약 3,200만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "R.E.P.O. 모드가 공통으로 사용하는 BepInEx 로더 번들입니다.",
+                            "usage": "모드 매니저가 의존성으로 자동 설치하게 두고 다른 버전을 수동 덮어쓰지 마세요.",
+                            "installLink": "https://thunderstore.io/c/repo/p/BepInEx/BepInExPack/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/BepInEx/BepInExPack/5.4.2305/",
+                            "attribution": "Thunderstore package/icon: BepInEx/BepInExPack.",
+                            "caution": "기능 모드가 아닙니다. 문제 진단은 BepInEx 로그와 중복 DLL부터 확인하세요.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "BepInEx-BepInExPack"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "5.4.2305 / 2026-03-17"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "Libraries"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "모드 사용 전원"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "없음"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "현행 기반 버전; 개별 기능의 호환 표시는 아님"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "4,191,285"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 3,200만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "BepInEx"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — BepInExPack",
+                                    "url": "https://thunderstore.io/c/repo/p/BepInEx/BepInExPack/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 5.4.2305",
+                                    "url": "https://thunderstore.io/package/download/BepInEx/BepInExPack/5.4.2305/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/BepInEx-BepInExPack-5.4.2305.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "repolib",
+                            "name": "REPOLib",
+                            "nameKr": "R.E.P.O. 공용 라이브러리",
+                            "image": "./REPO/mods/repolib.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/Zehs-REPOLib-4.2.0.png",
+                            "packageName": "Zehs-REPOLib",
+                            "aliases": [
+                                "Zehs-REPOLib",
+                                "Zehs REPOLib"
+                            ],
+                            "version": "4.2.0",
+                            "updatedAt": "2026-06-02",
+                            "categories": [
+                                "Libraries"
+                            ],
+                            "scope": "의존 모드 사용 전원",
+                            "dependencies": [
+                                "BepInEx-BepInExPack-5.4.2305"
+                            ],
+                            "compatibility": "changelog에 v0.4.4 지원 명시",
+                            "downloadStats": {
+                                "latestVersion": 724090,
+                                "totalDisplay": "약 1,200만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "적·아이템·네트워크 콘텐츠 등록을 공통화하는 핵심 라이브러리입니다.",
+                            "usage": "의존 모드와 함께 자동 설치하고 호스트·클라이언트 버전을 맞추세요.",
+                            "installLink": "https://thunderstore.io/c/repo/p/Zehs/REPOLib/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/Zehs/REPOLib/4.2.0/",
+                            "attribution": "Thunderstore package/icon: Zehs/REPOLib.",
+                            "caution": "REPOLib 3.x를 고정한 구형 모드는 매니저의 버전 선택과 로그를 확인하세요.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "Zehs-REPOLib"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "4.2.0 / 2026-06-02"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "Libraries"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "의존 모드 사용 전원"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInEx-BepInExPack-5.4.2305"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "changelog에 v0.4.4 지원 명시"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "724,090"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 1,200만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "Zehs"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — REPOLib",
+                                    "url": "https://thunderstore.io/c/repo/p/Zehs/REPOLib/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 4.2.0",
+                                    "url": "https://thunderstore.io/package/download/Zehs/REPOLib/4.2.0/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/Zehs-REPOLib-4.2.0.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "repo-config",
+                            "name": "REPOConfig",
+                            "nameKr": "인게임 모드 설정",
+                            "image": "./REPO/mods/repo-config.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/nickklmao-REPOConfig-1.2.6.png",
+                            "packageName": "nickklmao-REPOConfig",
+                            "aliases": [
+                                "nickklmao-REPOConfig",
+                                "nickklmao REPOConfig"
+                            ],
+                            "version": "1.2.6",
+                            "updatedAt": "2026-05-09",
+                            "categories": [
+                                "Tools",
+                                "Libraries"
+                            ],
+                            "scope": "설정 UI가 필요한 클라이언트",
+                            "dependencies": [
+                                "BepInEx-BepInExPack-5.4.2100",
+                                "nickklmao-MenuLib-2.5.2"
+                            ],
+                            "compatibility": "v1.2.4에 v0.4.0 대응; v0.4.4 직접 명시 없음",
+                            "downloadStats": {
+                                "latestVersion": 890797,
+                                "totalDisplay": "약 790만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "지원 모드의 설정을 게임 안에서 편집하게 해 주는 설정 UI입니다.",
+                            "usage": "재접속·재시작 요구 여부는 각 기능 모드 지침을 따르세요.",
+                            "installLink": "https://thunderstore.io/c/repo/p/nickklmao/REPOConfig/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/nickklmao/REPOConfig/1.2.6/",
+                            "attribution": "Thunderstore package/icon: nickklmao/REPOConfig.",
+                            "caution": "설정 UI가 네트워크 동기화를 보장하지 않습니다. 파티 설정은 별도로 맞춰야 할 수 있습니다.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "nickklmao-REPOConfig"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "1.2.6 / 2026-05-09"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "Tools · Libraries"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "설정 UI가 필요한 클라이언트"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInEx-BepInExPack-5.4.2100, nickklmao-MenuLib-2.5.2"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "v1.2.4에 v0.4.0 대응; v0.4.4 직접 명시 없음"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "890,797"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 790만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "nickklmao"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — REPOConfig",
+                                    "url": "https://thunderstore.io/c/repo/p/nickklmao/REPOConfig/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 1.2.6",
+                                    "url": "https://thunderstore.io/package/download/nickklmao/REPOConfig/1.2.6/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/nickklmao-REPOConfig-1.2.6.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "mod-multiplayer",
+                    "label": "한국어·멀티플레이",
+                    "title": "한국어화와 파티 운영",
+                    "description": "언어·로비 규칙을 바꾸므로 같은 역할의 모드를 중복 설치하지 마세요.",
+                    "entries": [
+                        {
+                            "id": "rpkp",
+                            "name": "RPKP",
+                            "nameKr": "R.E.P.O. 한국어 패치",
+                            "image": "./REPO/mods/rpkp.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/whiteline7-RPKP-6.2.1.png",
+                            "packageName": "whiteline7-RPKP",
+                            "aliases": [
+                                "whiteline7-RPKP",
+                                "whiteline7 RPKP"
+                            ],
+                            "version": "6.2.1",
+                            "updatedAt": "2026-07-26",
+                            "categories": [
+                                "Translations"
+                            ],
+                            "scope": "한국어가 필요한 각 클라이언트",
+                            "dependencies": [
+                                "BepInEx-BepInExPack-5.4.2305"
+                            ],
+                            "compatibility": "v6.0.1 changelog에 v0.4.4 지원 명시",
+                            "downloadStats": {
+                                "latestVersion": 7765,
+                                "totalDisplay": "약 28.3만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "게임 UI와 텍스트를 한국어로 바꾸는 유지 중인 번역 패치입니다.",
+                            "usage": "각 플레이어가 자신의 클라이언트 프로필에 설치합니다.",
+                            "installLink": "https://thunderstore.io/c/repo/p/whiteline7/RPKP/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/whiteline7/RPKP/6.2.1/",
+                            "attribution": "Thunderstore package/icon: whiteline7/RPKP.",
+                            "caution": "다른 한국어·번역 패치와 함께 쓰면 문자열이 중복되거나 덮어쓸 수 있습니다.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "whiteline7-RPKP"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "6.2.1 / 2026-07-26"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "Translations"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "한국어가 필요한 각 클라이언트"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInEx-BepInExPack-5.4.2305"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "v6.0.1 changelog에 v0.4.4 지원 명시"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "7,765"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 28.3만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "whiteline7"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — RPKP",
+                                    "url": "https://thunderstore.io/c/repo/p/whiteline7/RPKP/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 6.2.1",
+                                    "url": "https://thunderstore.io/package/download/whiteline7/RPKP/6.2.1/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/whiteline7-RPKP-6.2.1.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "more-players-simple",
+                            "name": "MorePlayersSimple",
+                            "nameKr": "간단한 인원 확장",
+                            "image": "./REPO/mods/more-players-simple.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/cn_xc-MorePlayersSimple-1.2.2.png",
+                            "packageName": "cn_xc-MorePlayersSimple",
+                            "aliases": [
+                                "cn_xc-MorePlayersSimple",
+                                "cn_xc MorePlayersSimple"
+                            ],
+                            "version": "1.2.2",
+                            "updatedAt": "2026-08-06",
+                            "categories": [
+                                "Multiplayer"
+                            ],
+                            "scope": "호스트 중심; 동일 모드팩 권장",
+                            "dependencies": [
+                                "BepInEx-BepInExPack-5.4.2100"
+                            ],
+                            "compatibility": "설명은 v0.4.4, changelog는 v0.4.3으로 충돌 — 스모크 테스트 권장",
+                            "downloadStats": {
+                                "latestVersion": 5457,
+                                "totalDisplay": "약 19.1만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "기본 로비보다 많은 플레이어가 참가하도록 최대 인원을 확장합니다.",
+                            "usage": "호스트 설정을 확정하고 참가자 모두 같은 프로필과 버전으로 접속하세요.",
+                            "installLink": "https://thunderstore.io/c/repo/p/cn_xc/MorePlayersSimple/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/cn_xc/MorePlayersSimple/1.2.2/",
+                            "attribution": "Thunderstore package/icon: cn_xc/MorePlayersSimple.",
+                            "caution": "다른 MorePlayers 계열과 함께 쓰지 마세요. 패키지 내부의 버전 표기가 충돌합니다.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "cn_xc-MorePlayersSimple"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "1.2.2 / 2026-08-06"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "Multiplayer"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "호스트 중심; 동일 모드팩 권장"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInEx-BepInExPack-5.4.2100"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "설명은 v0.4.4, changelog는 v0.4.3으로 충돌 — 스모크 테스트 권장"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "5,457"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 19.1만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "cn_xc"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — MorePlayersSimple",
+                                    "url": "https://thunderstore.io/c/repo/p/cn_xc/MorePlayersSimple/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 1.2.2",
+                                    "url": "https://thunderstore.io/package/download/cn_xc/MorePlayersSimple/1.2.2/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/cn_xc-MorePlayersSimple-1.2.2.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "shared-upgrades-plus",
+                            "name": "SharedUpgradesPlus",
+                            "nameKr": "업그레이드 공유 플러스",
+                            "image": "./REPO/mods/shared-upgrades-plus.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/Vippy-SharedUpgradesPlus-1.5.1.png",
+                            "packageName": "Vippy-SharedUpgradesPlus",
+                            "aliases": [
+                                "Vippy-SharedUpgradesPlus",
+                                "Vippy SharedUpgradesPlus"
+                            ],
+                            "version": "1.5.1",
+                            "updatedAt": "2026-06-12",
+                            "categories": [
+                                "QoL",
+                                "Server-side"
+                            ],
+                            "scope": "호스트 전용",
+                            "dependencies": [
+                                "BepInEx-BepInExPack-5.4.2305"
+                            ],
+                            "compatibility": "v0.4·REPOLib 4·MoreUpgrades 호환 수정 명시",
+                            "downloadStats": {
+                                "latestVersion": 253962,
+                                "totalDisplay": "약 92.3만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "플레이어 업그레이드 구매 효과를 팀에 공유하는 호스트 중심 모드입니다.",
+                            "usage": "호스트만 설치하고 공유 규칙을 파티에 미리 알리세요.",
+                            "installLink": "https://thunderstore.io/c/repo/p/Vippy/SharedUpgradesPlus/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/Vippy/SharedUpgradesPlus/1.5.1/",
+                            "attribution": "Thunderstore package/icon: Vippy/SharedUpgradesPlus.",
+                            "caution": "deprecated인 Traktool-SharedUpgrades 등 다른 공유 모드와 중복 사용하지 마세요.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "Vippy-SharedUpgradesPlus"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "1.5.1 / 2026-06-12"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "QoL · Server-side"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "호스트 전용"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInEx-BepInExPack-5.4.2305"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "v0.4·REPOLib 4·MoreUpgrades 호환 수정 명시"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "253,962"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 92.3만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "Vippy"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — SharedUpgradesPlus",
+                                    "url": "https://thunderstore.io/c/repo/p/Vippy/SharedUpgradesPlus/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 1.5.1",
+                                    "url": "https://thunderstore.io/package/download/Vippy/SharedUpgradesPlus/1.5.1/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/Vippy-SharedUpgradesPlus-1.5.1.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "mod-gameplay",
+                    "label": "게임플레이·편의",
+                    "title": "운영과 정보 편의",
+                    "description": "난이도와 보상 구조가 바뀔 수 있어 별도 프로필에서 시험하세요.",
+                    "entries": [
+                        {
+                            "id": "better-truck-heals",
+                            "name": "BetterTruckHeals",
+                            "nameKr": "트럭 회복 개선",
+                            "image": "./REPO/mods/better-truck-heals.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/Lazarus-BetterTruckHeals-2.3.2.png",
+                            "packageName": "Lazarus-BetterTruckHeals",
+                            "aliases": [
+                                "Lazarus-BetterTruckHeals",
+                                "Lazarus BetterTruckHeals"
+                            ],
+                            "version": "2.3.2",
+                            "updatedAt": "2026-05-08",
+                            "categories": [
+                                "Client-side",
+                                "QoL"
+                            ],
+                            "scope": "클라이언트",
+                            "dependencies": [
+                                "BepInEx-BepInExPack-5.4.2305"
+                            ],
+                            "compatibility": "v0.4.0에 맞춰 재작업; v0.4.4 직접 명시 없음",
+                            "downloadStats": {
+                                "latestVersion": 148927,
+                                "totalDisplay": "약 190만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "트럭의 회복 표시와 동작을 더 명확하고 편리하게 조정합니다.",
+                            "usage": "개인 편의 개선으로 사용하되 호스트 규칙과 난이도 의도를 확인하세요.",
+                            "installLink": "https://thunderstore.io/c/repo/p/Lazarus/BetterTruckHeals/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/Lazarus/BetterTruckHeals/2.3.2/",
+                            "attribution": "Thunderstore package/icon: Lazarus/BetterTruckHeals.",
+                            "caution": "v0.4.4 직접 확인 문구가 없어 새 프로필에서 회복 동작을 시험하세요.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "Lazarus-BetterTruckHeals"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "2.3.2 / 2026-05-08"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "Client-side · QoL"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "클라이언트"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInEx-BepInExPack-5.4.2305"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "v0.4.0에 맞춰 재작업; v0.4.4 직접 명시 없음"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "148,927"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 190만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "Lazarus"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — BetterTruckHeals",
+                                    "url": "https://thunderstore.io/c/repo/p/Lazarus/BetterTruckHeals/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 2.3.2",
+                                    "url": "https://thunderstore.io/package/download/Lazarus/BetterTruckHeals/2.3.2/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/Lazarus-BetterTruckHeals-2.3.2.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "more-upgrades",
+                            "name": "MoreUpgrades",
+                            "nameKr": "추가 업그레이드",
+                            "image": "./REPO/mods/more-upgrades.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/BULLETBOT-MoreUpgrades-1.7.3.png",
+                            "packageName": "BULLETBOT-MoreUpgrades",
+                            "aliases": [
+                                "BULLETBOT-MoreUpgrades",
+                                "BULLETBOT MoreUpgrades"
+                            ],
+                            "version": "1.7.3",
+                            "updatedAt": "2026-05-18",
+                            "categories": [
+                                "Content",
+                                "Upgrades"
+                            ],
+                            "scope": "모든 플레이어·동일 설정",
+                            "dependencies": [
+                                "Zehs-REPOLib-3.0.0",
+                                "BULLETBOT-KeybindLib-1.0.1",
+                                "DarkSpider-TextUpgradesUIScale-1.0.0"
+                            ],
+                            "compatibility": "v0.4 이후 갱신; v0.4.4 직접 명시 없음",
+                            "downloadStats": {
+                                "latestVersion": 261828,
+                                "totalDisplay": "약 470만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "기본 게임에 여러 구매형 능력 업그레이드를 추가합니다.",
+                            "usage": "호스트와 참가자가 같은 버전·설정으로 맞춘 뒤 시작하세요.",
+                            "installLink": "https://thunderstore.io/c/repo/p/BULLETBOT/MoreUpgrades/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/BULLETBOT/MoreUpgrades/1.7.3/",
+                            "attribution": "Thunderstore package/icon: BULLETBOT/MoreUpgrades.",
+                            "caution": "manifest의 REPOLib 3.0.0 요구와 현재 4.2.0이 다릅니다. 로드 실패 시 먼저 끄세요.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "BULLETBOT-MoreUpgrades"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "1.7.3 / 2026-05-18"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "Content · Upgrades"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "모든 플레이어·동일 설정"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "Zehs-REPOLib-3.0.0, BULLETBOT-KeybindLib-1.0.1, DarkSpider-TextUpgradesUIScale-1.0.0"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "v0.4 이후 갱신; v0.4.4 직접 명시 없음"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "261,828"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 470만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "BULLETBOT"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — MoreUpgrades",
+                                    "url": "https://thunderstore.io/c/repo/p/BULLETBOT/MoreUpgrades/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 1.7.3",
+                                    "url": "https://thunderstore.io/package/download/BULLETBOT/MoreUpgrades/1.7.3/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/BULLETBOT-MoreUpgrades-1.7.3.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "enemy-report",
+                            "name": "EnemyReport",
+                            "nameKr": "적 보고서",
+                            "image": "./REPO/mods/enemy-report.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/miru_y-EnemyReport-1.4.2.png",
+                            "packageName": "miru_y-EnemyReport",
+                            "aliases": [
+                                "miru_y-EnemyReport",
+                                "miru_y EnemyReport"
+                            ],
+                            "version": "1.4.2",
+                            "updatedAt": "2026-05-31",
+                            "categories": [
+                                "QoL",
+                                "Information"
+                            ],
+                            "scope": "정보 UI를 사용할 각 클라이언트",
+                            "dependencies": [
+                                "BepInEx-BepInExPack-5.4.2305",
+                                "nickklmao-MenuLib-2.5.4",
+                                "Zehs-REPOLib-4.1.0"
+                            ],
+                            "compatibility": "v1.4.0 changelog에 v0.4.4 지원 명시",
+                            "downloadStats": {
+                                "latestVersion": 4966,
+                                "totalDisplay": "약 3.4만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "조우한 적 정보를 게임 안에서 확인하는 보고서 UI를 제공합니다.",
+                            "usage": "학습용으로 쓰되 새 적·패치 수치는 모드 업데이트 전까지 지연될 수 있습니다.",
+                            "installLink": "https://thunderstore.io/c/repo/p/miru_y/EnemyReport/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/miru_y/EnemyReport/1.4.2/",
+                            "attribution": "Thunderstore package/icon: miru_y/EnemyReport.",
+                            "caution": "다운로드 수가 대형 모드보다 작습니다. 인기와 안정성을 동일시하지 말고 직접 확인하세요.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "miru_y-EnemyReport"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "1.4.2 / 2026-05-31"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "QoL · Information"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "정보 UI를 사용할 각 클라이언트"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInEx-BepInExPack-5.4.2305, nickklmao-MenuLib-2.5.4, Zehs-REPOLib-4.1.0"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "v1.4.0 changelog에 v0.4.4 지원 명시"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "4,966"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 3.4만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "miru_y"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — EnemyReport",
+                                    "url": "https://thunderstore.io/c/repo/p/miru_y/EnemyReport/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 1.4.2",
+                                    "url": "https://thunderstore.io/package/download/miru_y/EnemyReport/1.4.2/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/miru_y-EnemyReport-1.4.2.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "map-vote",
+                            "name": "MapVote",
+                            "nameKr": "맵 투표",
+                            "image": "./REPO/mods/map-vote.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/Patrick-MapVote-1.1.2.png",
+                            "packageName": "Patrick-MapVote",
+                            "aliases": [
+                                "Patrick-MapVote",
+                                "Patrick MapVote"
+                            ],
+                            "version": "1.1.2",
+                            "updatedAt": "2026-05-10",
+                            "categories": [
+                                "Multiplayer",
+                                "QoL"
+                            ],
+                            "scope": "파티 전체 권장",
+                            "dependencies": [
+                                "BepInEx-BepInExPack-5.4.2305",
+                                "nickklmao-MenuLib-2.5.3",
+                                "Zehs-REPOLib-4.0.1"
+                            ],
+                            "compatibility": "v0.4.0 이후 게시; v0.4.4 직접 명시 없음",
+                            "downloadStats": {
+                                "latestVersion": 142143,
+                                "totalDisplay": "약 140만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "다음 레벨의 맵을 파티 투표로 선택하게 합니다.",
+                            "usage": "호스트가 투표 규칙을 정하고 참가자도 같은 네트워크 구성을 사용하세요.",
+                            "installLink": "https://thunderstore.io/c/repo/p/Patrick/MapVote/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/Patrick/MapVote/1.1.2/",
+                            "attribution": "Thunderstore package/icon: Patrick/MapVote.",
+                            "caution": "다른 맵 선택·로테이션 모드와 충돌 여부를 확인하세요.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "Patrick-MapVote"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "1.1.2 / 2026-05-10"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "Multiplayer · QoL"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "파티 전체 권장"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInEx-BepInExPack-5.4.2305, nickklmao-MenuLib-2.5.3, Zehs-REPOLib-4.0.1"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "v0.4.0 이후 게시; v0.4.4 직접 명시 없음"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "142,143"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 140만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "Patrick"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — MapVote",
+                                    "url": "https://thunderstore.io/c/repo/p/Patrick/MapVote/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 1.1.2",
+                                    "url": "https://thunderstore.io/package/download/Patrick/MapVote/1.1.2/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/Patrick-MapVote-1.1.2.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "mod-customization",
+                    "label": "외형·그래픽",
+                    "title": "외형과 그래픽 조정",
+                    "description": "외형 동기화와 렌더링 옵션 충돌을 확인하세요.",
+                    "entries": [
+                        {
+                            "id": "more-head",
+                            "name": "MoreHead",
+                            "nameKr": "추가 머리 꾸미기",
+                            "image": "./REPO/mods/more-head.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/YMC_MHZ-MoreHead-1.4.5.png",
+                            "packageName": "YMC_MHZ-MoreHead",
+                            "aliases": [
+                                "YMC_MHZ-MoreHead",
+                                "YMC_MHZ MoreHead"
+                            ],
+                            "version": "1.4.5",
+                            "updatedAt": "2026-05-08",
+                            "categories": [
+                                "Cosmetics"
+                            ],
+                            "scope": "외형 공유 시 파티 전체 권장",
+                            "dependencies": [
+                                "nickklmao-MenuLib-2.5.2"
+                            ],
+                            "compatibility": "v0.4 캐릭터 리그 수정 명시; v0.4.4 직접 명시 없음",
+                            "downloadStats": {
+                                "latestVersion": 450440,
+                                "totalDisplay": "약 1,100만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "세미봇 머리·장식 선택지를 크게 늘리는 인기 외형 모드입니다.",
+                            "usage": "다른 플레이어에게 동일하게 보이길 원하면 파티의 모드팩 버전을 맞추세요.",
+                            "installLink": "https://thunderstore.io/c/repo/p/YMC_MHZ/MoreHead/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/YMC_MHZ/MoreHead/1.4.5/",
+                            "attribution": "Thunderstore package/icon: YMC_MHZ/MoreHead.",
+                            "caution": "deprecated인 CustomColors와 리그를 바꾸는 다른 모드가 겹치면 표시 오류를 확인하세요.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "YMC_MHZ-MoreHead"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "1.4.5 / 2026-05-08"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "Cosmetics"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "외형 공유 시 파티 전체 권장"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "nickklmao-MenuLib-2.5.2"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "v0.4 캐릭터 리그 수정 명시; v0.4.4 직접 명시 없음"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "450,440"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 1,100만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "YMC_MHZ"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — MoreHead",
+                                    "url": "https://thunderstore.io/c/repo/p/YMC_MHZ/MoreHead/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 1.4.5",
+                                    "url": "https://thunderstore.io/package/download/YMC_MHZ/MoreHead/1.4.5/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/YMC_MHZ-MoreHead-1.4.5.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "repo-fidelity",
+                            "name": "REPOFidelity",
+                            "nameKr": "그래픽 세부 설정",
+                            "image": "./REPO/mods/repo-fidelity.png",
+                            "imageSource": "https://gcdn.thunderstore.io/live/repository/icons/Vippy-REPOFidelity-1.7.7.png",
+                            "packageName": "Vippy-REPOFidelity",
+                            "aliases": [
+                                "Vippy-REPOFidelity",
+                                "Vippy REPOFidelity"
+                            ],
+                            "version": "1.7.7",
+                            "updatedAt": "2026-06-15",
+                            "categories": [
+                                "Client-side",
+                                "Graphics"
+                            ],
+                            "scope": "클라이언트",
+                            "dependencies": [
+                                "BepInEx-BepInExPack-5.4.2305",
+                                "nickklmao-MenuLib-2.5.4"
+                            ],
+                            "compatibility": "v0.4 대상 재설계; v0.4.4 직접 명시 없음",
+                            "downloadStats": {
+                                "latestVersion": 29666,
+                                "totalDisplay": "약 9.5만",
+                                "checkedAt": "2026-08-11 14:45 KST",
+                                "meaning": "인기 신호이며 활성 사용자 수가 아닙니다."
+                            },
+                            "description": "해상도·렌더링·후처리 등 기본 메뉴보다 세밀한 그래픽 옵션을 제공합니다.",
+                            "usage": "옵션을 한 번에 하나씩 바꾸며 프레임과 가독성을 비교하세요.",
+                            "installLink": "https://thunderstore.io/c/repo/p/Vippy/REPOFidelity/",
+                            "manualDownloadLink": "https://thunderstore.io/package/download/Vippy/REPOFidelity/1.7.7/",
+                            "attribution": "Thunderstore package/icon: Vippy/REPOFidelity.",
+                            "caution": "REPO_HD 제거를 안내하며 BetterView 등과 겹칠 수 있습니다. RepoXR 조합은 패키지 지침을 확인하세요.",
+                            "stats": [
+                                {
+                                    "label": "패키지",
+                                    "value": "Vippy-REPOFidelity"
+                                },
+                                {
+                                    "label": "버전 / 갱신",
+                                    "value": "1.7.7 / 2026-06-15"
+                                },
+                                {
+                                    "label": "분류",
+                                    "value": "Client-side · Graphics"
+                                },
+                                {
+                                    "label": "설치 범위",
+                                    "value": "클라이언트"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInEx-BepInExPack-5.4.2305, nickklmao-MenuLib-2.5.4"
+                                },
+                                {
+                                    "label": "v0.4.4 근거",
+                                    "value": "v0.4 대상 재설계; v0.4.4 직접 명시 없음"
+                                },
+                                {
+                                    "label": "최신 버전 다운로드",
+                                    "value": "29,666"
+                                },
+                                {
+                                    "label": "누적 신호",
+                                    "value": "약 9.5만"
+                                },
+                                {
+                                    "label": "저작자",
+                                    "value": "Vippy"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — REPOFidelity",
+                                    "url": "https://thunderstore.io/c/repo/p/Vippy/REPOFidelity/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "수동 설치 ZIP 1.7.7",
+                                    "url": "https://thunderstore.io/package/download/Vippy/REPOFidelity/1.7.7/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "Thunderstore 원본 아이콘",
+                                    "url": "https://gcdn.thunderstore.io/live/repository/icons/Vippy-REPOFidelity-1.7.7.png",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         }
                     ]
                 }

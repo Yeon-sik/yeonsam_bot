@@ -327,6 +327,7 @@ function renderRecordCategory(category, panel) {
             <h2 class="game-section-title">${escapeHtml(category.title)}</h2>
             ${category.description ? `<p class="section-lead">${escapeHtml(category.description)}</p>` : ""}
         </div>
+        ${renderResearchSummary(category.research)}
         <div class="guide-search pixel-box">
             <label for="record-search">${escapeHtml(category.label)} 항목 검색</label>
             <div class="guide-search-row">
