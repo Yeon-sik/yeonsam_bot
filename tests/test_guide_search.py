@@ -43,7 +43,7 @@ class GuideSearchContractTests(unittest.TestCase):
 
         sample_data = {
             "slug": "PUBG",
-            "name": "PUBG: BATTLEGROUNDS",
+            "name": "PUBG BATTLE GROUND",
             "guides": [
                 {
                     "id": "akm",
@@ -83,6 +83,35 @@ class GuideSearchContractTests(unittest.TestCase):
             self.assertEqual(
                 resolve_search_selection("AKM"),
                 ("PUBG", "guides", "weapons", "akm-weapon"),
+            )
+
+    def test_game_alias_opens_the_game_without_ambiguous_child_routes(self):
+        from cogs.yeonsam import build_search_candidates, resolve_search_selection
+
+        sample_data = {
+            "slug": "PUBG",
+            "name": "PUBG BATTLE GROUND",
+            "aliases": ["배그"],
+            "guides": [
+                {"id": "weapons", "label": "무기", "title": "무기", "groups": []},
+                {"id": "items", "label": "아이템", "title": "아이템", "groups": []},
+            ],
+        }
+
+        with patch("cogs.yeonsam.list_games", return_value=["PUBG"]), patch(
+            "cogs.yeonsam.load_game_data",
+            return_value=sample_data,
+        ):
+            alias_candidates = [
+                candidate
+                for candidate in build_search_candidates()
+                if "배그" in candidate["keywords"]
+            ]
+            self.assertEqual(len(alias_candidates), 1)
+            self.assertEqual(alias_candidates[0]["route"], "PUBG|||")
+            self.assertEqual(
+                resolve_search_selection("배그"),
+                ("PUBG", None, None, None),
             )
 
     def test_record_entry_embed_includes_stats_and_sources(self):

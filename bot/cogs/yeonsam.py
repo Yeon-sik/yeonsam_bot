@@ -57,8 +57,73 @@ def monster_section_label(section: str) -> str:
     return {
         "inside": "내부",
         "outside": "외부",
+        "daytime": "주간",
+        "company": "회사 건물",
         "dummy": "더미",
     }.get(section, section)
+
+
+def add_monster_research_fields(embed: discord.Embed, research: dict | None):
+    if not research:
+        return
+
+    version = research.get("gameVersion")
+    verified_at = research.get("verifiedAt")
+    if version or verified_at:
+        embed.add_field(
+            name="검증 기준",
+            value=clamp_field_value(
+                " · ".join(str(value) for value in (version, verified_at) if value)
+            ),
+            inline=False,
+        )
+
+    source_lines = []
+    for source in select_monster_research_sources(research.get("sources", [])):
+        url = str(source.get("url", ""))
+        if not url.startswith("https://") or not is_http_url(url):
+            continue
+        label = str(source.get("label") or url).replace("]", "")
+        source_lines.append(f"- [{label}]({url})")
+
+    if source_lines:
+        embed.add_field(
+            name="근거 자료",
+            value=clamp_field_value("\n".join(source_lines)),
+            inline=False,
+        )
+
+
+def select_monster_research_sources(sources: list[dict], limit: int = 5) -> list[dict]:
+    """Pick a balanced official/data/practical source set for Discord's compact embed."""
+    selected: list[dict] = []
+    source_groups = (
+        lambda source_type: source_type == "official",
+        lambda source_type: "build" in source_type or "mirror" in source_type,
+        lambda source_type: "wiki" in source_type or "community-data" in source_type,
+        lambda source_type: "practical" in source_type,
+        lambda source_type: "technical" in source_type or "mechanics" in source_type,
+    )
+
+    for matches_group in source_groups:
+        match = next(
+            (
+                source
+                for source in sources
+                if source not in selected and matches_group(str(source.get("type", "")))
+            ),
+            None,
+        )
+        if match is not None:
+            selected.append(match)
+
+    for source in sources:
+        if len(selected) >= limit:
+            break
+        if source not in selected:
+            selected.append(source)
+
+    return selected[:limit]
 
 
 def monster_category_label(monster: dict) -> str:
@@ -206,6 +271,16 @@ def build_search_candidates() -> list[dict[str, object]]:
             continue
 
         game_name = data.get("name", game_slug)
+        game_aliases = flatten_entry_aliases(data)
+        candidates.append(
+            create_search_candidate(
+                game_slug=game_slug,
+                game_name=game_name,
+                context="게임 홈",
+                display_name="전체 가이드",
+                keywords=[game_slug, game_name, *game_aliases],
+            )
+        )
         for topic_entry in data.get("guides", []):
             topic_context = str(topic_entry.get("label") or topic_entry.get("title") or "공략")
             topic_keywords = [
@@ -228,6 +303,8 @@ def build_search_candidates() -> list[dict[str, object]]:
             )
 
             if topic_entry.get("monsters"):
+                # 자동완성 응답만 25개로 제한하고, 후보 색인에는 전체 몬스터를 넣습니다.
+                # 그래야 Discord Select의 25개 제한 밖에 있는 몬스터도 이름 검색으로 열 수 있습니다.
                 for monster in topic_entry["monsters"]:
                     display_name = str(monster.get("nameKr") or monster.get("name") or monster["id"])
                     candidates.append(
@@ -961,6 +1038,7 @@ def build_game_browser_embed(
                 or "없음",
                 inline=False,
             )
+            add_monster_research_fields(embed, matched_entry.get("research"))
             return embed
 
         embed.description = f"{data['name']} - {matched_entry['label']} - {matched_monster['name']}"
@@ -975,14 +1053,73 @@ def build_game_browser_embed(
             value=monster_category_label(matched_monster),
             inline=False,
         )
-        embed.add_field(name="설명", value=matched_monster["description"], inline=False)
-        embed.add_field(name="공략", value=matched_monster["strategy"], inline=False)
         if matched_monster.get("health"):
-            embed.add_field(name="체력", value=str(matched_monster["health"]), inline=False)
+            embed.add_field(
+                name="체력·처치",
+                value=clamp_field_value(str(matched_monster["health"])),
+                inline=False,
+            )
+        if matched_monster.get("spawn"):
+            embed.add_field(
+                name="출현",
+                value=clamp_field_value(str(matched_monster["spawn"])),
+                inline=False,
+            )
+        if matched_monster.get("detection"):
+            embed.add_field(
+                name="감지·발동",
+                value=clamp_field_value(str(matched_monster["detection"])),
+                inline=False,
+            )
+        if matched_monster.get("damage"):
+            embed.add_field(
+                name="피해",
+                value=clamp_field_value(str(matched_monster["damage"])),
+                inline=False,
+            )
+        if matched_monster.get("strength"):
+            embed.add_field(
+                name="잡기 요구 힘",
+                value=clamp_field_value(str(matched_monster["strength"])),
+                inline=False,
+            )
+        if matched_monster.get("stun"):
+            embed.add_field(
+                name="기절",
+                value=clamp_field_value(str(matched_monster["stun"])),
+                inline=False,
+            )
+        embed.add_field(
+            name="설명",
+            value=clamp_field_value(str(matched_monster["description"])),
+            inline=False,
+        )
+        embed.add_field(
+            name="공략",
+            value=clamp_field_value(str(matched_monster["strategy"])),
+            inline=False,
+        )
         if matched_monster.get("threatLevel"):
             embed.add_field(name="위협도", value=str(matched_monster["threatLevel"]), inline=False)
         if matched_monster.get("cashDrop"):
-            embed.add_field(name="드롭", value=str(matched_monster["cashDrop"]), inline=False)
+            embed.add_field(
+                name="드롭",
+                value=clamp_field_value(str(matched_monster["cashDrop"])),
+                inline=False,
+            )
+        if matched_monster.get("loot"):
+            embed.add_field(
+                name="전리품",
+                value=clamp_field_value(str(matched_monster["loot"])),
+                inline=False,
+            )
+        if matched_monster.get("versionNote"):
+            embed.add_field(
+                name="버전 주의",
+                value=clamp_field_value(str(matched_monster["versionNote"])),
+                inline=False,
+            )
+        add_monster_research_fields(embed, matched_entry.get("research"))
         embed.add_field(
             name="안내 링크",
             value=build_monster_guide_link(data, matched_monster["id"]),
@@ -1240,7 +1377,13 @@ class GameBrowserView(discord.ui.View):
 
         if self.topic_entry["id"] == "monsters" and self.topic_entry.get("monsters"):
             options: list[discord.SelectOption] = []
-            for monster in self.topic_entry["monsters"][:25]:
+            monsters = self.topic_entry["monsters"]
+            visible_monsters = monsters[:25]
+            selected_monster = resolve_selected_monster(monsters, self.entry)
+            if selected_monster is not None and selected_monster not in visible_monsters:
+                visible_monsters = [*visible_monsters[:24], selected_monster]
+
+            for monster in visible_monsters:
                 label = monster.get("nameKr") or monster["name"]
                 description = shorten_text(
                     f"{monster['name']} · {monster_category_label(monster)}",
@@ -1675,25 +1818,49 @@ class Yeonsam(commands.Cog):
             inline=False,
         )
         embed.add_field(
-            name="/도움",
+            name="/설정 · /초대",
             value=(
-                "명령어 입력 후 선택 메뉴가 열립니다.\n"
-                "`문서 -> 구역 -> 주제 -> 항목` 순서로 클릭해서 탐색합니다.\n"
-                "JSON 데이터만 추가하면 같은 UI에 자동으로 포함되도록 구성되어 있습니다."
+                "관리자는 `/설정`에서 환영 채널, 문구·링크, 권한 진단과 테스트 발송을 순서대로 진행합니다.\n"
+                "`/초대`는 연삼이를 다른 서버에 설치하는 최소 권한 링크를 표시합니다."
             ),
             inline=False,
         )
         embed.add_field(
-            name="/스팀인기게임",
+            name="/도움 [항목검색]",
+            value=(
+                "명령어 입력 후 선택 메뉴가 열립니다.\n"
+                "`문서 -> 구역 -> 주제 -> 항목` 순서로 클릭해서 탐색합니다.\n"
+                "예: `항목검색: 배그`를 입력하면 PUBG BATTLE GROUND 가이드를 바로 엽니다."
+            ),
+            inline=False,
+        )
+        embed.add_field(
+            name="/무료게임 · /무료알림설정",
+            value=(
+                "현재 Steam 기간 한정 무료 배포 목록은 `/무료게임`으로 조회합니다.\n"
+                "관리자는 `/무료알림설정`, `/무료알림상태`, `/무료알림해제`로 자동 알림 채널을 관리합니다."
+            ),
+            inline=False,
+        )
+        embed.add_field(
+            name="/패치알림설정",
+            value=(
+                "관리자가 Lethal Company 또는 R.E.P.O.의 공식 Steam 업데이트 알림 채널을 지정합니다.\n"
+                "`/패치알림목록`, `/패치알림테스트`, `/패치알림해제`로 점검·관리할 수 있습니다."
+            ),
+            inline=False,
+        )
+        embed.add_field(
+            name="/스팀인기게임 [표시개수]",
             value="Steam 공식 Most Played 기준 인기 게임 TOP 5 또는 TOP 10을 확인합니다.",
             inline=False,
         )
         embed.add_field(
             name="예시",
             value=(
-                "1. `/도움` 입력\n"
-                "2. `문서 선택`에서 보고 싶은 게임 문서 클릭\n"
-                "3. `구역 -> 주제 -> 항목` 순서로 선택"
+                "1. `/설정`으로 환영 메시지를 테스트 발송\n"
+                "2. `/무료알림설정` 또는 `/패치알림설정`으로 운영 채널 연결\n"
+                "3. `/도움 항목검색: 배그`처럼 원하는 공략을 바로 검색"
             ),
             inline=False,
         )

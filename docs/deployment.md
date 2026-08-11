@@ -17,6 +17,7 @@ Invoke-RestMethod http://127.0.0.1:8080/health
 - `data/`를 `/app/data`에 연결해 SQLite 설정과 알림 상태 영속 보관
 - `/health` 기반 컨테이너 헬스체크
 - Steam 공식 업데이트를 기본 30분 간격으로 확인
+- Steam용 기간 한정 무료 게임을 시작 즉시 확인하고 실행 중에는 기본 6시간 간격으로 재확인
 
 실제 공개 운영에서는 동일한 Docker 이미지를 상시 실행 가능한 VPS, NAS 또는 컨테이너 호스팅에 배포하고 `/app/data`에 영속 볼륨을 연결해야 합니다.
 
@@ -48,5 +49,9 @@ GitHub 저장소의 `Settings > Secrets and variables > Actions > Variables`에 
 2. `권한 진단`을 실행하고 테스트 메시지를 발송합니다.
 3. `/패치알림설정`에서 게임과 알림 채널을 선택합니다.
 4. `/패치알림테스트`로 현재 최신 공식 업데이트를 확인합니다.
+5. `/무료알림설정`에서 기간 한정 Steam 무료 게임 목록을 받을 채널을 선택합니다.
+6. `/무료게임`으로 현재 목록을 직접 확인합니다.
 
 현재 자동 알림 지원 게임은 Lethal Company와 R.E.P.O.입니다. 공급원은 Steamworks의 공개 `ISteamNews/GetNewsForApp/v2` API입니다.
+
+무료 게임 목록은 [GamerPower API](https://www.gamerpower.com/api-read)의 활성 Steam 게임 배포 데이터를 사용합니다. 할인 게임, DLC, 게임 내 아이템, 베타, 무료 주말과 체험판은 대상으로 삼지 않으며, 메시지의 GamerPower 링크에서 실제 수령 조건과 종료 시각을 다시 확인해야 합니다. 무료 게임 확인 주기는 `FREE_GAME_POLL_INTERVAL_MINUTES`로 조정할 수 있고 최소 15분, 최대 24시간으로 제한됩니다.

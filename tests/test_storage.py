@@ -1,3 +1,4 @@
+import importlib
 import json
 import os
 import tempfile
@@ -21,7 +22,12 @@ Path(TEST_DATA_DIR.name, "guild_config.json").write_text(
     encoding="utf-8",
 )
 
-from utils import storage  # noqa: E402
+from utils import storage as storage_module  # noqa: E402
+
+
+# Other test modules may import a Cog, and therefore storage, during discovery.
+# Reload after setting BOT_DATA_DIR so this module always exercises an isolated DB.
+storage = importlib.reload(storage_module)
 
 
 class StorageTests(unittest.TestCase):
@@ -59,6 +65,23 @@ class StorageTests(unittest.TestCase):
         )
         self.assertTrue(storage.remove_patch_subscription(200, "REPO"))
 
+    def test_free_game_alert_round_trip(self):
+        storage.upsert_free_game_alert(800, 801)
+
+        self.assertEqual(
+            storage.get_free_game_alert(800),
+            {"guild_id": 800, "channel_id": 801},
+        )
+        self.assertIn(
+            {"guild_id": 800, "channel_id": 801},
+            storage.list_free_game_alerts(),
+        )
+
+        storage.upsert_free_game_alert(800, 802)
+        self.assertEqual(storage.get_free_game_alert(800)["channel_id"], 802)
+        self.assertTrue(storage.remove_free_game_alert(800))
+        self.assertIsNone(storage.get_free_game_alert(800))
+
     def test_metrics_are_atomic_across_threads(self):
         threads = [
             threading.Thread(
@@ -85,12 +108,14 @@ class StorageTests(unittest.TestCase):
     def test_delete_guild_data_removes_settings_and_subscriptions(self):
         storage.ensure_guild(700)
         storage.upsert_patch_subscription(700, "REPO", 701, "article-1")
+        storage.upsert_free_game_alert(700, 702)
         storage.record_metric("delete_test", 700)
 
         storage.delete_guild_data(700)
 
         self.assertEqual(storage.get_guild(700), storage.DEFAULT_GUILD_CONFIG)
         self.assertEqual(storage.list_patch_subscriptions(700), [])
+        self.assertIsNone(storage.get_free_game_alert(700))
         self.assertEqual(storage.get_metric_totals(days=1, guild_id=700), {})
 
 

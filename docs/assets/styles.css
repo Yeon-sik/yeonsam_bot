@@ -486,6 +486,121 @@ code {
     color: var(--text);
 }
 
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.feature-card {
+    display: flex;
+    min-width: 0;
+    padding: 22px;
+    flex-direction: column;
+}
+
+.feature-card--wide {
+    grid-column: 1 / -1;
+}
+
+.feature-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.feature-card__eyebrow {
+    margin: 0;
+    color: var(--pink);
+    font-size: 13px;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.feature-badge {
+    padding: 4px 8px;
+    border: 2px solid var(--pink);
+    color: var(--pink);
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.feature-card h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.45;
+    font-family: "DungGeunMo", "Galmuri11", "NeoDunggeunmo", monospace;
+}
+
+.feature-card > p {
+    margin: 12px 0 0;
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.command-steps,
+.command-list {
+    margin: 18px 0 0;
+    padding: 0;
+}
+
+.command-steps {
+    padding-left: 24px;
+    color: var(--text-muted);
+}
+
+.command-steps li {
+    padding: 5px 0;
+    line-height: 1.7;
+}
+
+.command-list {
+    list-style: none;
+}
+
+.command-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-top: 1px solid var(--pink-line);
+}
+
+.command-list li:last-child {
+    border-bottom: 1px solid var(--pink-line);
+}
+
+.command-list code,
+.command-steps code {
+    color: var(--pink);
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.command-list span {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.feature-card > .feature-note {
+    margin-top: auto;
+    padding-top: 16px;
+    color: var(--pink-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.command-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
 .info-card strong,
 .game-feature-copy strong,
 .detail-card h3,
@@ -1229,7 +1344,7 @@ code {
 
     .top-nav {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         width: 100%;
         gap: 8px;
     }
@@ -1284,6 +1399,8 @@ code {
     }
 
     .info-grid,
+    .feature-grid,
+    .command-columns,
     .game-hero,
     .detail-grid,
     .detail-card-media,

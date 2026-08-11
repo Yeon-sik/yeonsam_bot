@@ -10,7 +10,7 @@
 <body data-game-json="./LethalCompany/LethalCompany.json">
     <a class="skip-link" href="#game-main">가이드 본문 바로가기</a>
     <script id="game-data-fallback" type="application/json">
-        {
+{
     "slug": "LethalCompany",
     "name": "Lethal Company",
     "profileImage": "./LethalCompany/LethalCompany_Profile.jpg",
@@ -27,6 +27,80 @@
             "id": "monsters",
             "label": "몬스터",
             "title": "몬스터 공략",
+            "research": {
+                "gameVersion": "V80 콘텐츠 / V81 hotfix 빌드",
+                "verifiedAt": "2026-08-11",
+                "method": "공식 Steam 패치와 공개 브랜치 빌드를 먼저 고정한 뒤, 현재 공개 빌드의 Assembly-CSharp 동작과 유지보수 위키의 Entity·무기·히트박스·출현표를 교차 확인했습니다. 실전 팁은 이 동작과 충돌하지 않는 항목만 채택했습니다.",
+                "notes": [
+                    "Steam은 한국어를 공식 지원하지 않으므로 nameKr는 공식 번역이 아니라 기존 저장소·커뮤니티 별칭입니다. 사실을 오도한 Feiopar와 Vain Shroud의 기존 한국명은 제거하고 비공식 음역임을 표시했습니다.",
+                    "health의 삽·칼 횟수는 애니메이션 스윙 수가 아니라 피해가 정상 등록된 유효 타격 수입니다. 벽, 시체, 낮은 히트박스와 V81 Snare Flea 판정 결함 때문에 실제 스윙 수는 늘 수 있습니다.",
+                    "구버전 Shovel 표의 Bracken 3회, Hoarding Bug·Snare Flea 2회 범위는 다중 콜라이더 중복 피해 기록이므로 현재 기본 수치로 사용하지 않습니다.",
+                    "샷건은 거리에 따라 개체 피해가 5·3·2로 달라집니다. Manticoil은 샷건 면역이고 Maneater 성체와 Cadaver Bloom은 한 발당 최대 1 피해이므로 일괄적인 '샷건 1~2대' 표기를 사용하지 않습니다.",
+                    "Manticoil은 중앙 Entity 표의 HP 2와 개별 페이지·현재 사망 로직이 충돌합니다. 실제 플레이에서 모든 근접무기 1회에 즉시 죽는 동작을 우선했습니다.",
+                    "Backwater Gunkfish는 바닐라 사망 조건의 off-by-one 때문에 유효 근접 타격 5회가 필요합니다. 이를 수정하는 모드 환경에서는 4회로 달라질 수 있습니다.",
+                    "spawn은 해당 개체가 출현할 수 있는 기본 달 또는 조건입니다. 실제 출현은 시간 곡선, 파워 한도, 다양성 제한, 날씨와 당일 시드의 영향을 받습니다.",
+                    "Lasso Man과 Liquidation은 정상 공개 게임 플레이 대상이 아닙니다. Lasso Man은 dummy 부록에만 남기고 Liquidation은 출현 달에서 제외했습니다.",
+                    "iElucian의 V80 플레이 영상은 신규 개체의 실제 행동 순서와 회피 동선을 확인하는 실전 자료로만 사용했고, HP와 출현 수치의 근거로 사용하지 않았습니다.",
+                    "공식 패치 노트는 추가·변경 사실을 확인하는 1차 자료이고 세부 HP·히트박스 수치는 공개 빌드 코드와 유지보수 커뮤니티 자료에서 검증한 기술 수치입니다."
+                ],
+                "sources": [
+                    {
+                        "label": "Official Version 80 - The Blooming Update",
+                        "url": "https://steamcommunity.com/app/1966720/announcements/?l=english",
+                        "type": "official"
+                    },
+                    {
+                        "label": "SteamDB public branch and build 22825947",
+                        "url": "https://steamdb.info/app/1966720/depots/",
+                        "type": "build-metadata"
+                    },
+                    {
+                        "label": "Steam language support",
+                        "url": "https://store.steampowered.com/app/1966720/Lethal_Company/?l=koreana",
+                        "type": "official"
+                    },
+                    {
+                        "label": "Maintained Entity roster and spawn table",
+                        "url": "https://lethal-company.fandom.com/wiki/Entity",
+                        "type": "maintained-wiki"
+                    },
+                    {
+                        "label": "Shovel mechanics",
+                        "url": "https://lethal-company.fandom.com/wiki/Shovel",
+                        "type": "maintained-wiki"
+                    },
+                    {
+                        "label": "Kitchen Knife mechanics",
+                        "url": "https://lethal-company.fandom.com/wiki/Kitchen_Knife",
+                        "type": "maintained-wiki"
+                    },
+                    {
+                        "label": "Double-Barrel damage mechanics",
+                        "url": "https://lethal-company.fandom.com/wiki/Double-Barrel",
+                        "type": "maintained-wiki"
+                    },
+                    {
+                        "label": "Entity and weapon hitboxes",
+                        "url": "https://lethal-company.fandom.com/wiki/Hitbox",
+                        "type": "maintained-wiki"
+                    },
+                    {
+                        "label": "MeleeFixes collision and version notes",
+                        "url": "https://thunderstore.io/c/lethal-company/p/ButteryStancakes/MeleeFixes/changelog",
+                        "type": "technical-community"
+                    },
+                    {
+                        "label": "ButteryFixes Backwater Gunkfish off-by-one note",
+                        "url": "https://thunderstore.io/c/lethal-company/p/ButteryStancakes/ButteryFixes/changelog",
+                        "type": "technical-community"
+                    },
+                    {
+                        "label": "iElucian - Version 80 New Creatures Guide",
+                        "url": "https://www.youtube.com/watch?v=nAPiD_l8Brg",
+                        "type": "practical-guide"
+                    }
+                ]
+            },
             "monsters": [
                 {
                     "id": "snare-flea",
@@ -34,9 +108,15 @@
                     "name": "Snare Flea",
                     "nameKr": "올가미 벼룩",
                     "image": "./LethalCompany/entities/Snare Flea.png",
-                    "description": "천장에 붙어 있다가 플레이어 머리를 덮쳐 시야를 가리는 몬스터입니다.",
-                    "strategy": "천장과 통로 상단을 자주 확인하고, 붙었을 때는 팀원이 삽으로 빠르게 대응하는 편이 좋습니다.",
-                    "health": "삽 3대 / 샷건 1대"
+                    "spawn": "실내 · 정상 접근 가능한 11개 달 전체",
+                    "detection": "천장에 붙어 대기하다 플레이어가 아래나 가까이를 지나면 낙하하며, Echo Scanner로 천장 개체를 확인할 수 있습니다.",
+                    "damage": "머리에 붙어 지속 질식 피해를 주고 음성을 작게 만듭니다.",
+                    "description": "천장 매복 후 플레이어 머리를 감싸는 실내 개체입니다.",
+                    "strategy": "천장을 주기적으로 스캔하고, 우회할 수 없으면 짧게 접근해 낙하를 먼저 빼세요. 부착되면 떨어진 무기를 찾아 직접 치거나 팀원의 공격, 출입구 통과, 텔레포터로 제거할 수 있습니다. 솔로에서만 치명상 시 자동 이탈합니다.",
+                    "health": "삽 3회 / 칼 3회(유효 타격 기준)",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "구버전 삽 중복 타격 때문에 2회로 보이던 기록이 있으나 현재 기준 HP는 3입니다. V81에는 간헐적으로 피해가 등록되지 않는 판정 결함이 보고되어 실제 스윙 수는 늘 수 있습니다."
                 },
                 {
                     "id": "bunker-spider",
@@ -44,9 +124,15 @@
                     "name": "Bunker Spider",
                     "nameKr": "거미",
                     "image": "./LethalCompany/entities/Bunker Spider.png",
-                    "description": "거미줄 구역을 만들고 시야에 들어온 대상을 압박하는 내부 몬스터입니다.",
-                    "strategy": "거미줄이 보이면 깊게 들어가지 말고 우회 경로를 우선 찾는 편이 안전합니다.",
-                    "health": "삽 5대 / 샷건 1~2대"
+                    "spawn": "실내 · 정상 접근 가능한 11개 달 전체",
+                    "detection": "거미줄 접촉·파괴, 본체 접근이 주요 추격 트리거입니다.",
+                    "damage": "근접 공격 90 피해; 처치한 시체를 둥지로 끌고 가 거미줄로 싸서 직접 회수를 막습니다.",
+                    "description": "거미줄로 영역을 만들고 침입자를 추격하는 실내 개체입니다.",
+                    "strategy": "거미줄을 건드리지 않고 우회하는 것이 우선입니다. 싸워야 하면 낮은 몸통 판정을 노려 후진하며 타격하고, 막다른 곳을 피하세요. 저체력에서는 조금 빨라집니다.",
+                    "health": "삽 5회 / 칼 5회(몸통 유효 타격 기준)",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "Knife는 짧은 사거리와 낮은 판정 때문에 유효 타격이 누락될 수 있어 표시 수치는 등록 타격 수입니다."
                 },
                 {
                     "id": "hoarding-bug",
@@ -54,9 +140,15 @@
                     "name": "Hoarding Bug",
                     "nameKr": "비축 벌레",
                     "image": "./LethalCompany/entities/Hoarding Bug.png",
-                    "description": "아이템을 모으는 성향이 강한 내부 몬스터입니다.",
-                    "strategy": "불필요하게 자극하지 않으면 교전 빈도가 낮습니다. 아이템 회수 시 접근 각도를 짧게 잡으세요.",
-                    "health": "삽 3대 / 샷건 1대"
+                    "spawn": "실내 · Rend를 제외한 정상 접근 달",
+                    "detection": "아이템을 둥지로 모으며 둥지 접근, 물건 절도, 공격 또는 지나친 근접에 반응합니다.",
+                    "damage": "적대 상태에서 근접 돌진 공격을 반복합니다.",
+                    "description": "스크랩을 수집하고 둥지를 지키는 실내 개체입니다.",
+                    "strategy": "교전이 필요 없으면 둥지와 훔친 물건을 건드리지 마세요. 소모된 장비 같은 미끼를 주어 이동시키거나 마지막 철수 때 둥지 물건을 회수하는 편이 안전합니다.",
+                    "health": "삽 3회 / 칼 3회",
+                    "stun": "기절 가능",
+                    "loot": "자체 드롭 없음; 둥지에는 개체가 모은 원래 스크랩이 남습니다.",
+                    "versionNote": "구버전 삽 중복 타격 때문에 2회 처치 기록이 있으나 현재 유효 타격 기준은 3회입니다."
                 },
                 {
                     "id": "hygrodere",
@@ -64,9 +156,15 @@
                     "name": "Hygrodere",
                     "nameKr": "슬라임",
                     "image": "./LethalCompany/entities/Hygrodere.png",
-                    "description": "느리게 이동하지만 닿으면 위험한 슬라임형 내부 몬스터입니다.",
-                    "strategy": "속도는 느리므로 무리하게 싸우기보다 점프와 거리 유지로 회피하는 편이 효율적입니다.",
-                    "health": "처치 불가"
+                    "spawn": "실내 · 정상 접근 가능한 11개 달 전체",
+                    "detection": "실내의 가장 가까운 플레이어 위치를 알고 천천히 추적합니다.",
+                    "damage": "접촉하면 지속 피해를 주며 시체를 흡수할 수 있습니다.",
+                    "description": "통로를 점유하며 가장 가까운 플레이어를 따라오는 점액형 실내 개체입니다.",
+                    "strategy": "충분한 공간에서 뛰어넘거나 난간보다 높은 지형과 닫힌 문으로 우회하세요. V80 이후 바닥에서 재생 중인 Boombox 주변에서는 춤추며 안전거리를 두므로 고정 유인점으로 활용할 수 있습니다.",
+                    "health": "삽 무효 / 칼 무효",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "스파이크 트랩 처치는 비정상 높이·지형을 이용한 버그성 상호작용이므로 일반 처치로 보지 않습니다."
                 },
                 {
                     "id": "bracken",
@@ -74,9 +172,15 @@
                     "name": "Bracken",
                     "nameKr": "브래켄",
                     "image": "./LethalCompany/entities/Bracken.png",
-                    "description": "시야 밖에서 접근해 암살하듯 공격하는 대표적인 내부 몬스터입니다.",
-                    "strategy": "너무 오래 응시하지 말고, 완전히 등을 보이지도 않게 간헐적으로 위치를 확인하며 후퇴하는 편이 좋습니다.",
-                    "health": "삽 5대 / 샷건 1대"
+                    "spawn": "실내 · 정상 접근 가능한 11개 달 전체",
+                    "detection": "실내 플레이어 위치와 시선 방향을 이용해 뒤로 접근합니다. 짧게 보면 후퇴하지만 장시간 응시, 공격, 기절은 분노를 올립니다.",
+                    "damage": "접촉 시 목을 꺾어 즉사시키고 시체를 끌고 갑니다.",
+                    "description": "시야 밖으로 우회해 플레이어 뒤를 노리는 실내 포식자입니다.",
+                    "strategy": "뒤를 짧게 자주 확인하고 발견 즉시 팀에 알리세요. 오래 응시하지 말고 후퇴시키며, 팀원끼리 서로의 사각을 맡는 것이 안전합니다. 근접 처치는 접촉 즉사 때문에 매우 위험합니다.",
+                    "health": "삽 5회 / 칼 5회",
+                    "stun": "기절 가능하지만 분노를 올립니다.",
+                    "loot": "없음",
+                    "versionNote": "구버전 다중 콜라이더 삽 타격으로 3회 처치가 가능했던 기록이 있으나 현재 등록 타격 기준은 5회입니다."
                 },
                 {
                     "id": "thumper",
@@ -84,19 +188,31 @@
                     "name": "Thumper",
                     "nameKr": "덤퍼",
                     "image": "./LethalCompany/entities/Thumper.png",
-                    "description": "직선 돌진 속도가 매우 빠른 내부 몬스터입니다.",
-                    "strategy": "긴 직선 통로에서 특히 위험하니 코너를 활용해 시야를 끊고 동선을 짧게 바꾸는 것이 핵심입니다.",
-                    "health": "삽 4대 / 샷건 1~2대"
+                    "spawn": "실내 · Rend를 제외한 정상 접근 달",
+                    "detection": "청각이 없고 시야로만 목표를 찾으며 직선 추격 중 계속 가속합니다.",
+                    "damage": "근접 공격 40 피해를 반복합니다.",
+                    "description": "직선에서 빠르게 가속하지만 코너 회전이 약한 실내 개체입니다.",
+                    "strategy": "코너와 문으로 시야를 끊어 속도를 초기화하세요. 마지막으로 본 위치를 조사하러 올 때 몸통 옆을 노려 후진 타격하면 비교적 안전합니다.",
+                    "health": "삽 4회 / 칼 4회(칼은 몸통만 유효; 머리 판정은 무효)",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "Knife가 머리 판정에 막히는 현재 히트박스 특성이 있어 실제 스윙 수는 몸통 명중 여부에 따라 늘어납니다."
                 },
                 {
                     "id": "coil-head",
                     "section": "inside",
-                    "name": "Coil-head",
+                    "name": "Coil-Head",
                     "nameKr": "코일 헤드",
                     "image": "./LethalCompany/entities/Coil Head.png",
-                    "description": "누군가 보고 있을 때만 멈추는 특수 내부 몬스터입니다.",
-                    "strategy": "팀원 간 시선 분담이 중요합니다. 혼자 상대하기보다 보고 있는 사람과 이동하는 사람을 분리하세요.",
-                    "health": "처치 불가"
+                    "spawn": "실내 · Vow, Offense, March, Adamance, Rend, Dine, Titan, Artifice, Embrion",
+                    "detection": "플레이어 시야에 들어오면 정지하고 보지 않으면 매우 빠르게 접근합니다.",
+                    "damage": "빠르게 반복되는 90 피해로 사실상 즉사시킵니다.",
+                    "description": "시야에 잡혀 있을 때만 움직임을 멈추는 실내 개체입니다.",
+                    "strategy": "한 명이 감시하고 다른 인원이 이동하는 시선 릴레이가 기본입니다. 짧게 시선을 떼었다 다시 보며 위치를 유도하고, 문을 닫아 추가 시간을 만드세요.",
+                    "health": "삽 무효 / 칼 무효",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "지속 추격 뒤 충전 상태가 있으나 유지 위키의 35초·15초 설명과 V62 패치의 9초·9초 기록이 충돌해 정확한 타이머는 고정 수치로 싣지 않습니다."
                 },
                 {
                     "id": "jester",
@@ -104,9 +220,14 @@
                     "name": "Jester",
                     "nameKr": "제스터",
                     "image": "./LethalCompany/entities/Juester.png",
-                    "description": "오르골 단계 이후 전장을 강제로 붕괴시키는 최상급 내부 위협입니다.",
-                    "strategy": "소리가 들리면 탐색보다 탈출 준비를 우선해야 합니다. 욕심내지 말고 즉시 이탈 동선을 잡는 편이 안전합니다.",
-                    "health": "처치 불가"
+                    "spawn": "실내 · March, Adamance, Rend, Dine, Titan, Artifice",
+                    "detection": "플레이어를 따라온 뒤 멀티 기준 약 13~18초 후 태엽을 감기 시작합니다.",
+                    "damage": "상자가 열린 뒤 접촉하면 즉사합니다.",
+                    "description": "태엽이 끝나면 실내 생존자 위치를 알고 계속 가속하는 최상급 위협입니다.",
+                    "strategy": "태엽 소리가 시작되면 탐색을 중단하고 전원이 즉시 출입구로 이동하세요. 실내에 살아 있는 플레이어가 없으면 상자로 돌아갑니다. 보안문이나 광산 엘리베이터 격리는 숙련 팀의 보조 전술입니다.",
+                    "health": "삽 무효 / 칼 무효",
+                    "stun": "기절로 태엽 진행을 잠시 늦출 수 있으나 처치 불가",
+                    "loot": "없음"
                 },
                 {
                     "id": "nutcracker",
@@ -114,9 +235,15 @@
                     "name": "Nutcracker",
                     "nameKr": "호두까기 인형 / 병정",
                     "image": "./LethalCompany/entities/Nutcracker.png",
-                    "description": "샷건으로 시야 내 대상을 공격하는 내부 몬스터입니다.",
-                    "strategy": "시야선을 오래 내주지 말고 엄폐를 활용하세요. 접근보다 위치 파악과 각도 관리가 우선입니다.",
-                    "health": "삽 5대(눈 노출 시) / 샷건 1~2대(눈 노출 시)"
+                    "spawn": "실내 · Vow를 제외한 정상 접근 달",
+                    "detection": "눈을 드러낸 스캔 중 움직임을 감지합니다. 카메라 회전, 앉기·일어서기, 감정표현도 움직임으로 취급됩니다.",
+                    "damage": "거리별 샷건 피해와 근접 발차기 즉사 공격을 사용합니다.",
+                    "description": "움직임을 감지하는 눈과 더블배럴 샷건을 사용하는 실내 개체입니다.",
+                    "strategy": "눈이 스캔할 때 완전히 멈추고 엄폐하세요. 목표가 된 뒤에는 두 발을 소모하게 유도하고 재장전 중 노출된 눈을 공격합니다.",
+                    "health": "삽 5회 / 칼 5회(눈 노출 또는 공격 상태의 유효 타격만)",
+                    "stun": "기절 가능",
+                    "loot": "Double-Barrel 1정(가치 60), 보장 Shotgun Shell 2개, 총 안에 남은 0~2발",
+                    "versionNote": "순찰 상태의 몸체는 무적이므로 무효 타격을 HP에서 차감하면 안 됩니다."
                 },
                 {
                     "id": "masked",
@@ -124,9 +251,15 @@
                     "name": "Masked",
                     "nameKr": "마스크",
                     "image": "./LethalCompany/entities/Masked.png",
-                    "description": "플레이어를 감염시켜 아군 위협으로 바꾸는 특수 몬스터입니다.",
-                    "strategy": "가까운 거리에서의 혼전이 위험합니다. 좁은 실내보다는 시야가 확보된 위치에서 간격을 두는 편이 좋습니다.",
-                    "health": "삽 4대 / 샷건 1~2대"
+                    "spawn": "실내 자연 출현 · Adamance, Rend, Titan, Artifice; 생성 뒤 주 출입구로 실내·외 이동 가능",
+                    "detection": "플레이어처럼 돌아다니다 대상을 추적·매복하며 함선 모니터에는 직원과 같은 형태의 표식으로 보입니다.",
+                    "damage": "붙잡은 플레이어를 죽이고 추가 Masked로 전환합니다.",
+                    "description": "직원을 흉내 내고 붙잡은 대상을 같은 개체로 바꾸는 위협입니다.",
+                    "strategy": "시야가 열린 곳에서 거리를 두고 삽의 짧은 경직을 이어가세요. 동료가 붙잡히면 몇 초 안에 공격, 기절 또는 텔레포터로 구조해야 합니다. 짧은 Knife 사거리의 정면 교전은 위험합니다.",
+                    "health": "삽 4회 / 칼 4회",
+                    "stun": "기절 가능",
+                    "loot": "자체 드롭 없음; Dramatic Mask는 별도 스크랩(가치 28~51)",
+                    "versionNote": "Dramatic Mask는 얼굴에 댄 상태에서 5초마다 65% 전환 판정을 하며, 발동 뒤 약 5초 안의 텔레포트만 구조 기회를 줍니다."
                 },
                 {
                     "id": "maneater",
@@ -134,9 +267,15 @@
                     "name": "Maneater",
                     "nameKr": "맨이터 / 아기",
                     "image": "./LethalCompany/entities/Maneater.png",
-                    "description": "초기에는 위협도가 낮아 보이지만 시간이 지나면 치명적으로 변하는 내부 몬스터입니다.",
-                    "strategy": "초기 대응을 가볍게 보면 후반 리스크가 커집니다. 발견 시 팀 전체가 상태를 공유하는 편이 안전합니다.",
-                    "health": "유아: 처치 불가 / 성체: 삽으로 처치 가능"
+                    "spawn": "실내 · Assurance, Vow, Offense, March, Adamance, Dine, Artifice; Mineshaft에서 기본 확률의 1.7배",
+                    "detection": "유아는 선호 플레이어를 따라다니며 소음, 밝은 빛, 아이템 낙하, 공격, 낙하와 실외 이동 등에 울기 시작할 수 있습니다.",
+                    "damage": "성체 돌진 접촉은 즉사합니다.",
+                    "description": "달래지 않으면 유아 단계에서 고속 즉사형 성체로 변하는 실내 개체입니다.",
+                    "strategy": "유아를 흔들어 달래고 팀이 울음 누적을 공유하세요. 누적 약 17초 울면 성체가 되므로 변신 전에 동선을 정리하고, 성체가 되면 문과 시야 차단으로 거리를 확보합니다.",
+                    "health": "유아: 삽 무효 / 칼 무효 · 성체: 삽 5회 / 칼 5회",
+                    "stun": "유아는 기절 가능; 성체는 Stun Grenade 무효",
+                    "loot": "없음",
+                    "versionNote": "성체는 모든 비즉사 피해를 1로 제한하므로 근거리 샷건도 5발이 필요합니다."
                 },
                 {
                     "id": "eyeless-dog",
@@ -144,19 +283,31 @@
                     "name": "Eyeless Dog",
                     "nameKr": "눈 없는 개",
                     "image": "./LethalCompany/entities/Eyeless Dog.png",
-                    "description": "시각 대신 소리에 매우 민감하게 반응하는 외부 몬스터입니다.",
-                    "strategy": "질주, 점프, 큰 음성 반응을 줄이고 소음 관리 중심으로 움직이는 것이 핵심입니다.",
-                    "health": "삽 12대 / 샷건 2~3대"
+                    "spawn": "외부 · 정상 접근 가능한 11개 달 전체",
+                    "detection": "시각이 없고 음성, 발걸음, 아이템 낙하, 손전등 클릭, 근접무기 충돌음 같은 소리를 추적합니다.",
+                    "damage": "돌진 접촉 시 즉사합니다.",
+                    "description": "소리 위치를 추측해 돌진하는 외부 포식자입니다.",
+                    "strategy": "앉아서 이동하고 불필요한 음성과 장비 소리를 멈추세요. 돌진이 시작되면 마지막 소리 위치에서 옆으로 비키며, 교전보다 소음 미끼로 경로를 빼는 편이 안전합니다.",
+                    "health": "몸통: 삽 12회 / 칼 12회 · 머리: 삽 6회 / 칼 6회",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "머리 히트박스는 모든 근접무기 피해를 2로 받습니다. 샷건에는 이 근접 약점이 적용되지 않습니다."
                 },
                 {
                     "id": "forest-giant",
                     "section": "outside",
-                    "name": "Forest Giant",
+                    "name": "Forest Keeper",
                     "nameKr": "숲의 거인",
                     "image": "./LethalCompany/entities/Forest Keeper.png",
-                    "description": "시야가 매우 좋고 붙잡히면 즉사급인 대형 외부 몬스터입니다.",
-                    "strategy": "열린 지형에서 오래 노출되지 말고, 나무와 구조물을 이용해 시야를 끊으며 우회하세요.",
-                    "health": "삽 38대 / 샷건 8대 이상"
+                    "spawn": "외부 · 정상 접근 가능한 11개 달 전체",
+                    "detection": "청각은 없고 시야로만 탐지합니다. 거리, 움직임, 자세와 엄폐 상태가 탐지 누적에 영향을 줍니다.",
+                    "damage": "붙잡은 플레이어를 먹어 즉사시킵니다.",
+                    "description": "매우 먼 거리에서 움직임을 포착하는 대형 외부 개체입니다.",
+                    "strategy": "나무, 바위, 구조물과 함선으로 시야를 계속 끊으세요. 멀리서는 앉기, 정지, 걷기가 유효하며 붙잡힌 직후에는 기절 수단이나 텔레포터로 구조할 짧은 시간이 있습니다. 근접전은 비추천입니다.",
+                    "health": "삽 38회 / 칼 38회",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "V80에서 원거리의 앉기·정지·걷기가 더 효과적이 되었고 매우 먼 거리에서는 탐지하지 못하도록 변경됐습니다. 공식 개체명은 Forest Keeper이며 Forest Giant는 별칭입니다."
                 },
                 {
                     "id": "earth-leviathan",
@@ -164,9 +315,14 @@
                     "name": "Earth Leviathan",
                     "nameKr": "레비아탄",
                     "image": "./LethalCompany/entities/Earth Leviathan.png",
-                    "description": "땅속에서 튀어나와 한 번에 삼키는 외부 몬스터입니다.",
-                    "strategy": "지면 울림이나 전조를 보면 곧바로 옆 방향으로 크게 이탈하는 편이 좋습니다.",
-                    "health": "처치 불가"
+                    "spawn": "외부 · Rend를 제외한 정상 접근 달",
+                    "detection": "지하 추적 중 굉음이 들리고, 실제 출현 지점에는 검은 입자와 지면 파편이 나타납니다.",
+                    "damage": "출현 경로의 플레이어와 대부분의 개체를 즉시 제거합니다.",
+                    "description": "지하에서 목표를 추적한 뒤 지면을 뚫고 솟는 거대 개체입니다.",
+                    "strategy": "전조가 들리면 무거운 물건을 내려놓고, 검은 입자가 보이면 공격 구역에서 직선으로 벗어나세요. 계속 방향을 바꾸면 추적 시간이 길어질 수 있습니다.",
+                    "health": "삽 무효 / 칼 무효",
+                    "stun": "기절 무효",
+                    "loot": "없음; 바닥에 내려놓은 스크랩은 삼켜지지 않습니다."
                 },
                 {
                     "id": "baboon-hawk",
@@ -174,49 +330,76 @@
                     "name": "Baboon Hawk",
                     "nameKr": "개코매",
                     "image": "./LethalCompany/entities/Baboon Hawk.png",
-                    "description": "무리를 이루며 숫자 우위를 잡으면 공격적으로 변하는 외부 몬스터입니다.",
-                    "strategy": "단독으로 오래 남지 말고, 시야에 여러 마리가 보이면 교전보다 합류를 우선하세요.",
-                    "health": "삽 4대 / 샷건 1대"
+                    "spawn": "외부 · Assurance, Vow, Offense, March, Adamance, Artifice",
+                    "detection": "무리 규모, 둥지 접근, 상대의 수와 위협도에 따라 경계·공격 상태를 바꿉니다.",
+                    "damage": "근접 공격 20 피해를 반복합니다.",
+                    "description": "무리와 둥지를 만들고 바깥의 스크랩을 훔치는 사회성 외부 개체입니다.",
+                    "strategy": "무기를 든 채 바라보면 위협도가 올라가 소수 개체를 물러나게 할 수 있지만 둥지와 큰 무리는 우회하세요. 단독 개체만 숙련된 근접전 대상으로 보고, 바깥에 스크랩을 방치하지 마세요.",
+                    "health": "삽 4회 / 칼 4회",
+                    "stun": "기절 가능",
+                    "loot": "자체 드롭 없음; 훔친 스크랩은 둥지에 남습니다.",
+                    "versionNote": "큰 소리나 고함만으로 달아난다는 통설은 현재 행동 로직과 맞지 않습니다."
                 },
                 {
                     "id": "circuit-bees",
-                    "section": "outside",
+                    "section": "daytime",
                     "name": "Circuit Bees",
                     "nameKr": "회로 벌",
-                    "image": "./LethalCompany/entities/Circuit Bees.png",
-                    "description": "벌집 주변을 배회하는 군집형 외부 개체입니다.",
-                    "strategy": "벌집 가까이 오래 머무르지 말고, 회수가 목적이라면 시야를 넓게 확보한 뒤 짧게 진입해 빠르게 이탈하는 편이 안전합니다.",
-                    "health": "즉시 처치보다는 회피 우선"
+                    "image": "./LethalCompany/entities/Circuit Bees.webp",
+                    "spawn": "주간 사전 생성 · Experimentation, Assurance, Vow, March, Adamance, Artifice",
+                    "detection": "벌집 접근 또는 운반을 감지하면 가장 가까운 플레이어를 추격하고 멀어지면 벌집으로 돌아갑니다.",
+                    "damage": "반복 접촉 전기 피해 10, 최대 초당 약 25 피해",
+                    "description": "판매 가능한 벌집을 지키는 전기성 주간 군집입니다.",
+                    "strategy": "한 명이 군집을 벌집에서 빼고 다른 인원이 벌집을 짧게 운반하는 릴레이가 안전합니다. 함선 외부 난간에 보관했다가 출발 순간 회수하면 군집을 남길 수 있습니다.",
+                    "health": "삽 무효 / 칼 무효",
+                    "stun": "기절 무효",
+                    "loot": "Bee Hive 1개 · 가치 40~149 · 무게 0lb · 양손"
                 },
                 {
                     "id": "manticoil",
-                    "section": "outside",
+                    "section": "daytime",
                     "name": "Manticoil",
                     "nameKr": "만티코일",
-                    "image": "./LethalCompany/entities/Manticoil.png",
-                    "description": "주변을 선회하며 날아다니는 비교적 위협도 낮은 비행 개체입니다.",
-                    "strategy": "직접적인 전투 대상으로 보기보다 위치 확인용 개체로 판단하면 됩니다. 다른 위협과 함께 나타나는지 주변 상황을 먼저 체크하세요.",
-                    "health": "삽 1대 / 샷건 면역"
+                    "image": "./LethalCompany/entities/Manticoil.webp",
+                    "spawn": "주간 · Experimentation, Assurance, Vow, Offense, March, Adamance, Artifice",
+                    "detection": "플레이어 접근이나 큰 소리를 감지하면 날아갑니다.",
+                    "damage": "직접 피해 없음",
+                    "description": "플레이어를 피하는 무해한 주간 비행 생물입니다.",
+                    "strategy": "전투 가치가 없으므로 그대로 두세요. 반드시 제거해야 한다면 기절 후 근접무기 1회가 가장 안정적입니다.",
+                    "health": "삽 1회 / 칼 1회 / 샷건 무효",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "중앙 Entity 표의 HP 2와 개별 페이지·현재 사망 로직이 충돌합니다. 실제 플레이 기준은 근접무기 1회 즉시 처치이며 샷건은 무효입니다."
                 },
                 {
                     "id": "roaming-locust",
-                    "section": "outside",
+                    "section": "daytime",
                     "name": "Roaming Locust",
                     "nameKr": "메뚜기",
-                    "image": "./LethalCompany/entities/Roaming Locust.png",
-                    "description": "군집으로 떠다니지만 플레이어에게 직접적인 압박은 적은 외부 생물입니다.",
-                    "strategy": "공략 대상이라기보다 시야 방해 요소로 취급하는 편이 좋습니다. 주변에 더 치명적인 몬스터가 없는지 함께 확인하세요.",
-                    "health": "처치 불가"
+                    "image": "./LethalCompany/entities/Roaming Locust.webp",
+                    "spawn": "주간 · Experimentation, Assurance, Vow, March, Adamance, Artifice",
+                    "detection": "군집을 통과하거나 접근하면 흩어집니다.",
+                    "damage": "직접 피해 없음",
+                    "description": "공 모양 군집으로 떠다니다 접근 시 흩어지는 무해한 주간 생물입니다.",
+                    "strategy": "전투나 회피 자원을 쓰지 말고 그대로 통과하세요. 다른 외부 위협을 가리는 경우에만 시야를 재확보합니다.",
+                    "health": "삽 무효 / 칼 무효(공격용 히트박스 없음)",
+                    "stun": "기절 무효",
+                    "loot": "없음"
                 },
                 {
                     "id": "tulip-snake",
-                    "section": "outside",
+                    "section": "daytime",
                     "name": "Tulip Snake",
                     "nameKr": "튤립 뱀",
-                    "image": "./LethalCompany/entities/Tulip Snake.png",
-                    "description": "플레이어에게 달라붙어 이동에 영향을 주는 특수 외부 개체입니다.",
-                    "strategy": "높은 지형이나 낙하 위험 구간에서는 특히 조심해야 합니다. 붙기 전에 거리 조절을 하고, 붙었다면 무리한 이동보다 안전 지대로 유도하는 편이 좋습니다.",
-                    "health": "삽 1대 / 샷건 1대"
+                    "image": "./LethalCompany/entities/Tulip Snake.webp",
+                    "spawn": "주간 · Assurance, Vow, March, Adamance, Artifice",
+                    "detection": "플레이어를 발견하면 반복해서 뛰어들어 헬멧에 붙습니다.",
+                    "damage": "직접 공격 피해는 없지만 비행 종료 낙하, 시설 입구 팬, 발생 소음에 끌린 Eyeless Dog가 2차 위험입니다.",
+                    "description": "최대 5마리가 달라붙어 플레이어를 들어 올릴 수 있는 주간 생물입니다.",
+                    "strategy": "비행을 지름길로 이용할 수 있지만 착지 지형을 먼저 보세요. 제거하려면 붙은 상태에서 근접무기를 휘두르며, 높은 곳에서 즉시 제거해 추락하지 않도록 주의합니다.",
+                    "health": "삽 1회 / 칼 1회",
+                    "stun": "기절 무효",
+                    "loot": "없음"
                 },
                 {
                     "id": "old-bird",
@@ -224,9 +407,15 @@
                     "name": "Old Bird",
                     "nameKr": "올드 버드 / 로봇",
                     "image": "./LethalCompany/entities/Old Bird.png",
-                    "description": "미사일과 화염 공격을 사용하는 거대 이족보행 로봇형 외부 위협입니다.",
-                    "strategy": "정면 교전보다는 거리 확보와 시야 차단이 우선입니다. 개활지에서는 특히 오래 노출되지 마세요.",
-                    "health": "처치 불가 (무한 HP)"
+                    "spawn": "외부 사전 배치 · Experimentation, Vow, Offense, Adamance, Dine, Titan, Artifice, Embrion",
+                    "detection": "비활성 조형물로 배치된 뒤 야외 스폰 주기 또는 Apparatus 제거로 활성화됩니다. 시야 판정점은 발목 부근입니다.",
+                    "damage": "미사일·밟기 30, 착지 70, 붙잡기 160으로 즉사 가능",
+                    "description": "미사일, 착지, 밟기와 화염방사를 사용하는 전쟁 기계입니다.",
+                    "strategy": "하체를 가리는 엄폐와 앉기로 시야를 끊고, 무거운 물건을 내려 미사일을 피하세요. Apparatus는 운반을 마친 뒤 뽑고, Artifice에서는 창고로 유도해 문을 닫는 전술을 쓸 수 있습니다.",
+                    "health": "삽 무효 / 칼 무효(무한 HP)",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "Earth Leviathan은 활성 여부와 관계없이 제거할 수 있지만 일반 무기 처치는 불가능합니다."
                 },
                 {
                     "id": "kidnapper-fox",
@@ -234,9 +423,15 @@
                     "name": "Kidnapper Fox",
                     "nameKr": "여우",
                     "image": "./LethalCompany/entities/Kidnapper Fox.png",
-                    "description": "덤불 속에 숨어 있다가 혀로 플레이어를 끌어가는 외부 몬스터입니다.",
-                    "strategy": "수풀 지역을 지날 때는 경로를 짧게 잡고, 납치 각이 보이면 즉시 팀 콜과 후퇴를 우선하세요.",
-                    "health": "삽 7대 / 샷건 2~3대"
+                    "spawn": "외부 조건부 · 어느 달이든 Vain Shroud 17개 이상일 때 오전 8시부터 2게임시간마다 출현 시도",
+                    "detection": "가장 큰 Vain Shroud 군락에 숨고 영역에 들어온 플레이어를 혀로 노립니다.",
+                    "damage": "혀 자체는 피해가 없지만 모든 아이템을 떨어뜨리고 처형 구역까지 끌고 가 즉사시킵니다.",
+                    "description": "Vain Shroud 군락을 영역으로 삼아 플레이어를 혀로 끌어가는 외부 개체입니다.",
+                    "strategy": "팀으로 이동하고 중거리에서 함께 응시해 영역을 줄이세요. 동료가 붙잡히면 혀나 본체를 공격해 풀어주며, 장기적으로 Weed Killer로 Shroud 수를 관리합니다.",
+                    "health": "삽 7회 / 칼 7회",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "V80에서 재추가됐으며 시작 시 함선 근처에는 Vain Shroud가 생기지 않지만 이후 확산될 수 있습니다."
                 },
                 {
                     "id": "backwater-gunkfish",
@@ -244,9 +439,15 @@
                     "name": "Backwater Gunkfish",
                     "nameKr": "백워터 건크피쉬",
                     "image": "./LethalCompany/entities/Backwater Gunkfish.png",
-                    "description": "물가나 습한 내부 시설에서 발견되는 물고기 형태의 괴생명체입니다.",
-                    "strategy": "주로 물 주변에 서식하므로 이동 경로를 주의 깊게 살피고 거리를 두는 것이 좋습니다.",
-                    "health": "삽 ? / 샷건 ?"
+                    "spawn": "실내 · Embrion을 제외한 정상 접근 달; March에서 가장 흔함",
+                    "detection": "바닥에 은신한 채 가까운 플레이어를 지켜보다 접촉 또는 장시간 근접 시 점액을 뿌리고 도주합니다.",
+                    "damage": "직접 공격 피해 0; 점액이 얼굴을 가리고 바닥을 미끄럽게 만들어 추락·함정 사고를 유발합니다.",
+                    "description": "은신 상태에서 점액을 분사하고 미끄러운 흔적을 남기는 무해한 실내 개체입니다.",
+                    "strategy": "스캔으로 은신 위치를 확인하고 굳이 추격하지 마세요. 점액에 맞으면 급회전과 점프를 줄이고 위험 지형에서 먼저 벗어납니다.",
+                    "health": "삽 5회 / 칼 5회(바닐라 처치까지의 유효 타격)",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "V80 추가. 바닐라가 HP 0이 아닌 음수에서 사망 처리하는 결함 때문에 5회가 필요하며, 해당 조건을 고치는 모드에서는 4회로 달라집니다."
                 },
                 {
                     "id": "barber",
@@ -254,9 +455,14 @@
                     "name": "Barber",
                     "nameKr": "바버 / 이발사",
                     "image": "./LethalCompany/entities/Barber.png",
-                    "description": "보이지 않는 상태로 거대한 가위 소리를 내며 다가오는 위협적인 존재입니다.",
-                    "strategy": "가위질 소리(탁, 탁)가 들리는 방향을 확인하고 소리가 가까워지면 즉시 거리를 벌려야 합니다.",
-                    "health": "처치 불가"
+                    "spawn": "실내 · Assurance, Vow, Adamance, Rend, Dine, Artifice, Embrion",
+                    "detection": "멀리서는 거의 보이지 않고 리듬에 맞춰 점프합니다. 스네어 드럼 롤 때 목표 위치를 고정한 뒤 해당 선으로 돌진합니다.",
+                    "damage": "가위 접촉 시 즉사",
+                    "description": "리듬에 맞춰 점프하고 거대한 가위로 직선 돌진하는 실내 개체입니다.",
+                    "strategy": "드럼 롤과 스네어 타격을 구분해 듣고 돌진 예정선에서 옆으로 이동하세요. 불필요한 질주로 스태미나를 소모하지 말고, 이중문 격리는 가능한 방에서만 보조적으로 사용합니다.",
+                    "health": "삽 무효 / 칼 무효",
+                    "stun": "기절 가능",
+                    "loot": "없음"
                 },
                 {
                     "id": "butler",
@@ -264,9 +470,15 @@
                     "name": "Butler",
                     "nameKr": "집사",
                     "image": "./LethalCompany/entities/Butler.png",
-                    "description": "혼자 있는 플레이어를 찾아내 칼로 공격하는 집사 형태의 몬스터입니다.",
-                    "strategy": "혼자 있을 때 습격받기 쉬우므로 팀원과 동행하며, 처치 시 몸에서 벌레가 나오므로 주의해야 합니다.",
-                    "health": "삽 2대(솔플)·8대(멀티) / 샷건 1대(솔플)·2대(멀티)"
+                    "spawn": "실내 · Rend, Dine, Artifice",
+                    "detection": "여러 플레이어 앞에서는 수동적이지만 고립된 플레이어를 일정 시간 관찰한 뒤 공격합니다.",
+                    "damage": "반복 Knife 공격; 사망 시 팽창 폭발이 30 피해와 넉백을 줍니다.",
+                    "description": "혼자 떨어진 플레이어를 골라 Knife로 공격하는 실내 개체입니다.",
+                    "strategy": "두 명 이상이 서로의 시야에 남아 살인 상태를 취소시키세요. 처치할 때는 출구를 확보하고 폭발 거리에서 물러나며, 생성되는 Mask Hornets 때문에 Knife 회수 뒤 즉시 구역을 떠납니다.",
+                    "health": "솔로: 삽 2회 / 칼 1회 · 멀티: 삽 8회 / 칼 1회",
+                    "stun": "기절 가능",
+                    "loot": "Kitchen Knife 1개 · 가치 35; 처치 시 Mask Hornets 생성",
+                    "versionNote": "Knife의 hitID에는 Butler를 즉시 처치하는 특수 피해가 적용됩니다."
                 },
                 {
                     "id": "cadaver-bloom",
@@ -274,9 +486,15 @@
                     "name": "Cadaver Bloom",
                     "nameKr": "시체 꽃",
                     "image": "./LethalCompany/entities/Cadaver Bloom.png",
-                    "description": "시체나 어두운 곳에서 피어나는 불길한 식물형 몬스터입니다.",
-                    "strategy": "성장하기 전에 제거하거나, 포자가 퍼지지 않도록 해당 구역을 빠르게 벗어나세요.",
-                    "health": "처치 불가"
+                    "spawn": "조건부 · Cadaver에 감염된 플레이어가 죽으면 실내 또는 외부에서 발생 가능; 자연 스폰 없음",
+                    "detection": "넓은 범위에서 플레이어를 찾고 먼 거리나 엄폐 뒤에서는 고속 돌진, 중거리에서는 불규칙 이동을 합니다.",
+                    "damage": "근접 공격 30 피해",
+                    "description": "감염된 직원 시체에서 발생해 실내·외에서 추격하는 식물형 개체입니다.",
+                    "strategy": "시야를 끊어 돌진 경로를 망가뜨리고 공격 시 발생하는 약 0.75초 경직을 이용해 팀으로 타격하세요. 함선 모니터에는 원래 직원 표식처럼 보이고 텔레포트할 수 있습니다.",
+                    "health": "삽 4회 / 칼 4회 / 샷건 4회",
+                    "stun": "기절 가능",
+                    "loot": "처치 시 원래 플레이어 시체 복원",
+                    "versionNote": "V80 추가. 모든 비즉사 피해가 한 번에 1로 제한되므로 현재 JSON의 처치 불가 표기는 오류입니다."
                 },
                 {
                     "id": "cadaver-growth",
@@ -284,19 +502,31 @@
                     "name": "Cadaver Growth",
                     "nameKr": "시체 풀",
                     "image": "./LethalCompany/entities/Cadaver Growth.png",
-                    "description": "시설 내부에 증식하여 길을 막거나 환경적 위협을 가하는 변이체입니다.",
-                    "strategy": "진로를 방해할 수 있으므로 도구를 사용해 제거하거나 우회로를 찾으십시오.",
-                    "health": "처치 불가"
+                    "spawn": "실내 · Adamance, Rend, Dine, Artifice",
+                    "detection": "식물 포자 구역 또는 감염자의 기침 근처에 머문 시간을 누적해 감염시킵니다.",
+                    "damage": "솔로 약 7초, 멀티 약 4초 최소 노출 뒤 감염 가능; 노출 타이머는 구역을 벗어나도 초기화되지 않습니다.",
+                    "description": "포자와 감염자 기침을 통해 지속성 감염을 퍼뜨리는 실내 식물입니다.",
+                    "strategy": "포자 구역을 빠르게 지나고 감염자는 팀과 거리를 두세요. 감염 약 8% 전의 초기 구간은 샤워로 치료 가능하며, 이후 샤워는 진행을 늦출 뿐입니다. Weed Killer는 증식과 감염을 억제하지만 대상 플레이어에게 피해를 줍니다.",
+                    "health": "삽 무효 / 칼 무효(Weed Killer로 관리)",
+                    "stun": "기절 무효",
+                    "loot": "없음",
+                    "versionNote": "V80 추가. 무기 처치 대상인 Cadaver Bloom과 제거 불가능한 Cadaver Growth를 분리해 설명해야 합니다."
                 },
                 {
                     "id": "feiopar",
                     "section": "outside",
                     "name": "Feiopar",
-                    "nameKr": "늑대",
+                    "nameKr": "페이오파 (비공식 음역)",
                     "image": "./LethalCompany/entities/Feiopar.png",
-                    "description": "외부에서 활동하며 플레이어를 추적하는 기괴한 외형의 생명체입니다.",
-                    "strategy": "시야가 넓으므로 지형지물을 이용해 몸을 숨기며 함선으로 복귀하십시오.",
-                    "health": "삽 3대 / 샷건 1~2대"
+                    "spawn": "외부 · Vow, March만 자연 출현",
+                    "detection": "나무를 타고 시야 밖으로 이동하며 플레이어 뒤를 노립니다. 중거리 응시는 공격 가능성을 낮추지만 나무 바로 아래의 근접 응시는 분노를 올릴 수 있습니다.",
+                    "damage": "뒤쪽 기습과 돌진으로 빠르게 치명상을 입힙니다.",
+                    "description": "퓨마·재규어처럼 나무를 이용해 뒤에서 습격하는 외부 포식자입니다.",
+                    "strategy": "수목선과 뒤를 자주 확인하고 으르렁거림이나 빠른 발소리가 들리면 즉시 돌아보세요. 습격 중 정면으로 압박하거나 무기로 맞히면 물러나므로 혼자 도망만 치지 않습니다.",
+                    "health": "삽 4회 / 칼 4회",
+                    "stun": "기절 가능",
+                    "loot": "없음",
+                    "versionNote": "V80 추가. 현재 JSON의 한국명 '늑대'와 삽 3회는 오류입니다. nameKr는 공식명이 아닌 영문명의 비공식 음역입니다."
                 },
                 {
                     "id": "ghost-girl",
@@ -304,19 +534,31 @@
                     "name": "Ghost Girl",
                     "nameKr": "유령 소녀",
                     "image": "./LethalCompany/entities/Ghost Girl.png",
-                    "description": "특정 한 명의 플레이어에게만 보이며, 끝까지 추적해 즉사시키는 공포스러운 존재입니다.",
-                    "strategy": "추적 대상으로 지정되면 뒤를 돌아보지 말고 최대한 빨리 시설을 탈출해야 합니다.",
-                    "health": "처치 불가"
+                    "spawn": "실내 생성 · Experimentation, Assurance, Adamance, Rend, Dine, Titan, Artifice; 대상은 실내·외·함선까지 추적 가능",
+                    "detection": "한 명의 대상에게만 직접 보이고 들리며 웃음, 호흡, 청각 왜곡, 시계 종, 조명 깜빡임을 일으킵니다.",
+                    "damage": "추격 중 접촉 시 즉사",
+                    "description": "한 명을 선택해 어디서든 출현하고 조건이 쌓이면 추격하는 초자연적 개체입니다.",
+                    "strategy": "뒤에서 호흡이나 웃음이 들리면 벽이 끼거나 호흡이 사라질 때까지 돌아보지 마세요. 추격이 시작되면 무게를 버리고 50유닛 이상 거리, 시설 출입구 또는 텔레포터로 끊습니다.",
+                    "health": "삽 무효 / 칼 무효",
+                    "stun": "기절 무효",
+                    "loot": "없음",
+                    "versionNote": "추격 판정은 한 번의 응시 시간보다 그녀를 본 출현 횟수와 보지 않은 출현 횟수에 좌우됩니다."
                 },
                 {
                     "id": "giant-sapsucker",
-                    "section": "outside",
+                    "section": "daytime",
                     "name": "Giant Sapsucker",
                     "nameKr": "딱따구리",
                     "image": "./LethalCompany/entities/Giant Sapsucker.png",
-                    "description": "거대한 크기로 외부 환경에서 플레이어를 위협하는 몬스터입니다.",
-                    "strategy": "멀리서 발견하기 쉬우므로 인식 범위에 들지 않도록 크게 돌아가야 합니다.",
-                    "health": "삽 28대 / 샷건 6대 이상"
+                    "spawn": "주간 사전 생성 · Vow, Assurance, Adamance",
+                    "detection": "둥지와 알 근처 접근, 본체 접촉, 공격 또는 알 운반을 감지합니다. 알을 들면 위치를 추적하고 함선 문도 강제로 열 수 있습니다.",
+                    "damage": "고속 추격과 연속 공격; 공격 상태가 길어질수록 이동·공격 속도가 증가합니다.",
+                    "description": "세 개의 알이 있는 둥지를 지키며 침입자를 끝까지 추격하는 대형 주간 생물입니다.",
+                    "strategy": "추격 중 알을 내려놓으면 회수를 우선하므로 탈출 기회로 쓰세요. 기절 후 이탈하거나 마지막 시간대에 알을 가져와 즉시 출발하는 편이 근접 처치보다 효율적입니다.",
+                    "health": "삽 28회 / 칼 28회",
+                    "stun": "기절 가능",
+                    "loot": "둥지에 Egg 3개 보장 · 각 가치 40~199 · 함선과 둥지 거리에 따라 가치 범위 변경",
+                    "versionNote": "V70 추가. 높은 HP 때문에 일반 근접전은 수익 대비 위험이 큽니다."
                 },
                 {
                     "id": "lasso-man",
@@ -324,19 +566,31 @@
                     "name": "Lasso Man",
                     "nameKr": "올가미 인간",
                     "image": "./LethalCompany/entities/Lasso Man.png",
-                    "description": "올가미 같은 형태로 기괴하게 움직이며 플레이어를 압박하는 내부 몬스터입니다.",
-                    "strategy": "비정상적인 움직임을 보이므로 마주쳤을 때 당황하지 말고 빠르게 퇴로를 확보하세요.",
-                    "health": "불확실"
+                    "spawn": "정상 자연 출현 없음 · 미사용 코드/에셋; 과거 Challenge Moon에서 버그 출현 사례만 있음",
+                    "detection": "미완성 AI가 플레이어를 따라가지만 정상 게임용 행동이 완성되지 않았습니다.",
+                    "damage": "현재 미사용 구현에서는 접촉 피해가 정상 작동하지 않습니다.",
+                    "description": "게임 파일에만 남아 있는 붉은 밧줄 형태의 미사용 개체입니다.",
+                    "strategy": "정상 플레이 공략 대상이 아닙니다. 모드나 버그로 강제 출현한 경우에만 퇴로를 확보하고 일반 추적 개체처럼 거리를 둡니다.",
+                    "health": "삽 3회 / 칼 3회(미사용 코드상 이론값; 정상 플레이 비대상)",
+                    "stun": "미사용 코드상 기절 가능",
+                    "loot": "없음",
+                    "versionNote": "스크랩 콘텐츠이므로 정상 몬스터 목록이 아니라 dummy 부록에만 유지합니다."
                 },
                 {
                     "id": "mask-hornets",
-                    "section": "outside",
+                    "section": "inside",
                     "name": "Mask Hornets",
                     "nameKr": "가면 말벌",
                     "image": "./LethalCompany/entities/Mask Hornets.png",
-                    "description": "군집을 이루어 빠르게 비행하며 대상을 공격하는 벌 형태의 적입니다.",
-                    "strategy": "한 번 표적이 되면 따돌리기 어려우므로 물가로 유인하거나 건물 안으로 숨으십시오.",
-                    "health": "처치 불가"
+                    "spawn": "실내 조건부 · Butler 사망 시만 생성; 자연 스폰 없음",
+                    "detection": "시설 안을 돌아다니다 가까운 플레이어를 추격하며 시설 밖으로 나갈 수 없습니다.",
+                    "damage": "접촉 10 피해를 반복합니다.",
+                    "description": "Butler의 시체에서 발생해 함선이 떠날 때까지 실내를 배회하는 군집입니다.",
+                    "strategy": "Butler 처치 전에 출구를 확보하세요. 생성 후에는 죽이려 하지 말고 Knife만 회수해 해당 실내 구역을 버립니다.",
+                    "health": "삽 무효 / 칼 무효",
+                    "stun": "기절 무효",
+                    "loot": "없음",
+                    "versionNote": "현재 JSON의 outside 분류와 물가·건물 숨기 전략은 반대입니다. Butler 개별 페이지의 오래된 Adamance 출현표가 있으나 현재 Butler 자연 출현은 Rend, Dine, Artifice입니다."
                 },
                 {
                     "id": "spore-lizard",
@@ -344,19 +598,44 @@
                     "name": "Spore Lizard",
                     "nameKr": "포자 도마뱀",
                     "image": "./LethalCompany/entities/Spore Lizard.png",
-                    "description": "겁이 많지만 위협을 느끼면 보라색 안개를 뿜어 시야를 차단하는 도마뱀입니다.",
-                    "strategy": "공격적이지 않으므로 먼저 자극하지 않으면 안전하게 지나갈 수 있습니다.",
-                    "health": "처치 불가"
+                    "spawn": "실내 · 정상 접근 가능한 11개 달 전체",
+                    "detection": "플레이어를 보면 뒷걸음질 치며, 쫓기거나 궁지에 몰릴 때 방어 행동을 합니다.",
+                    "damage": "분홍 포자는 시야만 가리고 직접 피해는 없으며, 궁지에서는 20 피해의 약한 물기를 사용할 수 있습니다.",
+                    "description": "위협받지 않으면 먼저 도망가는 소극적인 실내 생물입니다.",
+                    "strategy": "쫓거나 막다른 곳으로 몰지 말고 지나갈 공간을 주면 됩니다. 포자에 가려졌을 때만 주변의 다른 위협을 확인하며 물러나세요.",
+                    "health": "삽 무효 / 칼 무효",
+                    "loot": "없음"
                 },
                 {
                     "id": "vain-shrouds",
-                    "section": "outside",
-                    "name": "Vain Shrouds",
-                    "nameKr": "허무한 가리개 / 보라색 풀",
+                    "section": "daytime",
+                    "name": "Vain Shroud",
+                    "nameKr": "베인 슈라우드 (비공식 음역)",
                     "image": "./LethalCompany/entities/Vain Shrouds.png",
-                    "description": "지면에 서식하며 근처를 지나는 플레이어를 낚아채는 식물성 함정입니다.",
-                    "strategy": "바닥의 붉은 줄기나 덤불을 확인하고, 잡혔을 경우 팀원의 도움을 받아 탈출해야 합니다.",
-                    "health": "처치 불가"
+                    "spawn": "외부 환경 식물 · 어느 달에서나 시작·성장 가능하며 저장 파일에 지속",
+                    "detection": "플레이어를 직접 감지하거나 공격하지 않지만 군락 수가 Kidnapper Fox 출현 조건으로 사용됩니다.",
+                    "damage": "직접 피해 없음",
+                    "description": "달 표면에 확산되어 Kidnapper Fox의 영역과 출현 조건을 만드는 붉은 침입성 잡초입니다.",
+                    "strategy": "같은 달을 반복 방문한다면 Weed Killer로 군락 수를 꾸준히 줄이세요. 17개 이상이면 Fox가 출현할 수 있으며, 당일 제거해도 착륙 시 계산된 출현 확률은 유지될 수 있습니다.",
+                    "health": "삽 무효 / 칼 무효(Weed Killer로 제거)",
+                    "stun": "기절 대상 아님",
+                    "loot": "없음",
+                    "versionNote": "V80에서 재추가. 기술적으로 적 개체가 아닌 식물이며, 기존 '허무한 가리개 / 보라색 풀'은 사실과 달라 영문명의 비공식 음역만 표기했습니다."
+                },
+                {
+                    "id": "company-monster",
+                    "section": "company",
+                    "name": "The Company Monster",
+                    "nameKr": "컴퍼니 몬스터 / 젭 (커뮤니티 별칭)",
+                    "spawn": "71-Gordion · Company 판매 창구 안쪽에서만 등장",
+                    "detection": "벨, 플레이어 음성 등 창구 주변 소음이 인내도를 낮춥니다. 깊은 울음은 공격 직전 경고입니다.",
+                    "damage": "창구 밖으로 나온 촉수에 잡히면 즉사하며 시체 회수와 텔레포트가 불가능합니다.",
+                    "description": "스크랩을 매입하지만 반복 소음에 격분해 직원을 끌고 가는 Company 대표 개체입니다.",
+                    "strategy": "스크랩을 카운터에 모은 뒤 필요한 만큼만 벨을 누르세요. 깊은 울음이 들리면 벨과 음성을 멈추고 창구에서 즉시 물러납니다. 가치가 거의 없는 묶음 판매도 공격 위험을 높일 수 있습니다.",
+                    "health": "삽 무효 / 칼 무효(판매 창구 안쪽의 비전투 대상)",
+                    "stun": "기절 대상 아님",
+                    "loot": "없음; 판매한 스크랩을 회수해 크레딧으로 정산",
+                    "versionNote": "정상 플레이 위협이지만 기존 JSON에는 누락돼 있었습니다. nameKr는 커뮤니티 별칭이며 정상 이미지 에셋이 없어 image는 생략했습니다."
                 }
             ]
         },
@@ -695,6 +974,23 @@
             "id": "items",
             "label": "아이템",
             "title": "아이템 공략",
+            "description": "상점에서 구매하는 핵심 장비 14종을 할인 전 기본가, 운용 수치, 실제 사용법 기준으로 정리했습니다.",
+            "research": {
+                "gameVersion": "V80/V81 상점 데이터 기준",
+                "verifiedAt": "2026-08-11",
+                "method": "현행 Store 목록과 각 아이템 문서를 대조하고, 오래된 가격과 충돌하는 항목은 개별 현행 문서를 우선했습니다.",
+                "notes": [
+                    "가격은 할인 이벤트가 적용되지 않은 기본가입니다.",
+                    "이미지는 Zeekerss 게임 자산을 표시한 Fandom CDN 원본을 로컬에 보관했으며, 각 카드에는 수치와 용도를 확인한 위키 문서 링크를 남겼습니다. 이미지별 재배포 라이선스는 추정하지 않습니다."
+                ],
+                "sources": [
+                    {
+                        "label": "Lethal Company Wiki — Store",
+                        "url": "https://lethal-company.fandom.com/wiki/Store",
+                        "type": "item-reference"
+                    }
+                ]
+            },
             "groups": [
                 {
                     "id": "consumables-tools",
@@ -704,93 +1000,277 @@
                     "entries": [
                         {
                             "id": "walkie-talkie",
-                            "name": "Walkie-talkie",
+                            "name": "Walkie-Talkie",
                             "nameKr": "무전기",
-                            "price": 12,
+                            "image": "./LethalCompany/items/walkie-talkie.webp",
+                            "price": 10,
                             "terminalCommand": "walkie-talkie",
-                            "description": "함선 밖 팀원과 장거리 소통을 담당하는 핵심 통신 장비입니다.",
-                            "usage": "배터리를 아껴가며 정찰 담당자와 회수 담당자 사이의 콜을 유지하세요."
+                            "description": "켜진 무전기끼리 맵 전역에서 통신하는 배터리 장비입니다.",
+                            "usage": "함선 담당자와 탐사조가 최소 한 대씩 켜 두되, 송신할 때만 눌러 배터리를 절약하세요.",
+                            "stats": [
+                                {
+                                    "label": "배터리",
+                                    "value": "약 13분 40초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "0 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Walkie-Talkie",
+                                    "url": "https://lethal-company.fandom.com/wiki/Walkie-Talkie",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "flashlight",
                             "name": "Flashlight",
                             "nameKr": "손전등",
+                            "image": "./LethalCompany/items/flashlight.webp",
                             "price": 15,
                             "terminalCommand": "flashlight",
                             "description": "가장 저렴한 기본 조명 장비입니다.",
-                            "usage": "초반 입문용으로 무난하지만 배터리 소모가 빠라 예비 장비를 고려하는 편이 좋습니다."
+                            "usage": "무게가 없어 초반 정찰에 좋지만 지속 시간이 짧으므로 깊은 탐사에서는 프로 손전등을 우선하세요.",
+                            "stats": [
+                                {
+                                    "label": "배터리",
+                                    "value": "약 140초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "0 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Flashlight",
+                                    "url": "https://lethal-company.fandom.com/wiki/Flashlight",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "pro-flashlight",
                             "name": "Pro-flashlight",
                             "nameKr": "프로 손전등",
-                            "price": 25,
+                            "image": "./LethalCompany/items/pro-flashlight.webp",
+                            "price": 28,
                             "terminalCommand": "pro-flashlight",
                             "description": "기본 손전등보다 광량과 지속 시간이 좋은 상위 조명입니다.",
-                            "usage": "깊은 탐사 담당자나 후반 유료 행성에서 우선 지급하면 체감이 큽니다."
+                            "usage": "깊은 탐사 담당자나 후반 유료 행성에서 우선 지급하면 체감이 큽니다.",
+                            "stats": [
+                                {
+                                    "label": "배터리",
+                                    "value": "약 300초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "5 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Pro-flashlight",
+                                    "url": "https://lethal-company.fandom.com/wiki/Pro-flashlight",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "shovel",
                             "name": "Shovel",
-                            "nameKr": "샽",
+                            "nameKr": "삽",
+                            "image": "./LethalCompany/items/shovel.webp",
                             "price": 30,
                             "terminalCommand": "shovel",
                             "description": "근접 대응이 가능한 대표 도구입니다.",
-                            "usage": "붙잡힌 팀원 구출, 약한 몬스터 견제, 문 앞 교전 차단에 활용합니다."
+                            "usage": "붙잡힌 팀원 구출과 처치 가능한 몬스터 대응에 쓰되, 전도성 장비이므로 폭풍 날씨에는 낙뢰를 주의하세요.",
+                            "stats": [
+                                {
+                                    "label": "생물 피해",
+                                    "value": "1"
+                                },
+                                {
+                                    "label": "직원 피해",
+                                    "value": "20"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "14 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Shovel",
+                                    "url": "https://lethal-company.fandom.com/wiki/Shovel",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "lockpicker",
                             "name": "Lockpicker",
                             "nameKr": "락피커",
+                            "image": "./LethalCompany/items/lockpicker.webp",
                             "price": 20,
                             "terminalCommand": "lockpicker",
-                            "description": "잠긴 문을 시간차로 열어주는 장비입니다.",
-                            "usage": "정면 진입보다 우회 루트 개방용으로 사용하면 효율이 높습니다."
+                            "description": "일반 잠긴 문을 약 30초 뒤 여는 재사용 장비이며 보안문에는 작동하지 않습니다.",
+                            "usage": "열쇠를 아끼거나 우회 루트를 확보할 때 먼저 걸어 두고 주변 방을 탐색하세요.",
+                            "stats": [
+                                {
+                                    "label": "해제 시간",
+                                    "value": "약 30초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "11 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Lockpicker",
+                                    "url": "https://lethal-company.fandom.com/wiki/Lockpicker",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "stun-grenade",
                             "name": "Stun Grenade",
                             "nameKr": "섬광탄",
+                            "image": "./LethalCompany/items/stun-grenade.webp",
                             "price": 30,
                             "terminalCommand": "stun grenade",
-                            "description": "짧은 시간 적의 행동을 끊을 수 있는 긴급 대응 장비입니다.",
-                            "usage": "도주 타이밍 확보나 회수 직전 진입 차단용으로 던지는 편이 좋습니다."
+                            "description": "핀을 뽑은 뒤 약 3초 후 폭발하며 기본 5초 기절을 주는 일회용 장비입니다.",
+                            "usage": "도주 타이밍 확보나 회수 직전 진입 차단용으로 던지고, 손에 든 채 폭발하면 20 피해를 받으므로 즉시 투척하세요.",
+                            "stats": [
+                                {
+                                    "label": "신관",
+                                    "value": "약 3초"
+                                },
+                                {
+                                    "label": "기본 기절",
+                                    "value": "5초(개체별 배율 적용)"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Stun Grenade",
+                                    "url": "https://lethal-company.fandom.com/wiki/Stun_Grenade",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "extension-ladder",
                             "name": "Extension Ladder",
                             "nameKr": "확장 사다리",
+                            "image": "./LethalCompany/items/extension-ladder.webp",
                             "price": 60,
                             "terminalCommand": "extension ladder",
                             "description": "고저차가 큰 지형과 틈을 넘을 때 쓰는 보조 장비입니다.",
-                            "usage": "맵 이해도가 높은 팀원이 들고 다니며 루트 단축용으로 배치하세요."
+                            "usage": "맵 이해도가 높은 팀원이 루트 단축용으로 배치하고, 약 18초 뒤 접힐 때 아래에 서 있지 마세요.",
+                            "stats": [
+                                {
+                                    "label": "자동 접힘",
+                                    "value": "약 18초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "0 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Extension ladder",
+                                    "url": "https://lethal-company.fandom.com/wiki/Extension_ladder",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "tzp-inhalant",
                             "name": "TZP-Inhalant",
                             "nameKr": "TZP 흡입제",
-                            "price": 120,
+                            "image": "./LethalCompany/items/tzp-inhalant.webp",
+                            "price": 80,
                             "terminalCommand": "tzp-inhalant",
                             "description": "이동 속도와 스태미나 효율을 끌어올리는 버프형 장비입니다.",
-                            "usage": "장거리 외곽 회수나 고난도 긴급 탈출 때만 제한적으로 쓰는 편이 안전합니다."
+                            "usage": "장거리 외곽 회수나 긴급 탈출 때 짧게 흡입하고, 누적 흡입에 따른 시야·조작·음성 부작용을 감안하세요.",
+                            "stats": [
+                                {
+                                    "label": "총 사용량",
+                                    "value": "약 22초"
+                                },
+                                {
+                                    "label": "효과",
+                                    "value": "스태미나 소비 감소·이동 속도 증가"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — TZP-Inhalant",
+                                    "url": "https://lethal-company.fandom.com/wiki/TZP-Inhalant",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "zap-gun",
-                            "name": "Zap Gun",
+                            "name": "Zap gun",
                             "nameKr": "전기총",
+                            "image": "./LethalCompany/items/zap-gun.webp",
                             "price": 400,
                             "terminalCommand": "zap gun",
-                            "description": "특정 위협을 잠시 고정해 팀이 움직일 시간을 벌어주는 장비입니다.",
-                            "usage": "전담 사수가 뒤에서 조준을 유지하고 다른 팀원이 회수나 탈출을 진행하도록 맞추세요."
+                            "description": "조준 균형을 유지하는 동안 대상을 기절시키며 자체 살상 피해는 없는 배터리 장비입니다.",
+                            "usage": "전담 사수가 뒤에서 조준을 유지하고 다른 팀원이 공격·회수·탈출을 진행하도록 맞추세요.",
+                            "stats": [
+                                {
+                                    "label": "배터리",
+                                    "value": "총 약 60초"
+                                },
+                                {
+                                    "label": "실패 후 지연",
+                                    "value": "약 5초"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Zap gun",
+                                    "url": "https://lethal-company.fandom.com/wiki/Zap_gun",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "jetpack",
                             "name": "Jetpack",
                             "nameKr": "제트팩",
-                            "price": 700,
+                            "image": "./LethalCompany/items/jetpack.webp",
+                            "price": 900,
                             "terminalCommand": "jetpack",
                             "description": "비행 이동이 가능하지만 조종 난도가 높은 고가 장비입니다.",
-                            "usage": "외부 회수 최적화에 강하지만 추락과 폭발 리스크가 있으니 숙련자에게만 맡기세요."
+                            "usage": "외부 회수 최적화에 강하지만 과열·고속 충돌·추락으로 폭발할 수 있으니 숙련자에게 맡기세요.",
+                            "stats": [
+                                {
+                                    "label": "비행 가능 시간",
+                                    "value": "약 50초"
+                                },
+                                {
+                                    "label": "무게",
+                                    "value": "52.5 lb"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Jetpack",
+                                    "url": "https://lethal-company.fandom.com/wiki/Jetpack",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -804,37 +1284,109 @@
                             "id": "teleporter",
                             "name": "Teleporter",
                             "nameKr": "텔레포터",
+                            "image": "./LethalCompany/items/teleporter.webp",
                             "price": 375,
                             "terminalCommand": "teleporter",
-                            "description": "살아 있는 아군을 즉시 함선으로 귀환시키는 구조 장비입니다.",
-                            "usage": "회수 직전 사망 위험이 큰 팀원을 끊어 올리는 용도로 쓰면 손실을 줄일 수 있습니다."
+                            "description": "레이더에서 선택한 생존 직원 또는 시체를 함선으로 회수하는 장비입니다.",
+                            "usage": "위험한 팀원을 구조하거나 시체 회수에 쓰되, 대상이 들고 있던 모든 소지품은 현장에 떨어집니다.",
+                            "stats": [
+                                {
+                                    "label": "재사용 대기",
+                                    "value": "약 10초"
+                                },
+                                {
+                                    "label": "소지품",
+                                    "value": "전부 현장에 드롭"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Teleporter",
+                                    "url": "https://lethal-company.fandom.com/wiki/Teleporter",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "inverse-teleporter",
                             "name": "Inverse Teleporter",
                             "nameKr": "역방향 텔레포터",
+                            "image": "./LethalCompany/items/inverse-teleporter.webp",
                             "price": 425,
                             "terminalCommand": "inverse teleporter",
-                            "description": "플레이어를 시설 내부 무작위 위치로 보내는 특수 장비입니다.",
-                            "usage": "초반 빠른 진입이나 탐색 실험용으로만 제한적으로 사용하고, 팀 콜 없이는 남용하지 마세요."
+                            "description": "패드 위 플레이어를 소지품 없이 시설 내부 무작위 위치로 보내는 특수 장비입니다.",
+                            "usage": "초반 빠른 진입용으로 쓸 수 있지만 고립 위험이 크므로, 함선 담당자와 구조 계획을 정한 뒤 사용하세요.",
+                            "stats": [
+                                {
+                                    "label": "재사용 대기",
+                                    "value": "210초"
+                                },
+                                {
+                                    "label": "소지품",
+                                    "value": "함선에 남김"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Inverse teleporter",
+                                    "url": "https://lethal-company.fandom.com/wiki/Inverse_teleporter",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "signal-translator",
                             "name": "Signal Translator",
                             "nameKr": "신호 번역기",
+                            "image": "./LethalCompany/items/signal-translator.webp",
                             "price": 255,
                             "terminalCommand": "signal translator",
                             "description": "짧은 텍스트를 전 팀 화면에 띄우는 통신 보조 장비입니다.",
-                            "usage": "음성 전달이 어려운 상황에서 탈출, 위험 구역, 회수 지시를 짧게 공유할 때 유용합니다."
+                            "usage": "터미널에서 TRANSMIT 명령을 사용해 탈출·위험·회수 지시를 최대 9자로 압축해 공유하세요.",
+                            "stats": [
+                                {
+                                    "label": "메시지 길이",
+                                    "value": "최대 9자"
+                                },
+                                {
+                                    "label": "명령",
+                                    "value": "TRANSMIT [메시지]"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Signal translator",
+                                    "url": "https://lethal-company.fandom.com/wiki/Signal_translator",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
                             "id": "loud-horn",
                             "name": "Loud Horn",
                             "nameKr": "대형 경적",
+                            "image": "./LethalCompany/items/loud-horn.webp",
                             "price": 100,
                             "terminalCommand": "loud horn",
                             "description": "함선 위치를 소리로 알리거나 팀의 주의를 환기시키는 장비입니다.",
-                            "usage": "안개, 폭우, 야간 귀환 구간에서 방향 안내용으로 짧게 사용하는 편이 좋습니다."
+                            "usage": "안개·폭우·야간 귀환의 방향 신호로 쓰되, 눈 없는 개를 함선 쪽으로 유인할 수 있으므로 연속 사용을 피하세요.",
+                            "stats": [
+                                {
+                                    "label": "소리",
+                                    "value": "시설 내부에서도 들리는 함선 신호"
+                                },
+                                {
+                                    "label": "위험",
+                                    "value": "눈 없는 개 유인 가능"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Lethal Company Wiki — Loud Horn",
+                                    "url": "https://lethal-company.fandom.com/wiki/Loud_Horn",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         }
                     ]
                 }
@@ -843,57 +1395,613 @@
         {
             "id": "mods",
             "label": "모드",
-            "title": "모드 공략",
+            "title": "현행 인기 모드 가이드",
+            "description": "누적 다운로드, 최근 유지보수, V81 대응 기록과 Reddit 실사용 사례를 함께 확인해 기반·편의·콘텐츠 모드로 나눴습니다.",
+            "research": {
+                "gameVersion": "Lethal Company V81",
+                "verifiedAt": "2026-08-11",
+                "method": "Thunderstore 공식 API·패키지 페이지로 버전과 의존성을 확인하고, Reddit 사용 사례는 호환 보증이 아닌 실사용 참고 자료로만 반영했습니다.",
+                "notes": [
+                    "다운로드 수에는 모드팩 의존성 설치와 재다운로드가 포함되므로 활성 사용자 수와 같지 않습니다.",
+                    "모드 매니저에서 새 프로필을 만든 뒤 팀원과 프로필 코드를 공유하고, 기존 프로필은 복제해 보존하세요.",
+                    "Deprecated인 LateCompany와 ShipLoot은 대표 추천에서 제외했습니다. Late Join 대안은 실험판 경고와 함께 별도 표기했습니다."
+                ],
+                "sources": [
+                    {
+                        "label": "Thunderstore API 문서",
+                        "url": "https://thunderstore.io/api/docs/",
+                        "type": "official-api"
+                    },
+                    {
+                        "label": "Reddit — V81 호환 모드 논의",
+                        "url": "https://www.reddit.com/r/lethalcompany/comments/1toqcoq/are_there_any_good_mods_that_work_with_the_newest/",
+                        "type": "community"
+                    },
+                    {
+                        "label": "Reddit — V81 대형 로비 사용 사례",
+                        "url": "https://www.reddit.com/r/lethalcompany/comments/1uzuvn3/lethal_company_bigger_lobby/",
+                        "type": "community"
+                    },
+                    {
+                        "label": "Reddit — 몬스터 모드 추천",
+                        "url": "https://www.reddit.com/r/lethalcompany/comments/1vil4g3/monster_mod_recommendations/",
+                        "type": "community"
+                    }
+                ]
+            },
             "groups": [
                 {
-                    "id": "quality-of-life",
-                    "label": "편의성",
-                    "title": "편의성 모드",
-                    "description": "기본 플레이 감각은 유지하면서 UI나 인원 제한 같은 불편을 줄이는 계열입니다.",
+                    "id": "foundation",
+                    "label": "기반·현지화",
+                    "title": "기반 로더와 한국어 지원",
+                    "description": "직접 콘텐츠를 추가하기보다 다른 모드를 실행하거나 한국어 플레이를 돕는 기반 패키지입니다. 필요한 모드가 의존성으로 요구할 때 설치하세요.",
                     "entries": [
                         {
-                            "id": "morecompany",
-                            "name": "MoreCompany",
-                            "description": "기본 인원 제한을 넘어 더 많은 인원이 함께 플레이할 수 있게 돕는 대표 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "id": "bepinexpack",
+                            "name": "BepInExPack",
+                            "nameKr": "모드 로더 기반",
+                            "image": "./LethalCompany/mods/bepinexpack.png",
+                            "description": "Lethal Company의 다수 플러그인을 구동하는 기반 로더입니다. 모드 매니저는 요구된 버전을 자동으로 설치합니다.",
+                            "usage": "수동으로 여러 버전을 덮어쓰지 말고, 각 Thunderstore 프로필이 계산한 의존성 버전을 그대로 사용하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/BepInEx/BepInExPack/",
+                            "aliases": [
+                                "BepInEx-BepInExPack"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "5.4.2305 · 2026-03-17"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 32M 다운로드"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "없음"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — BepInExPack",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/BepInEx/BepInExPack/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — BepInEx",
+                                    "url": "https://github.com/BepInEx/BepInEx",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
-                            "id": "latecompany",
-                            "name": "LateCompany",
-                            "description": "게임이 이미 시작된 뒤에도 플레이어가 도중 참여할 수 있도록 지원하는 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "id": "lckr",
+                            "name": "LCKR",
+                            "nameKr": "Lethal Company 한국어 패치",
+                            "image": "./LethalCompany/mods/lckr.png",
+                            "description": "한국어 UI와 텍스트를 제공하는 클라이언트 현지화 모드입니다.",
+                            "usage": "V80 텍스트 대응은 확인됐지만 V81 전체 문구 보증은 아니므로, 문제 발생 시 번역 모드만 끈 별도 프로필과 비교하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/Piggy/LCKR/",
+                            "aliases": [
+                                "Piggy-LCKR",
+                                "한글패치",
+                                "한국어패치"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "2.1.1 · 2026-04-04"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 1.7M 다운로드"
+                                },
+                                {
+                                    "label": "적용 범위",
+                                    "value": "클라이언트"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2100"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — LCKR",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/Piggy/LCKR/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — LCKorean",
+                                    "url": "https://github.com/Piggy3590/LCKorean",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
-                            "id": "reserveditemslotcore",
-                            "name": "ReservedItemSlotCore",
-                            "description": "손전등이나 무전기 같은 전용 슬롯 기반 모드의 기반이 되는 코어 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "id": "lethal-level-loader",
+                            "name": "LethalLevelLoader",
+                            "nameKr": "커스텀 달·인테리어 로더",
+                            "image": "./LethalCompany/mods/lethal-level-loader.png",
+                            "description": "커스텀 달과 인테리어를 게임에 연결하는 대형 콘텐츠 프레임워크입니다. 단독 설치만으로 새 맵이 생기지는 않습니다.",
+                            "usage": "로더가 V81을 지원해도 개별 달·인테리어의 호환은 별도이므로 각 콘텐츠 페이지의 버전 기록을 다시 확인하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/IAmBatby/LethalLevelLoader/",
+                            "aliases": [
+                                "IAmBatby-LethalLevelLoader",
+                                "LLL"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "1.7.8 · 2026-07-05"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 13M 다운로드"
+                                },
+                                {
+                                    "label": "호환",
+                                    "value": "V81 명시"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2305 외 2개"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — LethalLevelLoader",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/IAmBatby/LethalLevelLoader/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — LethalLevelLoader",
+                                    "url": "https://github.com/IAmBatby/LethalLevelLoader",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         }
                     ]
                 },
                 {
-                    "id": "content-expansion",
-                    "label": "콘텐츠 확장",
-                    "title": "콘텐츠 확장 모드",
-                    "description": "위협, 밸런스, 진행 감각을 크게 바꾸는 계열입니다. 팀 합의 후 사용하는 편이 좋습니다.",
+                    "id": "multiplayer-quality-of-life",
+                    "label": "멀티·편의",
+                    "title": "로비와 편의성 모드",
+                    "description": "기본 플레이를 유지하면서 인원, UI, 전용 슬롯 같은 불편을 줄이는 계열입니다. 멀티플레이에서는 같은 프로필 사용을 우선하세요.",
                     "entries": [
                         {
-                            "id": "brutalcompanyminus",
-                            "name": "BrutalCompanyMinus",
-                            "description": "이벤트와 난이도 변수를 추가해 판마다 다른 압박감을 주는 고난도 확장 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "id": "morecompany",
+                            "name": "MoreCompany",
+                            "nameKr": "대형 로비·코스메틱",
+                            "image": "./LethalCompany/mods/morecompany.png",
+                            "description": "기본 로비 인원을 확장하고 코스메틱을 추가하는 대표 대형 로비 모드입니다.",
+                            "usage": "참가자 전원이 같은 버전과 프로필을 사용하세요. 8명을 넘기면 일부 UI가 완전히 맞지 않을 수 있습니다.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/notnotnotswipez/MoreCompany/",
+                            "aliases": [
+                                "notnotnotswipez-MoreCompany",
+                                "대형로비"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "1.14.0 · 2026-04-25"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 27M 다운로드"
+                                },
+                                {
+                                    "label": "멀티 권장",
+                                    "value": "전원 동일 프로필"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2100"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — MoreCompany",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/notnotnotswipez/MoreCompany/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — MoreCompany",
+                                    "url": "https://github.com/notnotnotswipez/MoreCompany",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
-                            "id": "sellbodiesfixed",
+                            "id": "general-improvements",
+                            "name": "GeneralImprovements",
+                            "nameKr": "종합 편의 개선",
+                            "image": "./LethalCompany/mods/general-improvements.png",
+                            "description": "스캐너, 함선 모니터, 전리품 가치 표시 등 여러 편의 기능을 하나의 설정 가능한 모드로 묶습니다.",
+                            "usage": "다른 UI·스캐너 모드와 기능이 겹치지 않도록 필요한 옵션만 켜세요. Deprecated ShipLoot의 현행 대안으로 적합합니다.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/ShaosilGaming/GeneralImprovements/",
+                            "aliases": [
+                                "ShaosilGaming-GeneralImprovements",
+                                "GI"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "1.5.5 · 2026-04-15"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 3.1M 다운로드"
+                                },
+                                {
+                                    "label": "호환",
+                                    "value": "V81 대응 변경 기록 확인"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2100"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — GeneralImprovements",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/ShaosilGaming/GeneralImprovements/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — GeneralImprovements",
+                                    "url": "https://github.com/Shaosil/LethalCompanyMods-GeneralImprovements",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "reserved-item-slot-core",
+                            "name": "ReservedItemSlotCore",
+                            "nameKr": "전용 슬롯 프레임워크",
+                            "image": "./LethalCompany/mods/reserved-item-slot-core.png",
+                            "description": "손전등·무전기·무기 같은 전용 슬롯 애드온을 작동시키는 핵심 프레임워크입니다. Core만 설치해도 슬롯이 생기지는 않습니다.",
+                            "usage": "ReservedFlashlightSlot 같은 슬롯 애드온을 함께 고르고, 핫바 재배열·AdvancedCompany 계열과 충돌 여부를 확인하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/FlipMods/ReservedItemSlotCore/",
+                            "aliases": [
+                                "FlipMods-ReservedItemSlotCore",
+                                "전용슬롯"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "2.0.55 · 2026-04-11"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 23M 다운로드"
+                                },
+                                {
+                                    "label": "주의",
+                                    "value": "별도 슬롯 애드온 필요"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2100"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — ReservedItemSlotCore",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/FlipMods/ReservedItemSlotCore/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — ReservedItemSlotMods",
+                                    "url": "https://github.com/cmooref17/ReservedItemSlotMods",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "reserved-flashlight-slot",
+                            "name": "ReservedFlashlightSlot",
+                            "nameKr": "손전등 전용 슬롯",
+                            "image": "./LethalCompany/mods/reserved-flashlight-slot.png",
+                            "description": "손전등을 기본 인벤토리와 분리된 전용 슬롯에 넣는 대표 애드온입니다.",
+                            "usage": "ReservedItemSlotCore와 함께 설치하고, 팀원도 같은 슬롯 구성을 쓰게 프로필 코드를 공유하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/FlipMods/ReservedFlashlightSlot/",
+                            "aliases": [
+                                "FlipMods-ReservedFlashlightSlot",
+                                "손전등슬롯"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "2.0.10"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 16M 다운로드"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · ReservedItemSlotCore 2.0.41+"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — ReservedFlashlightSlot",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/FlipMods/ReservedFlashlightSlot/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — ReservedItemSlotMods",
+                                    "url": "https://github.com/cmooref17/ReservedItemSlotMods",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "lobby-control-experimental",
+                            "name": "LobbyControl Experimental",
+                            "nameKr": "중도 참여·호스트 제어 실험판",
+                            "image": "./LethalCompany/mods/lobby-control-experimental.png",
+                            "description": "Deprecated LateCompany를 대신해 중도 참여와 로비 제어를 제공하는 실험판 모드입니다.",
+                            "usage": "안정 추천이 아닙니다. LateCompany·ShipLobby·VeryLateCompany·AdvancedCompany와 함께 쓰지 말고, 복제 프로필에서 먼저 시험하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/mattymatty/LobbyControl_Experimental/",
+                            "aliases": [
+                                "mattymatty-LobbyControl_Experimental",
+                                "Late Join",
+                                "LateCompany 대안"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "5.12.3 · 2026-07-01"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 134K 다운로드"
+                                },
+                                {
+                                    "label": "안정성",
+                                    "value": "Experimental"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack 5.4.2100"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — LobbyControl Experimental",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/mattymatty/LobbyControl_Experimental/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — LobbyControl",
+                                    "url": "https://github.com/mattymatty97/LTC_LobbyControl",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "content-challenge",
+                    "label": "콘텐츠·고난도",
+                    "title": "진행과 위협을 바꾸는 모드",
+                    "description": "경제·몬스터·이벤트·탈출 규칙을 바꾸므로 호스트가 먼저 설정을 정하고 전원이 같은 프로필을 쓰는 것이 안전합니다.",
+                    "entries": [
+                        {
+                            "id": "lategame-upgrades",
+                            "name": "Lategame Upgrades",
+                            "nameKr": "후반 업그레이드 확장",
+                            "image": "./LethalCompany/mods/lategame-upgrades.png",
+                            "description": "터미널 앱에서 구매하는 다수의 후반 업그레이드를 추가하며 대부분의 수치를 설정할 수 있습니다.",
+                            "usage": "진행과 경제 밸런스를 크게 바꾸므로 업그레이드 공유 방식과 가격 설정을 팀 합의 후 고정하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/malco/Lategame_Upgrades/",
+                            "aliases": [
+                                "malco-Lategame_Upgrades",
+                                "LGU"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "3.14.1 · 2026-08-10"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 11M 다운로드"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · LethalLib 외 4개"
+                                },
+                                {
+                                    "label": "멀티 권장",
+                                    "value": "전원 동일 설정"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — Lategame Upgrades",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/malco/Lategame_Upgrades/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — LC-LateGameUpgrades",
+                                    "url": "https://github.com/Malcolm-Q/LC-LateGameUpgrades",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "brutal-company-minus",
+                            "name": "Brutal Company Minus",
+                            "nameKr": "고난도 이벤트 오버홀",
+                            "image": "./LethalCompany/mods/brutal-company-minus.png",
+                            "description": "40개 이상의 이벤트와 날씨·난이도 변수를 추가해 매 판의 압박을 크게 높입니다.",
+                            "usage": "바닐라 난이도에 익숙한 팀이 별도 프로필로 시작하세요. 초보자 온보딩 프로필에는 넣지 않는 편이 좋습니다.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/DrinkableWater/Brutal_Company_Minus/",
+                            "aliases": [
+                                "DrinkableWater-Brutal_Company_Minus",
+                                "BrutalCompanyMinus"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "0.13.21 · 2026-07-01"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 1.2M 다운로드"
+                                },
+                                {
+                                    "label": "호환",
+                                    "value": "README에 V81 대응 명시"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · StarlancerAIFix"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — Brutal Company Minus",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/DrinkableWater/Brutal_Company_Minus/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — BrutalCompanyMinus",
+                                    "url": "https://github.com/Sylkadi/BrutalCompanyMinus",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "sell-bodies-fixed",
                             "name": "SellBodiesFixed",
-                            "description": "사망한 팀원의 시체를 회수 자원처럼 활용할 수 있게 만들어 운영 선택지를 늘리는 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "nameKr": "몬스터 시체 판매",
+                            "image": "./LethalCompany/mods/sell-bodies-fixed.png",
+                            "description": "사망한 팀원이 아니라 처치한 몬스터의 시체를 회수해 회사에 판매하는 경제 확장 모드입니다.",
+                            "usage": "전원이 같은 설정을 쓰고, Butler·Earth Leviathan 등 미지원 개체가 있음을 감안해 회수 동선을 계획하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/Entity378/SellBodiesFixed/",
+                            "aliases": [
+                                "Entity378-SellBodiesFixed",
+                                "시체판매"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "1.14.0 · 2026-04-27"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 3M 다운로드"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · LethalLib 외 3개"
+                                },
+                                {
+                                    "label": "용량 주의",
+                                    "value": "약 80MB"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — SellBodiesFixed",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/Entity378/SellBodiesFixed/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — SellBodiesFixed",
+                                    "url": "https://github.com/Entity378/LC-SellBodiesFixed",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         },
                         {
-                            "id": "shiploot",
-                            "name": "ShipLoot",
-                            "description": "함선 안 전리품 가치를 더 직관적으로 보여줘 회수 판단을 빠르게 돕는 모드입니다.",
-                            "installLink": "수동 추가 예정"
+                            "id": "biodiversity",
+                            "name": "Biodiversity",
+                            "nameKr": "바닐라풍 생물 다양성 확장",
+                            "image": "./LethalCompany/mods/biodiversity.png",
+                            "description": "기존 분위기에 맞춘 신규 몬스터와 아이템을 추가하는 콘텐츠 확장 모드입니다.",
+                            "usage": "Known Issues의 AI 고착·NavMesh 로그를 먼저 읽고, 커스텀 달에서는 Ogopogo 등 일부 콘텐츠가 제한될 수 있음을 공유하세요.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/super_fucking_cool_and_badass_team/Biodiversity/",
+                            "aliases": [
+                                "super_fucking_cool_and_badass_team-Biodiversity"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "0.2.9 · 2026-05-16"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 854K 다운로드"
+                                },
+                                {
+                                    "label": "호환",
+                                    "value": "V81 명시"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · LethalLib"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — Biodiversity",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/super_fucking_cool_and_badass_team/Biodiversity/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — BiodiversityLC",
+                                    "url": "https://github.com/BiodiversityLC",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "facility-meltdown",
+                            "name": "FacilityMeltdown",
+                            "nameKr": "장치 회수 후 시설 붕괴",
+                            "image": "./LethalCompany/mods/facility-meltdown.png",
+                            "description": "Apparatus를 제거하면 약 2분짜리 시설 붕괴 탈출 이벤트를 시작합니다.",
+                            "usage": "장치 회수 전에 출구와 귀환 동선을 확보하세요. 커스텀 달의 경고등은 해당 달 제작자의 지원 여부에 따라 달라집니다.",
+                            "installLink": "https://thunderstore.io/c/lethal-company/p/loaforc/FacilityMeltdown/",
+                            "aliases": [
+                                "loaforc-FacilityMeltdown",
+                                "멜트다운"
+                            ],
+                            "stats": [
+                                {
+                                    "label": "최신 확인",
+                                    "value": "2.7.5 · 2026-05-17"
+                                },
+                                {
+                                    "label": "인기 신호",
+                                    "value": "누적 약 4.5M 다운로드"
+                                },
+                                {
+                                    "label": "탈출 시간",
+                                    "value": "약 2분"
+                                },
+                                {
+                                    "label": "의존성",
+                                    "value": "BepInExPack · DawnLib"
+                                }
+                            ],
+                            "sources": [
+                                {
+                                    "label": "Thunderstore — FacilityMeltdown",
+                                    "url": "https://thunderstore.io/c/lethal-company/p/loaforc/FacilityMeltdown/",
+                                    "checkedAt": "2026-08-11"
+                                },
+                                {
+                                    "label": "GitHub — FacilityMeltdown",
+                                    "url": "https://github.com/LoafOrc/FacilityMeltdown",
+                                    "checkedAt": "2026-08-11"
+                                }
+                            ]
                         }
                     ]
                 }
