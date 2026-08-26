@@ -19,6 +19,7 @@ def offer(offer_id="1", title="Free Game"):
         claim_url=f"https://www.gamerpower.com/open/{offer_id}",
         ends_at=datetime(2026, 8, 10, 12, 0, tzinfo=timezone.utc),
         worth="$9.99",
+        platforms=("PC", "Epic Games Store"),
     )
 
 
@@ -26,7 +27,9 @@ class FreeGameEmbedTests(unittest.TestCase):
     def test_embed_displays_expiry_link_and_attribution(self):
         embed = build_free_game_embeds([offer()])[0]
 
-        self.assertEqual(embed.title, "Steam 기간 한정 무료 게임")
+        self.assertEqual(embed.title, "기간 한정 무료 게임")
+        self.assertIn("플랫폼: PC · Epic Games Store", embed.fields[0].value)
+        self.assertIn("정가: $9.99", embed.fields[0].value)
         self.assertIn("<t:1786363200:F>", embed.fields[0].value)
         self.assertIn("https://www.gamerpower.com/open/1", embed.fields[0].value)
         self.assertIn("https://www.gamerpower.com/", embed.description)

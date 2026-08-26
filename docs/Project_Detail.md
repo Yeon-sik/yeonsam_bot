@@ -1,14 +1,14 @@
 # 연삼이 | Project Detail
 
 > 이 문서는 연삼이 저장소의 Discord 봇, 정적 게임 가이드, SQLite 운영 데이터,
-> Steam 패치 알림과 배포 경계를 설명합니다. 빠른 개요는
+> Steam 패치 알림, 여러 플랫폼 무료 배포 알림과 배포 경계를 설명합니다. 빠른 개요는
 > [Project_Intro.md](./Project_Intro.md)를 참고합니다.
 
 | 항목 | 내용 |
 | --- | --- |
 | 문서 상태 | Active |
-| 적용 범위 | 2026-08-11에 검증한 저장소, 브라우저, 문서 자동화와 Notion 발행 경로 |
-| 최종 갱신 | 2026-08-11T15:49:11+09:00 |
+| 적용 범위 | 2026-08-12에 검증한 저장소·GamerPower provider 읽기 전용·문서 자동화와 2026-08-11 Notion 발행 경로 |
+| 최종 갱신 | 2026-08-12T21:47:46+09:00 |
 | 검증 환경 | Python 3.12.13, Node.js 22.19.0, Windows 로컬 환경, localhost 정적 서버, GitHub Pages |
 | 문서 진실 원천 | Git 저장소의 `docs/Project_Detail.md` |
 | 공개 경계 | 코드·테스트·공개 배포 파일만 사용, 실제 서버 식별자와 운영 데이터 제외 |
@@ -22,7 +22,7 @@
 - Discord bot 프로세스의 시작·종료와 command 등록
 - 신규 서버 설정과 멤버 환영 흐름
 - JSON 기반 게임 가이드 검색·선택형 UI와 로컬 이미지 첨부
-- Steam 무료 배포 조회·서버별 무료 알림
+- 여러 플랫폼의 유료 게임 무료 배포 조회·서버별 무료 알림
 - Steam 인기 게임 순위 조회
 - Steam 공식 뉴스 기반 서버별 패치 알림
 - SQLite 설정·구독·지표·runtime state
@@ -63,7 +63,7 @@ Discord 기반 협동 게임 서버는 신규 멤버 안내, 역할·채널 권�
 | 신규 멤버 | 서버 안내를 받고 닉네임을 설정 | member join → 환영 embed → profile modal |
 | 게임 사용자 | 필요한 공략 항목을 빠르게 탐색 | `/도움` 또는 `항목검색: 배그` → 게임 → 주제 → 항목 |
 | 서버 관리자 | 새 패치 소식을 지정 채널에 전달 | 게임·채널 구독 → cursor 시드 → 새 Steam 글 발송 |
-| 서버 관리자 | Steam 무료 배포를 서버 채널에 전달 | `/무료알림설정` → 6시간 주기 poll → 변경분만 발송 |
+| 서버 관리자 | 여러 플랫폼의 유료 게임 무료 배포를 서버 채널에 전달 | `/무료알림설정` → 6시간 주기 poll → 변경분만 발송 |
 | 일반 사용자 | 현재 화제 게임과 무료 배포를 즉시 확인 | `/스팀인기게임` 또는 `/무료게임` |
 | 웹 방문자 | 전체 가이드를 링크로 열람 | 랜딩 → 게임 페이지 → JSON 기반 카드·레코드 |
 
@@ -76,7 +76,7 @@ Discord 기반 협동 게임 서버는 신규 멤버 안내, 역할·채널 권�
 | 신규 멤버 환영 | 구현 완료 | embed 단위 테스트 | [welcome.py](../bot/cogs/welcome.py) | 실제 member join 미검증 |
 | 게임 검색·탐색 | 구현 완료 | 구조·정적 검사·브라우저 확인 | [yeonsam.py](../bot/cogs/yeonsam.py), [game-page.js](./assets/game-page.js) | 25개 선택 제한 |
 | 게임 아이템·모드 카탈로그 | 구현 완료 | 저장소 검증·이미지/링크 계약 테스트 | [LethalCompany.json](./games/LethalCompany/LethalCompany.json), [REPO.json](./games/REPO/REPO.json) | 커뮤니티 출처 수치의 장기 최신성 |
-| 무료 게임 알림 | 구현 완료 | parser·embed·polling 단위 테스트 | [free_game_alerts.py](../bot/cogs/free_game_alerts.py), [free_game_feed.py](../bot/utils/free_game_feed.py) | 외부 API 실통신 미검증 |
+| 무료 게임 알림 | 구현 완료 | parser·embed·polling 단위 테스트·GamerPower 읽기 전용 확인 | [free_game_alerts.py](../bot/cogs/free_game_alerts.py), [free_game_feed.py](../bot/utils/free_game_feed.py) | Discord 채널 발송·장기 polling·provider rate limit 미검증 |
 | Steam 인기 게임 | 구현 완료 | parser·embed·cache 단위 테스트 | [steam_popular.py](../bot/cogs/steam_popular.py), [steam_popular.py](../bot/utils/steam_popular.py) | Steam 원본 지연 시 UX 품질 |
 | 패치 알림 | 구현 완료 | 고정 패키지 adapter·parser·cursor 단위 테스트 | [patch_alerts.py](../bot/cogs/patch_alerts.py), [requirements.txt](../requirements.txt) | Steam·Discord E2E 없음 |
 | SQLite 저장 | 구현 완료 | 단위 테스트 | [storage.py](../bot/utils/storage.py) | 다중 프로세스 검증 없음 |
@@ -146,7 +146,7 @@ Steam News payload
   → 성공한 항목까지 cursor 갱신
 
 GamerPower payload
-  → Steam 무료·활성·만료 전 항목 필터링
+  → 양수 worth·여러 플랫폼·활성·만료 전 항목 필터링
   → digest 계산
   → guild free-game subscription 비교
   → 변경분만 Discord embed 발송
@@ -217,13 +217,13 @@ top-level `install`은 현재 주 렌더 경로에서 소비되지 않으므로,
 
 ### 결정 3. 외부 게임 피드를 기능별 어댑터로 분리
 
-- **상황**: 패치 공지, 무료 배포, Steam 인기 게임은 공급원과 갱신 규칙이 다릅니다.
+- **상황**: 패치 공지, 여러 플랫폼 무료 배포, Steam 인기 게임은 공급원과 갱신 규칙이 다릅니다.
 - **선택**: Steam 공식 뉴스는 고정된 `steam-discord-patch-alerts` 패키지에 맡기고,
   무료 배포는 `free_game_feed.py`, 인기 게임은 `steam_popular.py`로 별도 파서를 둡니다.
 - **근거**: 서로 다른 외부 응답 형식을 하나의 서비스에 몰아넣지 않아 장애 경계와
   테스트 경계를 분리할 수 있습니다.
-- **결과**: 패치 알림, 무료 배포 알림, 인기 게임 조회가 각자 독립 테스트와 캐시·cursor·digest 규칙을 갖습니다.
-- **비용과 위험**: GamerPower와 Steam의 실응답 변화, rate limit, 장기 polling 안정성은 아직 실운영 증거가 없습니다.
+- **결과**: 패치 알림, 무료 배포 알림, 인기 게임 조회가 각자 독립 테스트와 캐시·cursor·digest 규칙을 갖습니다. 무료 배포 parser는 양수 `worth`와 플랫폼을 보존합니다.
+- **비용과 위험**: GamerPower 현재 응답은 읽기 전용으로 한 번 확인했지만, provider 응답 변화, rate limit, 장기 polling 안정성은 실운영 증거가 없습니다.
 
 ### 결정 4. Git Markdown을 원본으로, Notion을 읽기 전용 미러로 사용
 
@@ -245,7 +245,7 @@ top-level `install`은 현재 주 렌더 경로에서 소비되지 않으므로,
 | --- | --- | --- | --- | --- |
 | Discord API | command, event, message, profile UI | bot token은 환경변수 | 공통 error handler와 metric | 실서버 미검증 |
 | Steam News | 공식 패치 기사 조회 | 공개 endpoint | timeout, parse error, cursor 유지 | synthetic payload만 검증 |
-| GamerPower | Steam 무료 배포 목록 조회 | 공개 endpoint | 비정상 payload 예외와 digest 재사용 | synthetic payload만 검증 |
+| GamerPower | 여러 플랫폼 유료 게임 무료 배포 목록 조회 | 공개 endpoint | 비정상 payload 예외와 digest 재사용 | 2026-08-12 provider 읽기 전용 확인, Discord 발송·장기 polling은 미검증 |
 | Steam Charts / Store | 인기 게임 차트·앱 메타데이터 조회 | 공개 endpoint | stale snapshot 경고, retry cooldown | synthetic payload만 검증 |
 | GitHub Pages | 정적 사이트 배포 | 공개 Application ID·상태 URL | 미설정 상태 UI | HTTP 응답 확인 |
 | Notion API | Git Markdown 미러 | protected Environment Secrets | 전체 페이지 preflight 후 replace-only 발행 | Actions 실제 발행·두 페이지 read-back 확인 |

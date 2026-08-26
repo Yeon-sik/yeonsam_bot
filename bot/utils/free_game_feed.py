@@ -1,7 +1,8 @@
-"""GamerPower feed parsing for limited-time free Steam games."""
+"""GamerPower feed parsing for limited-time paid games across platforms."""
 
 import hashlib
 import json
+import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any
@@ -17,6 +18,7 @@ _EXCLUDED_OFFER_TERMS = (
     "free weekend",
     "play for free",
 )
+_WORTH_NUMBER_PATTERN = re.compile(r"(?<!\d)(\d+(?:[.,]\d+)?)")
 
 
 class FreeGameFeedError(RuntimeError):
@@ -30,12 +32,12 @@ class FreeGameOffer:
     claim_url: str
     ends_at: datetime | None
     worth: str
+    platforms: tuple[str, ...] = ()
 
 
 def build_gamerpower_url() -> str:
     query = urlencode(
         {
-            "platform": "steam",
             "type": "game",
             "sort-by": "date",
         }
@@ -70,16 +72,31 @@ def _is_gamerpower_url(value: Any) -> bool:
     return parsed.scheme == "https" and parsed.hostname in _GAMERPOWER_HOSTS
 
 
-def _has_steam_platform(value: Any) -> bool:
-    if isinstance(value, list):
-        platforms = {str(item).strip().casefold() for item in value}
+def _parse_platforms(value: Any) -> tuple[str, ...]:
+    if isinstance(value, (list, tuple, set)):
+        raw_platforms = value
     else:
-        platforms = {
-            item.strip().casefold()
-            for item in str(value or "").split(",")
-            if item.strip()
-        }
-    return "steam" in platforms
+        raw_platforms = str(value or "").split(",")
+
+    platforms: list[str] = []
+    seen: set[str] = set()
+    for item in raw_platforms:
+        platform = " ".join(str(item).strip().split())
+        normalized = platform.casefold()
+        if platform and normalized not in seen:
+            seen.add(normalized)
+            platforms.append(platform)
+    return tuple(platforms)
+
+
+def _has_positive_worth(value: Any) -> bool:
+    match = _WORTH_NUMBER_PATTERN.search(str(value or ""))
+    if match is None:
+        return False
+    try:
+        return float(match.group(1).replace(",", ".")) > 0
+    except ValueError:
+        return False
 
 
 def _looks_like_temporary_access(item: dict) -> bool:
@@ -95,7 +112,7 @@ def parse_gamerpower_giveaways(
     *,
     now: datetime | None = None,
 ) -> list[FreeGameOffer]:
-    """Normalize active, full-game Steam giveaways and discard expired offers."""
+    """Normalize active, paid full-game giveaways and discard expired offers."""
     if isinstance(payload, dict) and payload.get("status") in (0, "0"):
         return []
     if not isinstance(payload, list):
@@ -111,7 +128,10 @@ def parse_gamerpower_giveaways(
             continue
         if str(item.get("type") or "").casefold() != "game":
             continue
-        if not _has_steam_platform(item.get("platforms")):
+        platforms = _parse_platforms(item.get("platforms"))
+        if not platforms:
+            continue
+        if not _has_positive_worth(item.get("worth")):
             continue
         if _looks_like_temporary_access(item):
             continue
@@ -143,6 +163,7 @@ def parse_gamerpower_giveaways(
             claim_url=claim_url,
             ends_at=ends_at,
             worth=str(item.get("worth") or "").strip(),
+            platforms=platforms,
         )
 
     return sorted(
@@ -163,6 +184,7 @@ def build_free_game_digest(offers: list[FreeGameOffer]) -> str:
             "url": offer.claim_url,
             "ends_at": offer.ends_at.isoformat() if offer.ends_at else None,
             "worth": offer.worth,
+            "platforms": offer.platforms,
         }
         for offer in sorted(offers, key=lambda item: item.offer_id)
     ]

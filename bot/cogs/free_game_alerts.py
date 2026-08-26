@@ -1,4 +1,4 @@
-"""Automatic startup digest for limited-time free Steam games."""
+"""Automatic startup digest for limited-time paid games across platforms."""
 
 import asyncio
 import logging
@@ -76,21 +76,26 @@ def _truncate(value: str, limit: int) -> str:
 
 
 def _offer_field_value(offer: FreeGameOffer) -> str:
+    platform_label = " · ".join(offer.platforms) or "플랫폼 미상"
+    worth_label = f"정가: {offer.worth}" if offer.worth else "정가 미상"
     if offer.ends_at is None:
         end_label = "종료 시각 미확인"
     else:
         unix_time = int(offer.ends_at.timestamp())
         end_label = f"종료: <t:{unix_time}:F> (<t:{unix_time}:R>)"
-    return f"{end_label}\n[무료로 받기]({offer.claim_url})"
+    return (
+        f"플랫폼: {platform_label}\n{worth_label}\n{end_label}\n"
+        f"[무료로 받기]({offer.claim_url})"
+    )
 
 
 def build_free_game_embeds(offers: list[FreeGameOffer]) -> list[discord.Embed]:
     if not offers:
         embed = discord.Embed(
-            title="Steam 기간 한정 무료 게임",
+            title="기간 한정 무료 게임",
             description=(
                 "현재 [GamerPower](https://www.gamerpower.com/)에서 확인된 "
-                "기간 한정 무료 게임이 없습니다."
+                "유료 게임의 기간 한정 무료 배포가 없습니다."
             ),
             color=0x5865F2,
         )
@@ -102,14 +107,14 @@ def build_free_game_embeds(offers: list[FreeGameOffer]) -> list[discord.Embed]:
     for page_index in range(page_count):
         start = page_index * OFFERS_PER_EMBED
         page_offers = offers[start : start + OFFERS_PER_EMBED]
-        title = "Steam 기간 한정 무료 게임"
+        title = "기간 한정 무료 게임"
         if page_count > 1:
             title += f" ({page_index + 1}/{page_count})"
         embed = discord.Embed(
             title=title,
             description=(
                 "[GamerPower](https://www.gamerpower.com/)에서 현재 활성으로 "
-                "확인된 Steam용 무료 게임입니다. "
+                "확인된 유료 게임의 기간 한정 무료 배포입니다. "
                 "종료 전에 링크에서 조건을 다시 확인하세요."
             ),
             color=0x57F287,
@@ -225,7 +230,7 @@ class FreeGameAlerts(commands.Cog):
 
     @app_commands.command(
         name="무료알림설정",
-        description="기간 한정 Steam 무료 게임 목록을 보낼 채널을 설정합니다.",
+        description="여러 플랫폼의 기간 한정 무료 게임 목록을 보낼 채널을 설정합니다.",
     )
     @app_commands.describe(channel="무료 게임 목록을 받을 채널")
     @app_commands.default_permissions(administrator=True)
@@ -320,7 +325,7 @@ class FreeGameAlerts(commands.Cog):
 
     @app_commands.command(
         name="무료게임",
-        description="현재 확인된 기간 한정 Steam 무료 게임을 조회합니다.",
+        description="현재 확인된 여러 플랫폼의 기간 한정 무료 게임을 조회합니다.",
     )
     @app_commands.guild_only()
     async def list_current_offers(self, interaction: discord.Interaction):

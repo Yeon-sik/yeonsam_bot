@@ -9,7 +9,7 @@
 | 개발 기간 | 2026-05 ~ 진행 중 |
 | 프로젝트 형태 | Python Discord 봇 + 정적 GitHub Pages 사이트 |
 | 현재 상태 | MVP, 로컬·정적 계약 검증 완료 / 원격 `main` 동기화 완료 / Discord 실운영·외부 API 장기운영 미검증 |
-| 문서 기준 | 2026-08-11 저장소·브라우저·Notion 발행 검증 |
+| 문서 기준 | 2026-08-12 저장소·브라우저·GamerPower provider 검증 / Notion mirror는 이전 revision |
 | 주요 기술 | Python, discord.py 2.7.1, steam-discord-patch-alerts, SQLite, HTML/CSS/JavaScript, GitHub Actions, Docker |
 | 공개 사이트 | [연삼이 GitHub Pages](https://yeon-sik.github.io/yeonsam_bot/) |
 | 저장소 | [Yeon-sik/yeonsam_bot](https://github.com/Yeon-sik/yeonsam_bot) |
@@ -22,7 +22,7 @@
 - **문제**: Discord 서버 관리자는 신규 멤버 안내, 게임 정보 공유, 업데이트 공지를
   서로 다른 채널과 도구에서 반복해서 관리해야 합니다.
 - **해결**: 관리자용 설정 UI, 신규 멤버 환영 흐름, JSON 기반 게임 가이드, 서버별
-  Steam 패치 알림, Steam 무료 배포 알림, Steam 인기 게임 조회를 하나의 Discord 봇으로 연결했습니다.
+  Steam 패치 알림, 여러 플랫폼의 기간 한정 무료 배포 알림, Steam 인기 게임 조회를 하나의 Discord 봇으로 연결했습니다.
 - **핵심 결과**: 고정된 의존성을 설치한 Python 3.12.13 환경에서 단위 테스트
   64개가 통과했고, 랜딩과 Lethal Company / R.E.P.O. / PUBG BATTLE GROUND /
   Thunderstore 경로가 로컬 브라우저에서 렌더링됐습니다.
@@ -38,7 +38,7 @@
 | 긴 게임 정보를 Discord 메시지로 반복 작성해야 함 | 공용 JSON을 검색·선택형 Discord UI와 웹 페이지로 렌더링 | 채팅 안에서 빠르게 찾고, 상세 내용은 링크로 공유 |
 | 아이템·모드 추천이 텍스트만 있어 복붙과 설치 실수가 잦음 | Lethal Company / R.E.P.O. 아이템 이미지, 인기 모드, Thunderstore 설치 링크를 같은 가이드에 결합 | 보는 즉시 식별하고, 설치 링크까지 한 번에 접근 |
 | 공식 업데이트를 관리자가 직접 확인해 전달해야 함 | Lethal Company와 R.E.P.O.의 Steam 공식 뉴스 cursor를 서버별로 추적 | 이미 본 글을 반복 발송하지 않고 지정 채널에 새 글 전달 |
-| 기간 한정 Steam 무료 배포를 놓치기 쉬움 | `/무료게임` 조회와 서버별 자동 알림 채널 저장 | 공짜 배포만 별도 추려 빠르게 확인 |
+| 기간 한정 유료 게임 무료 배포를 놓치기 쉬움 | `/무료게임` 조회와 서버별 자동 알림 채널 저장 | 양수 `worth`의 배포만 별도 추려 빠르게 확인 |
 | 서버 안에서 지금 많이 하는 게임을 빠르게 공유하기 어려움 | `/스팀인기게임`으로 Steam Most Played 순위를 즉시 조회 | 공용 대화 주제를 빠르게 맞춤 |
 | 운영 설정과 상태가 단일 JSON에 섞이기 쉬움 | SQLite에 설정·구독·runtime state·일별 지표를 분리 | 서버별 데이터 수명주기와 원자적 지표 집계를 명시적으로 관리 |
 
@@ -49,7 +49,7 @@
 | 서버 온보딩 | 관리자 채널 선택, 문구·링크 입력, 권한 진단, 테스트 발송 | [settings.py](../bot/cogs/settings.py), [welcome.py](../bot/cogs/welcome.py) |
 | 게임 가이드 | Lethal Company, R.E.P.O., Thunderstore, PUBG BATTLE GROUND 콘텐츠를 Discord와 웹에 제공 | [game_content.py](../bot/utils/game_content.py), [game-page.js](./assets/game-page.js) |
 | 항목 검색 | 게임·주제·몬스터·레코드를 검색하고 `배그` 같은 별칭으로 바로 진입 | [yeonsam.py](../bot/cogs/yeonsam.py) |
-| 무료 배포 알림 | GamerPower의 Steam 무료 배포를 조회하고 서버별 채널로 주기 발송 | [free_game_alerts.py](../bot/cogs/free_game_alerts.py), [free_game_feed.py](../bot/utils/free_game_feed.py) |
+| 무료 배포 알림 | GamerPower의 여러 플랫폼 유료 게임 무료 배포를 조회하고 서버별 채널로 주기 발송 | [free_game_alerts.py](../bot/cogs/free_game_alerts.py), [free_game_feed.py](../bot/utils/free_game_feed.py) |
 | Steam 인기 게임 | Steam Most Played 순위를 TOP 5 / 10으로 요약 | [steam_popular.py](../bot/cogs/steam_popular.py), [steam_popular.py](../bot/utils/steam_popular.py) |
 | 패치 알림 | 고정된 재사용 패키지를 어댑터로 연결해 서버별 구독과 Steam 새 글 cursor 처리 | [patch_alerts.py](../bot/cogs/patch_alerts.py), [requirements.txt](../requirements.txt) |
 | 데이터 저장 | 길드 설정, 일별 지표, 패치 구독, runtime state를 SQLite로 관리 | [storage.py](../bot/utils/storage.py) |
@@ -103,7 +103,7 @@ PUBG BATTLE GROUND 가이드 탭 다수입니다. 이 수치는 데이터 구조
 
 관리자 또는 일반 사용자
   → /무료게임 또는 /스팀인기게임
-  → 현재 무료 배포 / Steam 인기 순위 확인
+  → 현재 기간 한정 무료 배포 / Steam 인기 순위 확인
   → 필요 시 서버 알림 채널 설정
 ```
 
@@ -123,14 +123,14 @@ PUBG BATTLE GROUND 가이드 탭 다수입니다. 이 수치는 데이터 구조
 
 | 검증 항목 | 상태 | 확인 시각 | 근거와 경계 |
 | --- | --- | --- | --- |
-| Python 단위 테스트 | 통과 | 2026-08-11 KST | Python 3.12.13, `PYTHONPATH=bot`에서 `unittest discover -s tests -v`, 64개 |
-| 공유 JSON·정적 계약 | 통과 | 2026-08-11 KST | fallback 동등성, 이미지 존재·서명, 검색 계약, 랜딩/별칭 계약 테스트 |
+| Python 단위 테스트 | 통과 | 2026-08-12 KST | Python 3.12.13, `PYTHONPATH=bot`에서 `unittest discover -s tests`, 64개 |
+| 공유 JSON·정적 계약 | 통과 | 2026-08-12 KST | fallback 동등성, 이미지 존재·서명, 검색 계약, 랜딩/별칭 계약 테스트와 `scripts/sync_game_fallbacks.py --check` |
 | 공개/로컬 페이지 렌더링 | 브라우저 확인 | 2026-08-11 KST | localhost에서 랜딩·Lethal Company·R.E.P.O.·PUBG BATTLE GROUND 렌더링, 콘솔 오류 0 |
 | 항목 이미지·모드 링크 | 통과 | 2026-08-11 KST | Discord 레코드용 로컬 이미지 경로와 Thunderstore 설치 링크 테스트 |
 | 프로젝트 문서 런타임 | 통과 | 2026-08-11 KST | `validate-project-docs --require-tracked`와 render-only `sync-project-docs-to-notion` 경로 검증 |
 | Notion 미러 | 발행·read-back 완료 | 2026-08-11 KST | [Actions run 31466462990](https://github.com/Yeon-sik/yeonsam_bot/actions/runs/31466462990), source commit `4199016`, `Yeonsam Intro`·`연삼이 봇 Detail` source banner 확인 |
 | Discord 실서버 E2E | 미검증 | 2026-08-11 KST | 실제 gateway, 길드 권한, slash command 응답, 채널 발송을 실행하지 않음 |
-| Steam/GamerPower 실통신 | 미검증 | 2026-08-11 KST | parser·embed·cursor 테스트는 통과했지만 외부 API 실호출은 이번 문서 갱신에서 수행하지 않음 |
+| GamerPower provider 읽기 전용 확인 | 통과 | 2026-08-12 KST | `fetch_free_game_offers(timeout=15)`가 `type=game` 전체 플랫폼 endpoint에서 성공했고 Epic Games Store·Ubisoft·모바일 항목을 확인함. Discord 발송·장기 polling 증거는 아님 |
 | Docker 실행 | 미검증 | 2026-08-11 KST | 현재 환경에서 Docker image/Compose를 실행하지 않음 |
 
 위 검증은 기능 구현과 로컬 계약을 확인한 결과입니다. 실제 Discord 운영 서버 수,
@@ -143,8 +143,8 @@ PUBG BATTLE GROUND 가이드 탭 다수입니다. 이 수치는 데이터 구조
 - 공유 게임 JSON에 정식 schema 버전과 콘텐츠 provenance 규칙이 충분히 엄격하지
   않습니다. 출처·버전·검증일은 들어갔지만 자동 schema 검증은 아직 약합니다.
 - Python 단위 테스트를 자동 실행하는 CI와 Discord test guild E2E가 없습니다.
-- 외부 API(GamerPower, Steam News)와 Discord 채널 발송은 synthetic test 중심이라
-  장기 polling 안정성과 실운영 rate limit은 확인하지 않았습니다.
+- GamerPower는 현재 provider 응답을 한 번 읽기 전용 확인했지만, Steam News와 Discord 채널
+  발송은 synthetic test 중심이며 장기 polling 안정성과 실운영 rate limit은 확인하지 않았습니다.
 - Docker build, persistent volume, health check를 실제 컨테이너에서 확인해야 합니다.
 - 게임 이미지의 라이선스·출처 메타데이터를 별도로 정리해야 합니다.
 - 시간 제한 GitHub Actions 실행은 상시 운영 경로가 아니며, 운영 환경에는

@@ -201,10 +201,10 @@ async def setup_hook():
 
 
 async def main():
-    # TOKEN은 배포 환경 변수로만 받습니다. 누락되면 조용히 실패하지 않고 바로 중단합니다.
-    token = os.getenv("TOKEN")
+    # TOKEN을 기본으로 사용하고, 로컬 .env에서 쓰는 이름도 허용합니다.
+    token = os.getenv("TOKEN") or os.getenv("DISCORD_BOT_TOKEN")
     if not token:
-        raise RuntimeError("TOKEN environment variable is required.")
+        raise RuntimeError("TOKEN or DISCORD_BOT_TOKEN environment variable is required.")
 
     start_health_server()
 
