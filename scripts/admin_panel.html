@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>연삼이 봇 관리자</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b1020;
+        --panel: #151d34;
+        --panel-soft: #1d2945;
+        --text: #f6f7fb;
+        --muted: #aab5cc;
+        --accent: #7c9cff;
+        --good: #56d39b;
+        --warn: #ffc76b;
+        --bad: #ff7e8a;
+        font-family: "Segoe UI", "Malgun Gothic", sans-serif;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at top right, #1e315f 0, var(--bg) 44%);
+        color: var(--text);
+      }
+      main { width: min(1040px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 48px; }
+      header { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin-bottom: 24px; }
+      h1 { margin: 0 0 8px; font-size: clamp(1.7rem, 4vw, 2.5rem); }
+      h2 { margin: 0 0 16px; font-size: 1.1rem; }
+      p { margin: 0; color: var(--muted); line-height: 1.55; }
+      .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: .08em; font-size: .78rem; }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .card { background: rgba(21, 29, 52, .92); border: 1px solid #2c3b62; border-radius: 18px; padding: 20px; box-shadow: 0 14px 35px rgba(0,0,0,.2); }
+      .wide { grid-column: 1 / -1; }
+      .status-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+      .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--muted); box-shadow: 0 0 0 5px rgba(170,181,204,.12); }
+      .dot.good { background: var(--good); box-shadow: 0 0 0 5px rgba(86,211,155,.12); }
+      .dot.warn { background: var(--warn); box-shadow: 0 0 0 5px rgba(255,199,107,.12); }
+      .dot.bad { background: var(--bad); box-shadow: 0 0 0 5px rgba(255,126,138,.12); }
+      .state { font-size: 1.35rem; font-weight: 700; }
+      .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+      .metric { background: var(--panel-soft); border-radius: 12px; padding: 12px; }
+      .metric small { display: block; color: var(--muted); margin-bottom: 4px; }
+      .metric strong { font-size: 1.02rem; }
+      .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+      button { border: 0; border-radius: 10px; padding: 11px 15px; color: white; background: #334466; cursor: pointer; font-weight: 700; }
+      button:hover { filter: brightness(1.16); }
+      button:disabled { cursor: wait; opacity: .55; }
+      button.primary { background: #4c70d7; }
+      button.danger { background: #9b4054; }
+      button.neutral { background: #2b3857; }
+      .notice { min-height: 28px; margin-top: 14px; color: var(--warn); }
+      .notice.good { color: var(--good); }
+      .notice.bad { color: var(--bad); }
+      .meta { display: grid; gap: 8px; color: var(--muted); font-size: .92rem; }
+      .meta span { overflow-wrap: anywhere; }
+      pre { margin: 0; min-height: 220px; max-height: 420px; overflow: auto; padding: 14px; background: #090d18; border: 1px solid #263452; border-radius: 12px; color: #d7e2ff; font: .82rem/1.5 Consolas, monospace; white-space: pre-wrap; }
+      footer { margin-top: 22px; color: var(--muted); font-size: .86rem; }
+      @media (max-width: 700px) { main { width: min(100% - 20px, 620px); padding-top: 20px; } header { display: block; } .grid { grid-template-columns: 1fr; } .wide { grid-column: auto; } .metrics { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <div class="eyebrow">LOCAL CONTROL PANEL</div>
+          <h1>연삼이 봇 관리자</h1>
+          <p>이 컴퓨터에서 실행 중인 봇을 확인하고 간단한 작업을 수행합니다.</p>
+        </div>
+        <button class="neutral" id="refresh">상태 새로고침</button>
+      </header>
+
+      <section class="grid">
+        <article class="card">
+          <h2>봇 상태</h2>
+          <div class="status-row">
+            <span class="dot" id="statusDot"></span>
+            <span class="state" id="state">확인 중...</span>
+          </div>
+          <p id="statusDescription">런처와 Discord 연결 상태를 확인하고 있습니다.</p>
+          <div class="metrics">
+            <div class="metric"><small>Discord 준비</small><strong id="ready">-</strong></div>
+            <div class="metric"><small>프로세스 ID</small><strong id="pid">-</strong></div>
+            <div class="metric"><small>실행 시간</small><strong id="uptime">-</strong></div>
+          </div>
+          <div class="notice" id="notice"></div>
+        </article>
+
+        <article class="card">
+          <h2>빠른 작업</h2>
+          <p style="margin-bottom: 16px">문제가 생겼을 때 우선 재시작을 시도하세요. 토큰은 화면에 표시하지 않습니다.</p>
+          <div class="actions">
+            <button class="primary" data-action="start">봇 시작</button>
+            <button class="danger" data-action="stop">봇 중지</button>
+            <button class="primary" data-action="restart">봇 재시작</button>
+            <button class="neutral" id="openData">데이터 폴더 열기</button>
+          </div>
+          <div class="meta" style="margin-top: 18px">
+            <span>데이터: <b id="dataDir">-</b></span>
+            <span>로그: <b id="logFile">-</b></span>
+          </div>
+        </article>
+
+        <article class="card wide">
+          <h2>최근 로그</h2>
+          <pre id="logs">로그를 불러오는 중...</pre>
+        </article>
+      </section>
+      <footer>패널은 127.0.0.1에서만 접근할 수 있습니다. 이 창을 닫으면 봇도 함께 종료됩니다.</footer>
+    </main>
+    <script>
+      const $ = (selector) => document.querySelector(selector);
+      const buttons = [...document.querySelectorAll("[data-action]")];
+
+      function formatUptime(seconds) {
+        if (!seconds) return "-";
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return hours ? `${hours}시간 ${minutes}분` : `${minutes}분 ${secs}초`;
+      }
+
+      function setNotice(message, kind = "") {
+        $("#notice").textContent = message || "";
+        $("#notice").className = `notice ${kind}`;
+      }
+
+      async function refresh() {
+        try {
+          const [statusResponse, logsResponse] = await Promise.all([
+            fetch("/api/status", { cache: "no-store" }),
+            fetch("/api/logs", { cache: "no-store" }),
+          ]);
+          const statusPayload = await statusResponse.json();
+          const status = statusPayload.status;
+          const running = status.state === "실행 중";
+          const failed = status.state === "오류 종료" || status.state === "설정 필요";
+          $("#state").textContent = status.state;
+          $("#ready").textContent = status.ready ? "연결됨" : (running ? "연결 대기" : "- ");
+          $("#pid").textContent = status.pid || "-";
+          $("#uptime").textContent = formatUptime(status.uptime_seconds);
+          $("#dataDir").textContent = status.data_dir;
+          $("#logFile").textContent = status.log_file;
+          $("#statusDescription").textContent = status.health.reachable
+            ? `Discord 상태: ${status.health.status}`
+            : "봇 프로세스가 실행되지 않았거나 아직 상태 서버를 준비하지 못했습니다.";
+          $("#statusDot").className = `dot ${status.ready ? "good" : (failed ? "bad" : "warn")}`;
+          if (status.message) setNotice(status.message, failed ? "bad" : "");
+          else if (!$("#notice").textContent) setNotice("정상적으로 상태를 확인하고 있습니다.", "good");
+          $("#logs").textContent = (await logsResponse.json()).logs;
+        } catch (error) {
+          setNotice(`패널 연결 오류: ${error.message}`, "bad");
+        }
+      }
+
+      async function runAction(action) {
+        buttons.forEach((button) => button.disabled = true);
+        setNotice("작업을 처리하는 중입니다...");
+        try {
+          const response = await fetch(`/api/bot/${action}`, { method: "POST" });
+          const payload = await response.json();
+          setNotice(payload.message || "작업이 완료되었습니다.", payload.ok ? "good" : "bad");
+          await refresh();
+        } catch (error) {
+          setNotice(`작업 오류: ${error.message}`, "bad");
+        } finally {
+          buttons.forEach((button) => button.disabled = false);
+        }
+      }
+
+      buttons.forEach((button) => button.addEventListener("click", () => runAction(button.dataset.action)));
+      $("#refresh").addEventListener("click", refresh);
+      $("#openData").addEventListener("click", async () => {
+        const response = await fetch("/api/open-data");
+        const payload = await response.json();
+        setNotice(payload.message, payload.ok ? "good" : "bad");
+      });
+      refresh();
+      setInterval(refresh, 3000);
+    </script>
+  </body>
+</html>

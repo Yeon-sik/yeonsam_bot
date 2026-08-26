@@ -32,19 +32,25 @@ def giveaway(**overrides):
 
 
 class FreeGameFeedTests(unittest.TestCase):
-    def test_url_targets_only_steam_full_games(self):
+    def test_url_targets_full_games_on_all_platforms(self):
         url = build_gamerpower_url()
 
-        self.assertIn("platform=steam", url)
+        self.assertNotIn("platform=", url)
         self.assertIn("type=game", url)
         self.assertIn("sort-by=date", url)
 
-    def test_parser_keeps_only_active_unexpired_steam_games(self):
+    def test_parser_keeps_only_active_unexpired_paid_games_across_platforms(self):
         payload = [
             giveaway(id=1, title="Valid"),
             giveaway(id=2, status="Expired"),
             giveaway(id=3, type="Loot"),
-            giveaway(id=4, platforms="PC, Epic Games Store"),
+            giveaway(
+                id=4,
+                title="Valid Epic",
+                platforms="PC, Epic Games Store",
+                end_date="2026-08-11 12:00:00",
+                worth="$19.99",
+            ),
             giveaway(id=5, end_date="2026-08-08 23:59:59"),
             giveaway(id=6, description="Play for free this weekend"),
             giveaway(
@@ -52,16 +58,19 @@ class FreeGameFeedTests(unittest.TestCase):
                 open_giveaway_url="https://malicious.example/free",
                 gamerpower_url="https://malicious.example/fallback",
             ),
+            giveaway(id=8, worth="N/A"),
+            giveaway(id=9, worth="$0.00"),
         ]
 
         offers = parse_gamerpower_giveaways(payload, now=NOW)
 
-        self.assertEqual([offer.offer_id for offer in offers], ["1"])
+        self.assertEqual([offer.offer_id for offer in offers], ["1", "4"])
         self.assertEqual(offers[0].title, "Valid")
         self.assertEqual(
             offers[0].ends_at,
             datetime(2026, 8, 10, 12, 0, tzinfo=timezone.utc),
         )
+        self.assertEqual(offers[1].platforms, ("PC", "Epic Games Store"))
 
     def test_unknown_end_date_stays_unknown(self):
         offers = parse_gamerpower_giveaways(
@@ -92,6 +101,7 @@ class FreeGameFeedTests(unittest.TestCase):
             "https://www.gamerpower.com/one",
             datetime(2026, 8, 10, tzinfo=timezone.utc),
             "$9.99",
+            ("PC", "Steam"),
         )
         second = FreeGameOffer(
             "2",
@@ -115,6 +125,18 @@ class FreeGameFeedTests(unittest.TestCase):
         self.assertNotEqual(
             build_free_game_digest([first, second]),
             build_free_game_digest([changed, second]),
+        )
+        platform_changed = FreeGameOffer(
+            first.offer_id,
+            first.title,
+            first.claim_url,
+            first.ends_at,
+            first.worth,
+            ("PC", "Epic Games Store"),
+        )
+        self.assertNotEqual(
+            build_free_game_digest([first, second]),
+            build_free_game_digest([platform_changed, second]),
         )
 
 

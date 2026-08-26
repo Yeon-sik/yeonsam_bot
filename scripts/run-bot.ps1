@@ -14,7 +14,11 @@ $dependencyPaths = @(
 )
 
 if (-not $Token) {
-    throw "TOKEN environment variable or -Token argument is required."
+    $Token = $env:DISCORD_BOT_TOKEN
+}
+
+if (-not $Token) {
+    throw "TOKEN or DISCORD_BOT_TOKEN environment variable, or -Token argument, is required."
 }
 
 $resolvedDataDir = Resolve-Path $DataDir -ErrorAction SilentlyContinue
