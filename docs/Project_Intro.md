@@ -64,6 +64,5 @@
 - [프로젝트 상세](./Project_Detail.md)
 - [로컬 봇 실행](./local-bot-run.md)
 - [배포](./deployment.md)
-- [README](../README.md)
 
 Git Markdown이 원본이며 Notion은 생성 미러다.
