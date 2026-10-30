@@ -82,4 +82,3 @@ Windows에서 bot process와 local admin을 쉽게 관리하되 persistence와 D
 - [Project Intro](./Project_Intro.md)
 - [Local bot run](./local-bot-run.md)
 - [Deployment](./deployment.md)
-- [README](../README.md)
