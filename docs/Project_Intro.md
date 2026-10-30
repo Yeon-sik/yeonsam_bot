@@ -1,158 +1,68 @@
-# 연삼이 | Discord 서버 온보딩과 협동 게임 가이드를 연결하는 운영 봇
+# 연삼이 | Discord 서버 온보딩과 게임 운영을 연결하는 봇
 
-> 연삼이는 Discord 서버 관리자가 신규 멤버 안내, 게임 가이드 탐색, 공식 패치 알림을
-> 한곳에서 운영하도록 돕는 Python 봇과 정적 문서 사이트입니다. Git으로 관리되는 게임
-> JSON을 Discord와 웹이 함께 사용하고, 서버별 운영 상태는 SQLite에 분리해 저장합니다.
+연삼이는 Discord 서버 관리자가 신규 멤버 안내, 게임 가이드 탐색, Steam 패치·인기 게임·기간 한정 무료 배포 알림을 한곳에서 운영하도록 돕는 Python 봇과 정적 GitHub Pages 사이트다. 게임 JSON은 Discord와 웹이 공유하고 길드별 운영 상태는 SQLite에 저장한다.
 
 | 항목 | 내용 |
 | --- | --- |
-| 개발 기간 | 2026-05 ~ 진행 중 |
+| 문서 갱신 | 2026-10-30 (Asia/Seoul) |
+| 기준 소스 | [main@f9a7193](https://github.com/Yeon-sik/yeonsam_bot/tree/f9a719374d0911b529266b7a3d8ea0690b474c20) |
 | 프로젝트 형태 | Python Discord 봇 + 정적 GitHub Pages 사이트 |
-| 현재 상태 | MVP, 로컬·정적 계약 검증 완료 / 원격 `main` 동기화 완료 / Discord 실운영·외부 API 장기운영 미검증 |
-| 문서 기준 | 2026-08-12 저장소·브라우저·GamerPower provider 검증 / Notion mirror는 이전 revision |
-| 주요 기술 | Python, discord.py 2.7.1, steam-discord-patch-alerts, SQLite, HTML/CSS/JavaScript, GitHub Actions, Docker |
-| 공개 사이트 | [연삼이 GitHub Pages](https://yeon-sik.github.io/yeonsam_bot/) |
 | 저장소 | [Yeon-sik/yeonsam_bot](https://github.com/Yeon-sik/yeonsam_bot) |
-| 상세 문서 | [Project_Detail.md](./Project_Detail.md) |
-
----
+| 공개 사이트 | [연삼이 GitHub Pages](https://yeon-sik.github.io/yeonsam_bot/) |
+| 범위 | 병합된 main source와 저장소 검증 근거. 실제 길드 식별자·운영 메시지·secret은 제외. |
 
 ## 1. 30초 요약
 
-- **문제**: Discord 서버 관리자는 신규 멤버 안내, 게임 정보 공유, 업데이트 공지를
-  서로 다른 채널과 도구에서 반복해서 관리해야 합니다.
-- **해결**: 관리자용 설정 UI, 신규 멤버 환영 흐름, JSON 기반 게임 가이드, 서버별
-  Steam 패치 알림, 여러 플랫폼의 기간 한정 무료 배포 알림, Steam 인기 게임 조회를 하나의 Discord 봇으로 연결했습니다.
-- **핵심 결과**: 고정된 의존성을 설치한 Python 3.12.13 환경에서 단위 테스트
-  64개가 통과했고, 랜딩과 Lethal Company / R.E.P.O. / PUBG BATTLE GROUND /
-  Thunderstore 경로가 로컬 브라우저에서 렌더링됐습니다.
-- **기술적 차별점**: 같은 게임 JSON을 Discord와 정적 사이트가 함께 사용하며,
-  길드별 설정·구독·운영 지표는 SQLite로 분리했습니다. 게임 가이드의 이미지·모드
-  설치 링크도 같은 공유 JSON 계약으로 묶었습니다.
+- 신규 멤버 안내, 게임 가이드, Steam 패치·인기 게임·무료 배포 공지를 하나의 Discord 봇과 정적 사이트로 연결한다.
+- 2026-08-12 문서 기준 이후 Windows 로컬 launcher/admin panel이 추가됐고, 무료 게임 feed의 여러 플랫폼 처리·필터·알림 로직이 보강됐다.
+- 저장소와 과거 단위 테스트 기록은 확인했지만 실제 Discord gateway·장기 polling·provider rate limit은 이번 갱신에서 재검증하지 않았다.
 
 ## 2. 문제와 해결
 
-| 사용자 문제 | 해결 방식 | 사용자에게 주는 가치 |
-| --- | --- | --- |
-| 신규 멤버 안내가 서버 기본 채널과 수작업에 의존함 | `/설정`에서 환영 채널·문구·링크를 저장하고 권한 진단과 테스트 발송 제공 | 서버마다 필요한 온보딩 흐름을 관리자가 직접 구성 |
-| 긴 게임 정보를 Discord 메시지로 반복 작성해야 함 | 공용 JSON을 검색·선택형 Discord UI와 웹 페이지로 렌더링 | 채팅 안에서 빠르게 찾고, 상세 내용은 링크로 공유 |
-| 아이템·모드 추천이 텍스트만 있어 복붙과 설치 실수가 잦음 | Lethal Company / R.E.P.O. 아이템 이미지, 인기 모드, Thunderstore 설치 링크를 같은 가이드에 결합 | 보는 즉시 식별하고, 설치 링크까지 한 번에 접근 |
-| 공식 업데이트를 관리자가 직접 확인해 전달해야 함 | Lethal Company와 R.E.P.O.의 Steam 공식 뉴스 cursor를 서버별로 추적 | 이미 본 글을 반복 발송하지 않고 지정 채널에 새 글 전달 |
-| 기간 한정 유료 게임 무료 배포를 놓치기 쉬움 | `/무료게임` 조회와 서버별 자동 알림 채널 저장 | 양수 `worth`의 배포만 별도 추려 빠르게 확인 |
-| 서버 안에서 지금 많이 하는 게임을 빠르게 공유하기 어려움 | `/스팀인기게임`으로 Steam Most Played 순위를 즉시 조회 | 공용 대화 주제를 빠르게 맞춤 |
-| 운영 설정과 상태가 단일 JSON에 섞이기 쉬움 | SQLite에 설정·구독·runtime state·일별 지표를 분리 | 서버별 데이터 수명주기와 원자적 지표 집계를 명시적으로 관리 |
+**문제**: Discord 서버 관리자는 신규 멤버 안내, 게임 정보 공유, 패치·무료 배포 공지를 서로 다른 채널과 도구에서 반복 관리해야 한다.
+
+**해결**: Discord command/event, Git에서 관리하는 공유 게임 JSON, SQLite guild state와 외부 feed adapter를 한 봇에 묶고, 같은 콘텐츠를 Discord와 GitHub Pages가 함께 소비하도록 구성한다.
 
 ## 3. 핵심 기능과 결과
 
-| 영역 | 구현 결과 | 근거 |
+| 영역 | 현재 source에서 확인한 범위 |
+| --- | --- |
+| 서버 온보딩 | 관리자 채널 선택, 환영 문구·링크, 권한 진단과 테스트 흐름. |
+| 게임 가이드 | Git JSON을 Discord 검색/선택 UI와 정적 웹이 공유. |
+| 무료 배포 | 여러 플랫폼의 무료 배포 조회, 서버별 구독·digest 비교와 변경분 알림. |
+| Steam | 인기 게임 조회와 서버별 공식 뉴스 cursor 기반 패치 알림. |
+| 운영 데이터 | guild settings, subscription, cursor, runtime state와 일별 metric을 SQLite로 관리. |
+| 로컬 운영 | Windows launcher와 admin panel, PowerShell/BAT 시작 경로로 로컬 bot lifecycle을 관리. |
+| 공개 문서 | GitHub Pages로 랜딩·게임 가이드를 배포. |
+
+## 4. 데이터·운영 불변식
+
+- secret과 Discord 실제 서버 식별자를 Git에 저장하지 않는다.
+- 길드별 설정·구독·cursor를 다른 길드와 섞지 않는다.
+- 최초 패치 subscription은 최신 글을 cursor로 시드해 과거 글 일괄 발송을 피한다.
+- 무료 배포 digest가 같으면 중복 알림을 보내지 않는다.
+- 외부 provider 실패가 다른 길드·기능 전체를 조용히 성공 처리하게 하지 않는다.
+- 로컬 launcher는 편의 도구이며 실제 Discord 연결·장기 운영 성공의 증거가 아니다.
+
+## 5. 검증 현황
+
+| 항목 | 상태 | 근거와 한계 |
 | --- | --- | --- |
-| 서버 온보딩 | 관리자 채널 선택, 문구·링크 입력, 권한 진단, 테스트 발송 | [settings.py](../bot/cogs/settings.py), [welcome.py](../bot/cogs/welcome.py) |
-| 게임 가이드 | Lethal Company, R.E.P.O., Thunderstore, PUBG BATTLE GROUND 콘텐츠를 Discord와 웹에 제공 | [game_content.py](../bot/utils/game_content.py), [game-page.js](./assets/game-page.js) |
-| 항목 검색 | 게임·주제·몬스터·레코드를 검색하고 `배그` 같은 별칭으로 바로 진입 | [yeonsam.py](../bot/cogs/yeonsam.py) |
-| 무료 배포 알림 | GamerPower의 여러 플랫폼 유료 게임 무료 배포를 조회하고 서버별 채널로 주기 발송 | [free_game_alerts.py](../bot/cogs/free_game_alerts.py), [free_game_feed.py](../bot/utils/free_game_feed.py) |
-| Steam 인기 게임 | Steam Most Played 순위를 TOP 5 / 10으로 요약 | [steam_popular.py](../bot/cogs/steam_popular.py), [steam_popular.py](../bot/utils/steam_popular.py) |
-| 패치 알림 | 고정된 재사용 패키지를 어댑터로 연결해 서버별 구독과 Steam 새 글 cursor 처리 | [patch_alerts.py](../bot/cogs/patch_alerts.py), [requirements.txt](../requirements.txt) |
-| 데이터 저장 | 길드 설정, 일별 지표, 패치 구독, runtime state를 SQLite로 관리 | [storage.py](../bot/utils/storage.py) |
-| 공개 문서 | 랜딩·정책·상태·네 게임 가이드를 GitHub Pages로 배포 | [deploy-pages.yml](../.github/workflows/deploy-pages.yml) |
-| 운영 경로 | Docker 영속 볼륨과 `/health`, 수동 임시 Actions 실행 경로 선언 | [Dockerfile](../Dockerfile), [deployment.md](./deployment.md) |
-| 문서 미러 | Git Markdown을 원본으로 검증한 `main` revision만 Intro·Detail Notion 페이지에 수동 발행 | [project-docs-notion.yml](../.github/workflows/project-docs-notion.yml), [project-docs.config.json](../project-docs.config.json) |
+| 최신 main source | 저장소 검증 | `main@f9a7193`까지 launcher, admin panel, free-game adapter와 관련 tests를 확인했다. |
+| 2026-08-12 로컬 검증 | 통과 기록 | Python unit tests 64개, 공유 JSON/정적 계약, 브라우저 렌더와 GamerPower 읽기 확인 기록이 있다. 최신 HEAD 전체를 재실행한 증거로 확대하지 않는다. |
+| Discord 실서버 E2E | 미검증 | 실제 gateway, guild permission, command response, 채널 발송과 장기 polling은 이번 갱신에서 실행하지 않았다. |
+| Docker 운영 | 미검증 | image/Compose 기동과 persistent volume은 별도 검증 대상이다. |
 
-게임 콘텐츠의 저장소 기준 규모는 Lethal Company 몬스터 34개·아이템 14개·모드
-13개, R.E.P.O. 몬스터 29개·아이템 40개·모드 12개, Thunderstore 단계 카드 10개,
-PUBG BATTLE GROUND 가이드 탭 다수입니다. 이 수치는 데이터 구조를 센 결과이며
-실사용량·공식성·최신성의 절대 지표는 아닙니다.
+## 6. 현재 한계와 다음 단계
 
-## 4. 구현 범위
+- 외부 Steam/GamerPower 응답과 rate limit은 장기 실행 환경에서 재확인이 필요하다.
+- local launcher/admin panel은 운영 편의성을 높이지만 daemon reliability를 자동으로 보장하지 않는다.
+- 다음 우선 검증은 폐기 가능한 Discord 서버에서 onboarding→guide→free-game/patch subscription→restart recovery를 종단 확인하는 것이다.
 
-- **Discord 애플리케이션**: slash command 등록, persistent view, 길드 이벤트,
-  오류·완료 지표 수집을 구현했습니다.
-- **서버 설정**: 관리자가 환영 채널·문구·링크를 구성하고 실제 발송 전 권한을
-  확인할 수 있습니다.
-- **가이드 탐색**: `docs/games` 아래 JSON을 읽어 Discord embed와 정적 웹
-  카드로 변환합니다.
-- **패치 알림**: commit으로 고정한 `steam-discord-patch-alerts` 패키지에 Steam
-  조회·Discord 발송·구독 저장을 맡기고, 연삼이 어댑터가 기존 설정과 지표를 연결합니다.
-- **저장소**: 기존 JSON 설정을 SQLite로 한 번 이관하고, 길드 제거 시 해당
-  길드의 설정·구독·지표를 삭제합니다.
-- **배포 기반**: GitHub Pages, Docker/Compose, 시간 제한 수동 Actions 경로를
-  제공합니다.
+## 7. 관련 문서
 
-개인별 메시지 내용이나 실제 서버 식별자는 이 공개 문서의 근거와 결과에서
-제외했습니다.
+- [프로젝트 상세](./Project_Detail.md)
+- [로컬 봇 실행](./local-bot-run.md)
+- [배포](./deployment.md)
 
-## 5. 핵심 사용자 흐름
-
-```text
-관리자
-  → /설정
-  → 환영 채널·문구·링크 저장
-  → 권한 진단
-  → 테스트 발송
-  → 신규 멤버 환영 흐름 사용
-
-서버 사용자
-  → /도움 또는 항목검색: 배그
-  → 게임·주제·항목 선택
-  → Discord 요약 확인
-  → 공개 웹 가이드로 상세 내용 확인
-
-관리자
-  → 패치 알림 게임·채널 설정
-  → Steam 공식 뉴스 확인
-  → 새 글만 지정 채널로 전달
-
-관리자 또는 일반 사용자
-  → /무료게임 또는 /스팀인기게임
-  → 현재 기간 한정 무료 배포 / Steam 인기 순위 확인
-  → 필요 시 서버 알림 채널 설정
-```
-
-## 6. 핵심 기술 판단
-
-### Git JSON을 봇과 웹의 공용 콘텐츠 원천으로 사용
-
-- **상황**: 동일한 게임 가이드를 Discord와 웹에서 각각 관리하면 내용이 쉽게
-  어긋납니다.
-- **선택**: 게임별 JSON을 Git에서 관리하고 Python과 JavaScript가 함께 읽도록
-  구성했습니다.
-- **결과**: 한 번의 콘텐츠 변경으로 두 UI를 갱신할 수 있습니다.
-- **비용**: 정식 JSON schema가 없고 일부 HTML fallback이 복제되어 있어,
-  schema 변경 시 봇·웹·fallback을 함께 검증해야 합니다.
-
-## 7. 검증 현황
-
-| 검증 항목 | 상태 | 확인 시각 | 근거와 경계 |
-| --- | --- | --- | --- |
-| Python 단위 테스트 | 통과 | 2026-08-12 KST | Python 3.12.13, `PYTHONPATH=bot`에서 `unittest discover -s tests`, 64개 |
-| 공유 JSON·정적 계약 | 통과 | 2026-08-12 KST | fallback 동등성, 이미지 존재·서명, 검색 계약, 랜딩/별칭 계약 테스트와 `scripts/sync_game_fallbacks.py --check` |
-| 공개/로컬 페이지 렌더링 | 브라우저 확인 | 2026-08-11 KST | localhost에서 랜딩·Lethal Company·R.E.P.O.·PUBG BATTLE GROUND 렌더링, 콘솔 오류 0 |
-| 항목 이미지·모드 링크 | 통과 | 2026-08-11 KST | Discord 레코드용 로컬 이미지 경로와 Thunderstore 설치 링크 테스트 |
-| 프로젝트 문서 런타임 | 통과 | 2026-08-11 KST | `validate-project-docs --require-tracked`와 render-only `sync-project-docs-to-notion` 경로 검증 |
-| Notion 미러 | 발행·read-back 완료 | 2026-08-11 KST | [Actions run 31466462990](https://github.com/Yeon-sik/yeonsam_bot/actions/runs/31466462990), source commit `4199016`, `Yeonsam Intro`·`연삼이 봇 Detail` source banner 확인 |
-| Discord 실서버 E2E | 미검증 | 2026-08-11 KST | 실제 gateway, 길드 권한, slash command 응답, 채널 발송을 실행하지 않음 |
-| GamerPower provider 읽기 전용 확인 | 통과 | 2026-08-12 KST | `fetch_free_game_offers(timeout=15)`가 `type=game` 전체 플랫폼 endpoint에서 성공했고 Epic Games Store·Ubisoft·모바일 항목을 확인함. Discord 발송·장기 polling 증거는 아님 |
-| Docker 실행 | 미검증 | 2026-08-11 KST | 현재 환경에서 Docker image/Compose를 실행하지 않음 |
-
-위 검증은 기능 구현과 로컬 계약을 확인한 결과입니다. 실제 Discord 운영 서버 수,
-사용자 수, 알림 발송량, 성능이나 장애율을 증명하지 않습니다.
-
-## 8. 현재 한계와 다음 단계
-
-- Discord select 제한 때문에 25개를 넘는 몬스터·레코드는 선택 UI 한 화면에
-  모두 노출되지 않습니다. 검색과 pagination 경계를 보강해야 합니다.
-- 공유 게임 JSON에 정식 schema 버전과 콘텐츠 provenance 규칙이 충분히 엄격하지
-  않습니다. 출처·버전·검증일은 들어갔지만 자동 schema 검증은 아직 약합니다.
-- Python 단위 테스트를 자동 실행하는 CI와 Discord test guild E2E가 없습니다.
-- GamerPower는 현재 provider 응답을 한 번 읽기 전용 확인했지만, Steam News와 Discord 채널
-  발송은 synthetic test 중심이며 장기 polling 안정성과 실운영 rate limit은 확인하지 않았습니다.
-- Docker build, persistent volume, health check를 실제 컨테이너에서 확인해야 합니다.
-- 게임 이미지의 라이선스·출처 메타데이터를 별도로 정리해야 합니다.
-- 시간 제한 GitHub Actions 실행은 상시 운영 경로가 아니며, 운영 환경에는
-  영속 데이터 볼륨과 별도 관찰 체계가 필요합니다.
-
-## 9. 관련 문서
-
-- [Project Detail](./Project_Detail.md): 아키텍처, 데이터 경계, 기술 판단과 검증
-- [Deployment](./deployment.md): Docker, 공개 사이트 설정과 운영 절차
-- [Privacy](./privacy.html): 저장 데이터와 삭제 정책
-- [Terms](./terms.html): 서비스 범위와 책임 제한
+Git Markdown이 원본이며 Notion은 생성 미러다.
